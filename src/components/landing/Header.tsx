@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
+import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 
 const Header = () => {
@@ -18,11 +19,11 @@ const Header = () => {
       <div className="container mx-auto px-4 lg:px-6">
         <div className="flex items-center justify-between h-16 lg:h-20">
           {/* Logo */}
-          <a href="/" className="flex items-center gap-2">
+          <Link to="/" className="flex items-center gap-2">
             <span className="text-xl lg:text-2xl font-semibold tracking-tight text-foreground">
               Sadhana
             </span>
-          </a>
+          </Link>
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center gap-8">
@@ -39,12 +40,16 @@ const Header = () => {
 
           {/* Desktop CTA */}
           <div className="hidden md:flex items-center gap-4">
-            <Button variant="ghost" size="sm">
-              Sign In
-            </Button>
-            <Button variant="crimson" size="sm">
-              Begin Practice
-            </Button>
+            <Link to="/auth">
+              <Button variant="ghost" size="sm">
+                Sign In
+              </Button>
+            </Link>
+            <Link to="/auth">
+              <Button variant="crimson" size="sm">
+                Begin Practice
+              </Button>
+            </Link>
           </div>
 
           {/* Mobile Menu Toggle */}
@@ -80,12 +85,16 @@ const Header = () => {
                 </a>
               ))}
               <div className="flex flex-col gap-3 pt-4 border-t border-border mt-2">
-                <Button variant="ghost" className="justify-center">
-                  Sign In
-                </Button>
-                <Button variant="crimson" className="justify-center">
-                  Begin Practice
-                </Button>
+                <Link to="/auth" onClick={() => setIsMenuOpen(false)}>
+                  <Button variant="ghost" className="w-full justify-center">
+                    Sign In
+                  </Button>
+                </Link>
+                <Link to="/auth" onClick={() => setIsMenuOpen(false)}>
+                  <Button variant="crimson" className="w-full justify-center">
+                    Begin Practice
+                  </Button>
+                </Link>
               </div>
             </nav>
           </motion.div>
