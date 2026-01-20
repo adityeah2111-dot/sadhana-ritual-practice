@@ -78,7 +78,22 @@ const PracticeTimer = ({
   const minutesPracticed = Math.floor(seconds / 60);
 
   return (
-    <div className="flex flex-col items-center">
+    <div
+      className="flex flex-col items-center"
+      role="region"
+      aria-label="Practice timer"
+    >
+      {/* Screen reader live region for timer updates */}
+      <div
+        className="sr-only"
+        aria-live="polite"
+        aria-atomic="true"
+      >
+        {isActive
+          ? `Timer: ${formatTime(seconds)}. ${isPaused ? 'Paused' : 'In session'}`
+          : 'Ready to begin practice'
+        }
+      </div>
       {/* Timer Display */}
       <motion.div
         className="relative w-72 h-72 sm:w-80 sm:h-80 flex items-center justify-center"
@@ -113,7 +128,7 @@ const PracticeTimer = ({
             stroke="hsl(var(--border))"
             strokeWidth="4"
           />
-          
+
           {/* Progress arc */}
           <motion.circle
             cx="140"
@@ -129,7 +144,7 @@ const PracticeTimer = ({
             transition={{ duration: 0.5, ease: "easeOut" }}
             className="drop-shadow-[0_0_10px_hsl(var(--crimson)/0.5)]"
           />
-          
+
           {/* Glowing dot at the end of progress */}
           {isActive && progress > 0 && (
             <motion.circle
@@ -138,9 +153,9 @@ const PracticeTimer = ({
               r="8"
               fill="hsl(var(--primary))"
               className="drop-shadow-[0_0_12px_hsl(var(--crimson))]"
-              animate={{ 
+              animate={{
                 scale: isPaused ? 1 : [1, 1.2, 1],
-                opacity: isPaused ? 0.5 : 1 
+                opacity: isPaused ? 0.5 : 1
               }}
               transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
             />
@@ -175,7 +190,7 @@ const PracticeTimer = ({
           </motion.p>
 
           {/* Status text */}
-          <motion.p 
+          <motion.p
             className="text-sm text-muted-foreground mt-3"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -200,7 +215,7 @@ const PracticeTimer = ({
       </motion.div>
 
       {/* Controls */}
-      <motion.div 
+      <motion.div
         className="flex items-center gap-3 mt-10"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -227,7 +242,7 @@ const PracticeTimer = ({
               <RotateCcw className="h-4 w-4 mr-2" />
               Cancel
             </Button>
-            
+
             <Button
               variant="outline"
               size="lg"
@@ -264,7 +279,7 @@ const PracticeTimer = ({
       {/* Minimum time notice */}
       <AnimatePresence>
         {isActive && !canComplete && (
-          <motion.p 
+          <motion.p
             className="text-xs text-muted-foreground mt-4"
             initial={{ opacity: 0, y: -5 }}
             animate={{ opacity: 1, y: 0 }}

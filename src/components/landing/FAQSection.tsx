@@ -39,8 +39,17 @@ const faqs = [
 
 const FAQSection = () => {
   return (
-    <section id="faq" className="py-24 lg:py-32 bg-card">
-      <div className="container px-4 lg:px-6">
+    <section id="faq" className="py-24 lg:py-32 bg-card relative overflow-hidden">
+      {/* Background accent */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 0.3 }}
+        viewport={{ once: true }}
+        transition={{ duration: 1.5 }}
+        className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"
+      />
+
+      <div className="container px-4 lg:px-6 relative z-10">
         <div className="max-w-3xl mx-auto">
           <div className="text-center mb-16">
             <motion.span
@@ -63,29 +72,29 @@ const FAQSection = () => {
             </motion.h2>
           </div>
 
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-          >
-            <Accordion type="single" collapsible className="w-full">
-              {faqs.map((faq, index) => (
+          <Accordion type="single" collapsible className="w-full">
+            {faqs.map((faq, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.4, delay: index * 0.08 }}
+              >
                 <AccordionItem
-                  key={index}
                   value={`item-${index}`}
-                  className="border-b border-border"
+                  className="border-b border-border group"
                 >
-                  <AccordionTrigger className="text-left text-foreground hover:text-foreground py-6 text-lg font-medium">
+                  <AccordionTrigger className="text-left text-foreground hover:text-primary py-6 text-lg font-medium transition-colors duration-200">
                     {faq.question}
                   </AccordionTrigger>
                   <AccordionContent className="text-muted-foreground pb-6 leading-relaxed">
                     {faq.answer}
                   </AccordionContent>
                 </AccordionItem>
-              ))}
-            </Accordion>
-          </motion.div>
+              </motion.div>
+            ))}
+          </Accordion>
         </div>
       </div>
     </section>
@@ -93,3 +102,4 @@ const FAQSection = () => {
 };
 
 export default FAQSection;
+

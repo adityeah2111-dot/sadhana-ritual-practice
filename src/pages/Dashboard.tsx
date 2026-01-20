@@ -7,14 +7,18 @@ import { useNavigate, Link } from 'react-router-dom';
 import { useSessions } from '@/hooks/useSessions';
 import PracticeTimer from '@/components/dashboard/PracticeTimer';
 import StatsCard from '@/components/dashboard/StatsCard';
+import PracticeHeatmap from '@/components/dashboard/PracticeHeatmap';
 import RecentSessions from '@/components/dashboard/RecentSessions';
+import DailyQuote from '@/components/dashboard/DailyQuote';
 import UpgradeAccountDialog from '@/components/auth/UpgradeAccountDialog';
 import { useToast } from '@/hooks/use-toast';
+import { useSound } from '@/hooks/useSound';
 
 const Dashboard = () => {
   const { user, signOut, isAnonymous } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { playCompletionBell, playStart } = useSound();
   const [showUpgradeDialog, setShowUpgradeDialog] = useState(false);
   const {
     sessions,
@@ -34,6 +38,7 @@ const Dashboard = () => {
   const handleStartSession = async () => {
     const session = await startSession();
     if (session) {
+      playStart(); // Play start sound
       toast({
         title: 'Session started',
         description: 'Focus on your practice. The timer is running.',
@@ -42,6 +47,7 @@ const Dashboard = () => {
   };
 
   const handleCompleteSession = async (durationSeconds: number) => {
+    playCompletionBell(); // Play completion bell sound
     const session = await completeSession(durationSeconds);
     if (session) {
       const minutes = Math.floor(durationSeconds / 60);
@@ -64,7 +70,7 @@ const Dashboard = () => {
   if (loading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
-        <motion.div 
+        <motion.div
           className="flex flex-col items-center gap-4"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -86,7 +92,7 @@ const Dashboard = () => {
               <Flame className="w-5 h-5 text-primary" />
               Sadhana
             </Link>
-            
+
             <div className="flex items-center gap-1 sm:gap-2">
               {/* Streak badge in header */}
               {stats.currentStreak > 0 && (
@@ -147,11 +153,14 @@ const Dashboard = () => {
               {activeSession ? 'Stay Focused' : getGreeting()}
             </h1>
             <p className="text-muted-foreground">
-              {activeSession 
-                ? 'Your practice is in progress. Stay present.' 
+              {activeSession
+                ? 'Your practice is in progress. Stay present.'
                 : 'Ready when you are. Take a breath and begin.'}
             </p>
           </motion.div>
+
+          {/* Daily Quote - for motivation */}
+          <DailyQuote />
 
           {/* Timer Section */}
           <motion.div
@@ -173,6 +182,9 @@ const Dashboard = () => {
             totalSessions={stats.totalSessions}
             totalMinutes={stats.totalMinutes}
           />
+
+          {/* Practice Heatmap */}
+          <PracticeHeatmap sessions={sessions} />
 
           {/* Recent Sessions */}
           <RecentSessions sessions={sessions} />
