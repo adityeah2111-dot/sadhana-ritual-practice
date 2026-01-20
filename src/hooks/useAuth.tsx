@@ -6,9 +6,14 @@ interface AuthContextType {
   user: User | null;
   session: Session | null;
   loading: boolean;
+  isAnonymous: boolean;
   signUp: (email: string, password: string) => Promise<{ error: Error | null }>;
   signIn: (email: string, password: string) => Promise<{ error: Error | null }>;
   signInWithGoogle: () => Promise<{ error: Error | null }>;
+  signInWithPhone: (phone: string) => Promise<{ error: Error | null }>;
+  verifyPhoneOtp: (phone: string, token: string) => Promise<{ error: Error | null }>;
+  signInAnonymously: () => Promise<{ error: Error | null }>;
+  linkEmailToAnonymous: (email: string, password: string) => Promise<{ error: Error | null }>;
   signOut: () => Promise<void>;
 }
 
@@ -18,6 +23,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
+
+  // Check if user is anonymous
+  const isAnonymous = user?.is_anonymous ?? false;
 
   useEffect(() => {
     // Set up auth state listener FIRST
@@ -70,6 +78,42 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     return { error };
   };
 
+  // Phone OTP authentication - Step 1: Send OTP
+  const signInWithPhone = async (phone: string) => {
+    const { error } = await supabase.auth.signInWithOtp({
+      phone,
+      options: {
+        shouldCreateUser: true,
+      }
+    });
+    return { error };
+  };
+
+  // Phone OTP authentication - Step 2: Verify OTP
+  const verifyPhoneOtp = async (phone: string, token: string) => {
+    const { error } = await supabase.auth.verifyOtp({
+      phone,
+      token,
+      type: 'sms',
+    });
+    return { error };
+  };
+
+  // Anonymous sign in - for quick access without account
+  const signInAnonymously = async () => {
+    const { error } = await supabase.auth.signInAnonymously();
+    return { error };
+  };
+
+  // Link email to anonymous account (to convert to permanent account)
+  const linkEmailToAnonymous = async (email: string, password: string) => {
+    const { error } = await supabase.auth.updateUser({
+      email,
+      password,
+    });
+    return { error };
+  };
+
   const signOut = async () => {
     await supabase.auth.signOut();
   };
@@ -79,9 +123,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       user, 
       session, 
       loading, 
+      isAnonymous,
       signUp, 
       signIn, 
-      signInWithGoogle, 
+      signInWithGoogle,
+      signInWithPhone,
+      verifyPhoneOtp,
+      signInAnonymously,
+      linkEmailToAnonymous,
       signOut 
     }}>
       {children}
