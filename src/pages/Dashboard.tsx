@@ -1,8 +1,8 @@
 import { motion } from 'framer-motion';
-import { LogOut, User } from 'lucide-react';
+import { LogOut, User, Settings } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/hooks/useAuth';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useSessions } from '@/hooks/useSessions';
 import PracticeTimer from '@/components/dashboard/PracticeTimer';
 import StatsCard from '@/components/dashboard/StatsCard';
@@ -76,11 +76,16 @@ const Dashboard = () => {
               Sadhana
             </a>
             
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2">
               <div className="flex items-center gap-2 text-sm text-muted-foreground">
                 <User className="h-4 w-4" />
                 <span className="hidden sm:inline">{user?.email}</span>
               </div>
+              <Link to="/settings">
+                <Button variant="ghost" size="sm">
+                  <Settings className="h-4 w-4" />
+                </Button>
+              </Link>
               <Button variant="ghost" size="sm" onClick={handleSignOut}>
                 <LogOut className="h-4 w-4 mr-2" />
                 Sign Out
