@@ -1,5 +1,6 @@
+import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { LogOut, User, Settings, Flame } from 'lucide-react';
+import { LogOut, User, Settings, Flame, Shield } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/hooks/useAuth';
 import { useNavigate, Link } from 'react-router-dom';
@@ -7,12 +8,14 @@ import { useSessions } from '@/hooks/useSessions';
 import PracticeTimer from '@/components/dashboard/PracticeTimer';
 import StatsCard from '@/components/dashboard/StatsCard';
 import RecentSessions from '@/components/dashboard/RecentSessions';
+import UpgradeAccountDialog from '@/components/auth/UpgradeAccountDialog';
 import { useToast } from '@/hooks/use-toast';
 
 const Dashboard = () => {
-  const { user, signOut } = useAuth();
+  const { user, signOut, isAnonymous } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
+  const [showUpgradeDialog, setShowUpgradeDialog] = useState(false);
   const {
     sessions,
     stats,
@@ -99,10 +102,23 @@ const Dashboard = () => {
                 </motion.div>
               )}
 
-              <div className="flex items-center gap-1 sm:gap-2 text-sm text-muted-foreground">
-                <User className="h-4 w-4" />
-                <span className="hidden sm:inline max-w-[150px] truncate">{user?.email}</span>
-              </div>
+              {/* Anonymous user indicator */}
+              {isAnonymous ? (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="h-9 border-primary/30 text-primary hover:bg-primary/10"
+                  onClick={() => setShowUpgradeDialog(true)}
+                >
+                  <Shield className="h-4 w-4 mr-2" />
+                  <span className="hidden sm:inline">Save Progress</span>
+                </Button>
+              ) : (
+                <div className="flex items-center gap-1 sm:gap-2 text-sm text-muted-foreground">
+                  <User className="h-4 w-4" />
+                  <span className="hidden sm:inline max-w-[150px] truncate">{user?.email || user?.phone}</span>
+                </div>
+              )}
               <Link to="/settings">
                 <Button variant="ghost" size="sm" className="h-9 w-9 p-0">
                   <Settings className="h-4 w-4" />
@@ -160,8 +176,41 @@ const Dashboard = () => {
 
           {/* Recent Sessions */}
           <RecentSessions sessions={sessions} />
+
+          {/* Anonymous user banner */}
+          {isAnonymous && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.4 }}
+              className="bg-primary/5 border border-primary/20 rounded-xl p-4 flex items-center justify-between gap-4"
+            >
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+                  <Shield className="w-5 h-5 text-primary" />
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-foreground">You're using a guest account</p>
+                  <p className="text-xs text-muted-foreground">Create an account to save your progress permanently</p>
+                </div>
+              </div>
+              <Button
+                variant="crimson"
+                size="sm"
+                onClick={() => setShowUpgradeDialog(true)}
+              >
+                Save Progress
+              </Button>
+            </motion.div>
+          )}
         </div>
       </main>
+
+      {/* Upgrade Account Dialog */}
+      <UpgradeAccountDialog
+        isOpen={showUpgradeDialog}
+        onClose={() => setShowUpgradeDialog(false)}
+      />
     </div>
   );
 };
