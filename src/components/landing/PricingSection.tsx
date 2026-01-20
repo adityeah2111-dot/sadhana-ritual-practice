@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
-import { Check } from "lucide-react";
+import { Check, Sparkles } from "lucide-react";
+import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 
 const features = [
@@ -52,16 +53,18 @@ const PricingSection = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
-            className="p-8 lg:p-10 rounded-xl bg-card border border-border"
+            className="p-8 lg:p-10 rounded-xl bg-card border border-border hover:border-border/80 transition-colors"
           >
             <h3 className="text-lg font-medium text-muted-foreground mb-2">Monthly</h3>
             <div className="flex items-baseline gap-1 mb-6">
               <span className="text-4xl font-semibold text-foreground">₹299</span>
               <span className="text-muted-foreground">/month</span>
             </div>
-            <Button variant="subtle" className="w-full mb-8">
-              Start Monthly
-            </Button>
+            <Link to="/auth">
+              <Button variant="subtle" className="w-full mb-8">
+                Start Monthly
+              </Button>
+            </Link>
             <ul className="space-y-3">
               {features.map((feature, index) => (
                 <li key={index} className="flex items-center gap-3 text-sm text-muted-foreground">
@@ -80,17 +83,21 @@ const PricingSection = () => {
             transition={{ duration: 0.5, delay: 0.1 }}
             className="p-8 lg:p-10 rounded-xl bg-card border-2 border-primary/30 relative glow-crimson-subtle"
           >
-            <div className="absolute -top-3 left-8 px-3 py-1 bg-primary text-primary-foreground text-xs font-medium rounded-full">
+            <div className="absolute -top-3 left-8 px-3 py-1 bg-primary text-primary-foreground text-xs font-medium rounded-full flex items-center gap-1">
+              <Sparkles className="w-3 h-3" />
               Save 33%
             </div>
             <h3 className="text-lg font-medium text-muted-foreground mb-2">Yearly</h3>
-            <div className="flex items-baseline gap-1 mb-6">
+            <div className="flex items-baseline gap-1 mb-2">
               <span className="text-4xl font-semibold text-foreground">₹2,399</span>
               <span className="text-muted-foreground">/year</span>
             </div>
-            <Button variant="crimson" className="w-full mb-8">
-              Start Yearly
-            </Button>
+            <p className="text-sm text-muted-foreground mb-6">That's just ₹200/month</p>
+            <Link to="/auth">
+              <Button variant="crimson" className="w-full mb-8">
+                Start Yearly
+              </Button>
+            </Link>
             <ul className="space-y-3">
               {features.map((feature, index) => (
                 <li key={index} className="flex items-center gap-3 text-sm text-muted-foreground">
