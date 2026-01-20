@@ -1,17 +1,70 @@
 import { motion } from 'framer-motion';
-import { LogOut, User, Flame } from 'lucide-react';
+import { LogOut, User } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
+import { useSessions } from '@/hooks/useSessions';
+import PracticeTimer from '@/components/dashboard/PracticeTimer';
+import StatsCard from '@/components/dashboard/StatsCard';
+import RecentSessions from '@/components/dashboard/RecentSessions';
+import { useToast } from '@/hooks/use-toast';
 
 const Dashboard = () => {
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
+  const { toast } = useToast();
+  const {
+    sessions,
+    stats,
+    loading,
+    activeSession,
+    startSession,
+    completeSession,
+    cancelSession,
+  } = useSessions();
 
   const handleSignOut = async () => {
     await signOut();
     navigate('/');
   };
+
+  const handleStartSession = async () => {
+    const session = await startSession();
+    if (session) {
+      toast({
+        title: 'Session started',
+        description: 'Focus on your practice. The timer is running.',
+      });
+    }
+  };
+
+  const handleCompleteSession = async (durationSeconds: number) => {
+    const session = await completeSession(durationSeconds);
+    if (session) {
+      const minutes = Math.floor(durationSeconds / 60);
+      toast({
+        title: 'Session complete!',
+        description: `Great work! You practiced for ${minutes} minute${minutes !== 1 ? 's' : ''}.`,
+      });
+    }
+  };
+
+  const handleCancelSession = async () => {
+    await cancelSession();
+    toast({
+      title: 'Session cancelled',
+      description: 'Your session was not recorded.',
+      variant: 'destructive',
+    });
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="animate-pulse text-muted-foreground">Loading...</div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-background">
@@ -39,46 +92,36 @@ const Dashboard = () => {
 
       {/* Main content */}
       <main className="container mx-auto px-4 lg:px-6 py-12">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4 }}
-          className="max-w-2xl mx-auto text-center"
-        >
-          {/* Streak display */}
-          <div className="inline-flex items-center justify-center w-24 h-24 rounded-full bg-primary/10 border border-primary/20 mb-8">
-            <Flame className="h-10 w-10 text-primary" />
-          </div>
+        <div className="max-w-2xl mx-auto space-y-8">
+          {/* Timer Section */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4 }}
+            className="text-center"
+          >
+            <h1 className="text-2xl font-semibold text-foreground mb-8">
+              {activeSession ? 'Stay Focused' : 'Begin Your Practice'}
+            </h1>
+            
+            <PracticeTimer
+              isActive={!!activeSession}
+              onStart={handleStartSession}
+              onComplete={handleCompleteSession}
+              onCancel={handleCancelSession}
+            />
+          </motion.div>
 
-          <h1 className="text-3xl font-semibold text-foreground mb-4">
-            Your Practice Awaits
-          </h1>
-          
-          <p className="text-muted-foreground mb-8">
-            The dashboard is being prepared. Soon you will begin your daily discipline here.
-          </p>
+          {/* Stats */}
+          <StatsCard
+            streak={stats.currentStreak}
+            totalSessions={stats.totalSessions}
+            totalMinutes={stats.totalMinutes}
+          />
 
-          <div className="bg-card border border-border rounded-lg p-8">
-            <div className="grid grid-cols-3 gap-6 text-center">
-              <div>
-                <p className="text-3xl font-semibold text-foreground">0</p>
-                <p className="text-sm text-muted-foreground mt-1">Day Streak</p>
-              </div>
-              <div>
-                <p className="text-3xl font-semibold text-foreground">0</p>
-                <p className="text-sm text-muted-foreground mt-1">Sessions</p>
-              </div>
-              <div>
-                <p className="text-3xl font-semibold text-foreground">0</p>
-                <p className="text-sm text-muted-foreground mt-1">Minutes</p>
-              </div>
-            </div>
-          </div>
-
-          <p className="text-xs text-muted-foreground mt-8">
-            Practice features coming soon. Stay disciplined.
-          </p>
-        </motion.div>
+          {/* Recent Sessions */}
+          <RecentSessions sessions={sessions} />
+        </div>
       </main>
     </div>
   );
