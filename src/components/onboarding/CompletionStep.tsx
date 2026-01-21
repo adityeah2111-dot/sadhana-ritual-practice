@@ -11,6 +11,7 @@ interface CompletionStepProps {
 
 const CompletionStep = ({ onContinue, practiceTime }: CompletionStepProps) => {
     const [showContent, setShowContent] = useState(false);
+    const [countdown, setCountdown] = useState(5);
 
     // Format time for display
     const formatTime = (time: string) => {
@@ -59,6 +60,24 @@ const CompletionStep = ({ onContinue, practiceTime }: CompletionStepProps) => {
 
         return () => clearInterval(interval);
     }, []);
+
+    // Auto-redirect countdown
+    useEffect(() => {
+        if (!showContent) return;
+
+        const timer = setInterval(() => {
+            setCountdown(prev => {
+                if (prev <= 1) {
+                    clearInterval(timer);
+                    onContinue();
+                    return 0;
+                }
+                return prev - 1;
+            });
+        }, 1000);
+
+        return () => clearInterval(timer);
+    }, [showContent, onContinue]);
 
     return (
         <div className="text-center max-w-lg mx-auto px-4">
@@ -153,6 +172,7 @@ const CompletionStep = ({ onContinue, practiceTime }: CompletionStepProps) => {
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.8 }}
+                        className="space-y-3"
                     >
                         <Button
                             size="lg"
@@ -161,9 +181,12 @@ const CompletionStep = ({ onContinue, practiceTime }: CompletionStepProps) => {
                             onClick={onContinue}
                         >
                             <Flame className="w-5 h-5 mr-2" />
-                            Start Your First Practice
+                            Go to Dashboard
                             <ArrowRight className="w-5 h-5 ml-2" />
                         </Button>
+                        <p className="text-xs text-muted-foreground">
+                            Redirecting automatically in {countdown} seconds...
+                        </p>
                     </motion.div>
                 </>
             )}

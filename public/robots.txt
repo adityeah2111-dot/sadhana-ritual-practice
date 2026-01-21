@@ -1,14 +1,17 @@
-User-agent: Googlebot
-Allow: /
-
-User-agent: Bingbot
-Allow: /
-
-User-agent: Twitterbot
-Allow: /
-
-User-agent: facebookexternalhit
-Allow: /
+# Sadhana Robots.txt
+# https://sadhana.app
 
 User-agent: *
 Allow: /
+
+# Disallow private routes
+Disallow: /dashboard
+Disallow: /settings
+Disallow: /onboarding
+Disallow: /auth
+
+# Sitemap
+Sitemap: https://sadhana.app/sitemap.xml
+
+# Crawl-delay for respectful crawling
+Crawl-delay: 1

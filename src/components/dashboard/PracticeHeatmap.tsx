@@ -175,19 +175,19 @@ const PracticeHeatmap = ({ sessions }: PracticeHeatmapProps) => {
                                     />
 
                                     {/* Tooltip */}
-                                    <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1.5 bg-popover border border-border rounded-lg shadow-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-20 whitespace-nowrap">
-                                        <p className="text-xs font-medium text-foreground">
+                                    <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-2 bg-zinc-900 border border-zinc-700 rounded-lg shadow-xl opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-50 whitespace-nowrap">
+                                        <p className="text-xs font-semibold text-white">
                                             {formatDate(day.date)}
                                         </p>
                                         {day.count > 0 ? (
-                                            <p className="text-[10px] text-muted-foreground">
+                                            <p className="text-[10px] text-zinc-300 mt-0.5">
                                                 {day.count} session{day.count > 1 ? 's' : ''} · {day.minutes} min
                                             </p>
                                         ) : (
-                                            <p className="text-[10px] text-muted-foreground">No practice</p>
+                                            <p className="text-[10px] text-zinc-400 mt-0.5">No practice</p>
                                         )}
                                         {/* Tooltip arrow */}
-                                        <div className="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-border" />
+                                        <div className="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-zinc-900" />
                                     </div>
                                 </motion.div>
                             ))}

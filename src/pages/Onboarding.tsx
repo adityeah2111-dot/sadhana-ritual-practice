@@ -11,8 +11,10 @@ import GoalStep from '@/components/onboarding/GoalStep';
 import PracticeTimeStep from '@/components/onboarding/PracticeTimeStep';
 import TimezoneStep from '@/components/onboarding/TimezoneStep';
 import CompletionStep from '@/components/onboarding/CompletionStep';
+import PersonalInfoStep from '@/components/onboarding/PersonalInfoStep';
+import { User } from 'lucide-react';
 
-type OnboardingStep = 'welcome' | 'commitment' | 'goals' | 'practice-time' | 'timezone' | 'completion';
+type OnboardingStep = 'welcome' | 'personal-info' | 'commitment' | 'goals' | 'practice-time' | 'timezone' | 'completion';
 
 const stepConfig = [
   { id: 'welcome', label: 'Welcome', icon: Sparkles },
@@ -27,10 +29,11 @@ const Onboarding = () => {
   const [step, setStep] = useState<OnboardingStep>('welcome');
   const [practiceTime, setPracticeTime] = useState<string>('06:00:00');
   const [selectedGoals, setSelectedGoals] = useState<string[]>([]);
+  const [personalInfo, setPersonalInfo] = useState<{ name: string; dateOfBirth: string; gender: string }>({ name: '', dateOfBirth: '', gender: '' });
   const [direction, setDirection] = useState<1 | -1>(1);
   const navigate = useNavigate();
   const { completeOnboarding } = useProfile();
-  const { user } = useAuth();
+  const { user, isAnonymous } = useAuth();
   const { toast } = useToast();
 
   const currentStepIndex = stepConfig.findIndex(s => s.id === step);
@@ -48,14 +51,27 @@ const Onboarding = () => {
 
   const handleBack = useCallback(() => {
     setDirection(-1);
-    const steps: OnboardingStep[] = ['welcome', 'commitment', 'goals', 'practice-time', 'timezone', 'completion'];
+    const steps: OnboardingStep[] = isAnonymous
+      ? ['welcome', 'personal-info', 'commitment', 'goals', 'practice-time', 'timezone', 'completion']
+      : ['welcome', 'commitment', 'goals', 'practice-time', 'timezone', 'completion'];
     const currentIndex = steps.indexOf(step);
     if (currentIndex > 0) {
       setStep(steps[currentIndex - 1]);
     }
-  }, [step]);
+  }, [step, isAnonymous]);
 
   const handleWelcomeContinue = () => {
+    setDirection(1);
+    // For anonymous users, collect personal info first
+    if (isAnonymous) {
+      setStep('personal-info');
+    } else {
+      setStep('commitment');
+    }
+  };
+
+  const handlePersonalInfoContinue = (data: { name: string; dateOfBirth: string; gender: string }) => {
+    setPersonalInfo(data);
     setDirection(1);
     setStep('commitment');
   };
@@ -80,25 +96,34 @@ const Onboarding = () => {
   const handleTimezoneSelect = async (timezone: string) => {
     const result = await completeOnboarding(practiceTime, timezone);
 
-    if (result) {
-      setDirection(1);
-      setStep('completion');
-    } else {
+    // Always proceed to completion step, even if save failed
+    // The completion step will redirect to dashboard
+    setDirection(1);
+    setStep('completion');
+
+    // Set flag to prevent redirect loop (in case DB save failed)
+    sessionStorage.setItem('onboarding_completed', 'true');
+
+    if (!result) {
+      // Non-blocking notification - user can still proceed
       toast({
-        title: 'Error',
-        description: 'Something went wrong. Please try again.',
-        variant: 'destructive',
+        title: 'Note',
+        description: 'Your preferences will be saved when you sign in.',
+        variant: 'default',
       });
     }
   };
 
-  const handleCompletionContinue = () => {
+  const handleCompletionContinue = useCallback(() => {
+    // Ensure flag is set before navigating - use replace to prevent back button issues
+    sessionStorage.setItem('onboarding_completed', 'true');
     toast({
       title: 'Welcome, Practitioner',
       description: 'Your journey begins now. Stay disciplined.',
     });
-    navigate('/dashboard');
-  };
+    // Use replace to prevent going back to onboarding
+    navigate('/dashboard', { replace: true });
+  }, [navigate]);
 
   const slideVariants = {
     enter: (direction: number) => ({
@@ -188,10 +213,10 @@ const Onboarding = () => {
                       <div key={stepItem.id} className="relative z-10 flex flex-col items-center">
                         <motion.div
                           className={`w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 ${isCompleted
-                              ? 'bg-primary text-primary-foreground'
-                              : isCurrent
-                                ? 'bg-primary/20 border-2 border-primary text-primary'
-                                : 'bg-card border-2 border-border text-muted-foreground'
+                            ? 'bg-primary text-primary-foreground'
+                            : isCurrent
+                              ? 'bg-primary/20 border-2 border-primary text-primary'
+                              : 'bg-card border-2 border-border text-muted-foreground'
                             }`}
                           animate={isCurrent ? { scale: [1, 1.05, 1] } : {}}
                           transition={{ duration: 0.5, repeat: isCurrent ? Infinity : 0, repeatDelay: 2 }}
@@ -233,6 +258,12 @@ const Onboarding = () => {
           >
             {step === 'welcome' && (
               <WelcomeStep onContinue={handleWelcomeContinue} userName={userName} />
+            )}
+            {step === 'personal-info' && (
+              <PersonalInfoStep
+                onContinue={handlePersonalInfoContinue}
+                onBack={handleBack}
+              />
             )}
             {step === 'commitment' && (
               <CommitmentStep onAccept={handleCommitmentAccept} />

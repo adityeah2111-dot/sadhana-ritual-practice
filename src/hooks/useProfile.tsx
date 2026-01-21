@@ -6,6 +6,10 @@ interface Profile {
   id: string;
   user_id: string;
   display_name: string | null;
+  full_name: string | null;
+  date_of_birth: string | null;
+  gender: 'male' | 'female' | 'other' | 'prefer_not_to_say' | null;
+  avatar_url: string | null;
   practice_time: string | null;
   timezone: string | null;
   onboarding_completed: boolean | null;
@@ -34,7 +38,8 @@ export const useProfile = () => {
       console.error('Error fetching profile:', error);
     }
 
-    setProfile(data);
+    // Cast to Profile - additional fields will be null if not in DB yet
+    setProfile(data as Profile | null);
     setLoading(false);
   };
 
@@ -53,7 +58,7 @@ export const useProfile = () => {
       return null;
     }
 
-    setProfile(data);
+    setProfile(data as Profile);
     return data;
   };
 

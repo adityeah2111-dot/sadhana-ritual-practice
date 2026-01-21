@@ -10,6 +10,7 @@ import SectionSkeleton from "@/components/ui/SectionSkeleton";
 const HowItWorksSection = lazy(() => import("@/components/landing/HowItWorksSection"));
 const TestimonialsSection = lazy(() => import("@/components/landing/TestimonialsSection"));
 const NotForEveryoneSection = lazy(() => import("@/components/landing/NotForEveryoneSection"));
+const LearnSection = lazy(() => import("@/components/landing/LearnSection"));
 const PricingSection = lazy(() => import("@/components/landing/PricingSection"));
 const FAQSection = lazy(() => import("@/components/landing/FAQSection"));
 const CTASection = lazy(() => import("@/components/landing/CTASection"));
@@ -38,6 +39,10 @@ const Index = () => {
 
         <Suspense fallback={<SectionSkeleton height="500px" />}>
           <NotForEveryoneSection />
+        </Suspense>
+
+        <Suspense fallback={<SectionSkeleton height="500px" />}>
+          <LearnSection />
         </Suspense>
 
         <Suspense fallback={<SectionSkeleton height="600px" />}>

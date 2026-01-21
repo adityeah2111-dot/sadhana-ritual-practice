@@ -1,5 +1,5 @@
-import { ReactNode } from 'react';
-import { Navigate } from 'react-router-dom';
+import { ReactNode, useEffect, useState } from 'react';
+import { Navigate, useLocation } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { useProfile } from '@/hooks/useProfile';
 
@@ -11,6 +11,18 @@ interface ProtectedRouteProps {
 const ProtectedRoute = ({ children, requireOnboarding = true }: ProtectedRouteProps) => {
   const { user, loading: authLoading } = useAuth();
   const { profile, loading: profileLoading } = useProfile();
+  const location = useLocation();
+  const [onboardingJustCompleted, setOnboardingJustCompleted] = useState(() => {
+    return sessionStorage.getItem('onboarding_completed') === 'true';
+  });
+
+  // Keep it stay updated if navigation happens within the same session
+  useEffect(() => {
+    const justCompleted = sessionStorage.getItem('onboarding_completed') === 'true';
+    if (justCompleted && !onboardingJustCompleted) {
+      setOnboardingJustCompleted(true);
+    }
+  }, [location, onboardingJustCompleted]);
 
   if (authLoading || profileLoading) {
     return (
@@ -27,8 +39,8 @@ const ProtectedRoute = ({ children, requireOnboarding = true }: ProtectedRoutePr
     return <Navigate to="/auth" replace />;
   }
 
-  // Redirect to onboarding if not completed
-  if (requireOnboarding && profile && !profile.onboarding_completed) {
+  // Redirect to onboarding if not completed AND not just finished onboarding
+  if (requireOnboarding && profile && !profile.onboarding_completed && !onboardingJustCompleted) {
     return <Navigate to="/onboarding" replace />;
   }
 
@@ -36,3 +48,4 @@ const ProtectedRoute = ({ children, requireOnboarding = true }: ProtectedRoutePr
 };
 
 export default ProtectedRoute;
+

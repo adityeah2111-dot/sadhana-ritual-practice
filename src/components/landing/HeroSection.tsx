@@ -128,7 +128,7 @@ const HeroSection = () => {
               <div className="w-[400px] h-[400px] bg-primary/20 rounded-full blur-[100px] animate-pulse-subtle" />
             </div>
 
-            {/* Floating app mockup */}
+            {/* Floating hero illustration */}
             <motion.div
               animate={{
                 y: [0, -10, 0],
@@ -141,9 +141,9 @@ const HeroSection = () => {
               className="relative z-10"
             >
               <img
-                src="/app-mockup.png"
-                alt="Sadhana App - Practice Timer Dashboard"
-                className="w-full max-w-[360px] lg:max-w-[420px] h-auto rounded-3xl shadow-2xl shadow-primary/10"
+                src="/hero-practice.png"
+                alt="Sadhana - Daily Practice Warrior Pose"
+                className="w-full max-w-[400px] lg:max-w-[480px] h-auto rounded-3xl"
               />
 
               {/* Decorative elements */}

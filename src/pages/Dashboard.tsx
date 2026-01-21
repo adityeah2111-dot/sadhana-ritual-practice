@@ -120,10 +120,10 @@ const Dashboard = () => {
                   <span className="hidden sm:inline">Save Progress</span>
                 </Button>
               ) : (
-                <div className="flex items-center gap-1 sm:gap-2 text-sm text-muted-foreground">
+                <Link to="/profile" className="flex items-center gap-1 sm:gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors">
                   <User className="h-4 w-4" />
                   <span className="hidden sm:inline max-w-[150px] truncate">{user?.email || user?.phone}</span>
-                </div>
+                </Link>
               )}
               <Link to="/settings">
                 <Button variant="ghost" size="sm" className="h-9 w-9 p-0">
