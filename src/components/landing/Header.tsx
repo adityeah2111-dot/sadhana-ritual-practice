@@ -1,19 +1,30 @@
 import { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, Flame, User, LogOut } from "lucide-react";
+import { Menu, X, Flame, User, LogOut, ChevronRight } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
 import { useProfile } from "@/hooks/useProfile";
+import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import GoogleLoginPrompt from "@/components/auth/GoogleLoginPrompt";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
   const { user, isAnonymous, signOut, loading } = useAuth();
   const { profile } = useProfile();
   const navigate = useNavigate();
+
+  // Track scroll for header styling
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 20);
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   // Close menu on escape key
   useEffect(() => {
@@ -23,7 +34,6 @@ const Header = () => {
         setShowUserMenu(false);
       }
     };
-
     document.addEventListener('keydown', handleEscape);
     return () => document.removeEventListener('keydown', handleEscape);
   }, []);
@@ -60,58 +70,44 @@ const Header = () => {
     { label: "Practice", href: "#practice" },
     { label: "Pricing", href: "#pricing" },
     { label: "Learn", href: "/learn", isRoute: true },
-    { label: "FAQ", href: "#faq" },
   ];
 
   const getInitials = () => {
-    if (profile?.display_name) {
-      return profile.display_name.charAt(0).toUpperCase();
-    }
-    if (profile?.full_name) {
-      return profile.full_name.charAt(0).toUpperCase();
-    }
-    if (user?.email) {
-      return user.email.charAt(0).toUpperCase();
-    }
+    if (profile?.display_name) return profile.display_name.charAt(0).toUpperCase();
+    if (profile?.full_name) return profile.full_name.charAt(0).toUpperCase();
+    if (user?.email) return user.email.charAt(0).toUpperCase();
     return 'U';
-  };
-
-  const getAvatarContent = () => {
-    if (profile?.avatar_url) {
-      return (
-        <img
-          src={profile.avatar_url}
-          alt="Profile"
-          className="w-full h-full object-cover rounded-full"
-        />
-      );
-    }
-    return <span className="text-sm font-medium text-white">{getInitials()}</span>;
   };
 
   return (
     <>
       <header
-        className="fixed top-0 left-0 right-0 z-[60] bg-background/80 backdrop-blur-md border-b border-border/50"
+        className={`fixed top-0 left-0 right-0 z-[60] transition-all duration-300 ${isScrolled
+          ? 'bg-background/95 backdrop-blur-lg border-b border-border/50 shadow-sm'
+          : 'bg-transparent'
+          }`}
         role="banner"
       >
-        <div className="container mx-auto px-4 lg:px-6">
-          <div className="flex items-center justify-between h-16 lg:h-20">
+        <div className="container mx-auto px-4 sm:px-6">
+          <div className="flex items-center justify-between h-14 sm:h-16 lg:h-18">
             {/* Logo */}
             <Link
               to="/"
-              className="flex items-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background rounded-md"
+              className="flex items-center gap-2 group"
               aria-label="Sadhana - Go to homepage"
             >
-              <Flame className="w-5 h-5 text-primary" aria-hidden="true" />
-              <span className="text-xl lg:text-2xl font-semibold tracking-tight text-foreground">
+              <div className="relative">
+                <Flame className="w-5 h-5 sm:w-6 sm:h-6 text-primary transition-transform group-hover:scale-110" aria-hidden="true" />
+                <div className="absolute inset-0 bg-primary/20 rounded-full blur-md opacity-0 group-hover:opacity-100 transition-opacity" />
+              </div>
+              <span className="text-lg sm:text-xl lg:text-2xl font-semibold tracking-tight text-foreground">
                 Sadhana
               </span>
             </Link>
 
             {/* Desktop Navigation */}
             <nav
-              className="hidden md:flex items-center gap-8"
+              className="hidden lg:flex items-center gap-1"
               role="navigation"
               aria-label="Main navigation"
             >
@@ -120,7 +116,7 @@ const Header = () => {
                   <Link
                     key={link.href}
                     to={link.href}
-                    className="text-sm text-muted-foreground hover:text-foreground transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background rounded-sm px-1 py-0.5"
+                    className="px-4 py-2 text-sm text-muted-foreground hover:text-foreground transition-colors rounded-lg hover:bg-muted/50"
                   >
                     {link.label}
                   </Link>
@@ -128,7 +124,7 @@ const Header = () => {
                   <a
                     key={link.href}
                     href={link.href}
-                    className="text-sm text-muted-foreground hover:text-foreground transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background rounded-sm px-1 py-0.5"
+                    className="px-4 py-2 text-sm text-muted-foreground hover:text-foreground transition-colors rounded-lg hover:bg-muted/50"
                   >
                     {link.label}
                   </a>
@@ -137,27 +133,32 @@ const Header = () => {
             </nav>
 
             {/* Desktop CTA / User Profile */}
-            <div className="hidden md:flex items-center gap-3">
+            <div className="hidden lg:flex items-center gap-2">
+              {/* Theme Toggle */}
+              <ThemeToggle variant="icon" />
+
               {!loading && user ? (
-                // Logged in user - show profile
                 <div className="relative">
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
                       setShowUserMenu(!showUserMenu);
                     }}
-                    className="flex items-center gap-2 p-1 rounded-full hover:bg-muted/50 transition-colors"
+                    className="flex items-center gap-2 pl-2 pr-3 py-1.5 rounded-full hover:bg-muted/50 transition-colors border border-transparent hover:border-border"
                   >
-                    <div className={`w-9 h-9 rounded-full flex items-center justify-center ${isAnonymous
+                    <div className={`w-8 h-8 rounded-full flex items-center justify-center ${isAnonymous
                       ? 'bg-muted border border-border'
                       : 'bg-gradient-to-br from-primary to-rose-500'
                       }`}>
                       {isAnonymous ? (
                         <User className="w-4 h-4 text-muted-foreground" />
                       ) : (
-                        getAvatarContent()
+                        <span className="text-xs font-medium text-white">{getInitials()}</span>
                       )}
                     </div>
+                    <span className="text-sm text-muted-foreground max-w-[100px] truncate">
+                      {profile?.display_name || (isAnonymous ? 'Guest' : 'Account')}
+                    </span>
                   </button>
 
                   {/* User dropdown menu */}
@@ -170,7 +171,7 @@ const Header = () => {
                         transition={{ duration: 0.15 }}
                         className="absolute right-0 top-full mt-2 w-56 bg-card border border-border rounded-xl shadow-xl overflow-hidden"
                       >
-                        <div className="p-3 border-b border-border">
+                        <div className="p-3 border-b border-border bg-muted/30">
                           <p className="text-sm font-medium text-foreground truncate">
                             {profile?.display_name || profile?.full_name || (isAnonymous ? 'Guest User' : user.email)}
                           </p>
@@ -178,26 +179,33 @@ const Header = () => {
                             {isAnonymous ? 'Anonymous account' : user.email}
                           </p>
                         </div>
-                        <div className="p-1">
+                        <div className="p-1.5">
                           <Link
                             to="/dashboard"
                             onClick={() => setShowUserMenu(false)}
-                            className="flex items-center gap-2 px-3 py-2 text-sm text-foreground hover:bg-muted rounded-lg transition-colors"
+                            className="flex items-center justify-between px-3 py-2.5 text-sm text-foreground hover:bg-muted rounded-lg transition-colors"
                           >
-                            <Flame className="w-4 h-4" />
-                            Dashboard
+                            <div className="flex items-center gap-2">
+                              <Flame className="w-4 h-4 text-primary" />
+                              Dashboard
+                            </div>
+                            <ChevronRight className="w-4 h-4 text-muted-foreground" />
                           </Link>
                           <Link
                             to="/profile"
                             onClick={() => setShowUserMenu(false)}
-                            className="flex items-center gap-2 px-3 py-2 text-sm text-foreground hover:bg-muted rounded-lg transition-colors"
+                            className="flex items-center justify-between px-3 py-2.5 text-sm text-foreground hover:bg-muted rounded-lg transition-colors"
                           >
-                            <User className="w-4 h-4" />
-                            Profile
+                            <div className="flex items-center gap-2">
+                              <User className="w-4 h-4" />
+                              Profile
+                            </div>
+                            <ChevronRight className="w-4 h-4 text-muted-foreground" />
                           </Link>
+                          <div className="my-1 border-t border-border" />
                           <button
                             onClick={handleSignOut}
-                            className="w-full flex items-center gap-2 px-3 py-2 text-sm text-destructive hover:bg-destructive/10 rounded-lg transition-colors"
+                            className="w-full flex items-center gap-2 px-3 py-2.5 text-sm text-destructive hover:bg-destructive/10 rounded-lg transition-colors"
                           >
                             <LogOut className="w-4 h-4" />
                             Sign Out
@@ -208,27 +216,35 @@ const Header = () => {
                   </AnimatePresence>
                 </div>
               ) : !loading ? (
-                // Not logged in - show auth buttons
                 <>
                   <Link to="/auth">
-                    <Button variant="ghost" size="sm">
+                    <Button variant="ghost" size="sm" className="text-muted-foreground">
                       Sign In
                     </Button>
                   </Link>
                   <Link to="/auth">
-                    <Button variant="crimson" size="sm">
-                      Begin Practice
+                    <Button variant="crimson" size="sm" className="shadow-sm">
+                      Start Practice
                     </Button>
                   </Link>
                 </>
               ) : null}
             </div>
 
-            {/* Mobile Menu Toggle */}
-            <div className="md:hidden flex items-center gap-2">
+            {/* Mobile Right Section */}
+            <div className="flex lg:hidden items-center gap-1">
+              {/* Mobile CTA (only when not logged in) */}
+              {!loading && !user && (
+                <Link to="/auth" className="mr-1">
+                  <Button variant="crimson" size="sm" className="text-xs px-3 h-8">
+                    Start
+                  </Button>
+                </Link>
+              )}
+
               {/* Mobile user avatar */}
               {!loading && user && (
-                <Link to="/profile" className="p-1">
+                <Link to="/profile" className="p-1.5">
                   <div className={`w-8 h-8 rounded-full flex items-center justify-center ${isAnonymous
                     ? 'bg-muted border border-border'
                     : 'bg-gradient-to-br from-primary to-rose-500'
@@ -241,132 +257,164 @@ const Header = () => {
                   </div>
                 </Link>
               )}
+
+              {/* Mobile theme toggle */}
+              <ThemeToggle variant="icon" className="lg:hidden" />
+
+              {/* Hamburger menu */}
               <button
-                className="p-2 text-foreground rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+                className="p-2 text-foreground rounded-lg hover:bg-muted/50 transition-colors"
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
-                aria-label={isMenuOpen ? "Close navigation menu" : "Open navigation menu"}
+                aria-label={isMenuOpen ? "Close menu" : "Open menu"}
                 aria-expanded={isMenuOpen}
-                aria-controls="mobile-menu"
               >
-                {isMenuOpen ? (
-                  <X size={24} aria-hidden="true" />
-                ) : (
-                  <Menu size={24} aria-hidden="true" />
-                )}
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={isMenuOpen ? 'close' : 'open'}
+                    initial={{ rotate: -90, opacity: 0 }}
+                    animate={{ rotate: 0, opacity: 1 }}
+                    exit={{ rotate: 90, opacity: 0 }}
+                    transition={{ duration: 0.15 }}
+                  >
+                    {isMenuOpen ? <X size={22} /> : <Menu size={22} />}
+                  </motion.div>
+                </AnimatePresence>
               </button>
             </div>
           </div>
         </div>
       </header>
 
-      {/* Mobile Menu - Full Screen Overlay via Portal */}
+      {/* Mobile Menu - Full Screen Overlay */}
       {createPortal(
         <AnimatePresence>
           {isMenuOpen && (
             <motion.div
-              id="mobile-menu"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              transition={{ duration: 0.3 }}
-              className="fixed inset-0 z-50 bg-background/95 backdrop-blur-xl md:hidden flex flex-col pt-20"
-              role="dialog"
-              aria-modal="true"
-              aria-label="Navigation menu"
+              transition={{ duration: 0.2 }}
+              className="fixed inset-0 z-[70] lg:hidden"
             >
-              <nav
-                className="flex-1 flex flex-col p-6 overflow-y-auto"
-                role="navigation"
-                aria-label="Mobile navigation"
+              {/* Full screen menu */}
+              <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.2 }}
+                className="absolute inset-0 bg-background flex flex-col"
               >
-                <div className="flex flex-col gap-1 mb-8">
+                {/* Header */}
+                <div className="flex items-center justify-between px-4 h-14 border-b border-border">
+                  <Link to="/" onClick={() => setIsMenuOpen(false)} className="flex items-center gap-2">
+                    <Flame className="w-5 h-5 text-primary" />
+                    <span className="font-semibold text-foreground text-lg">Sadhana</span>
+                  </Link>
+                  <button
+                    onClick={() => setIsMenuOpen(false)}
+                    className="w-10 h-10 flex items-center justify-center rounded-full hover:bg-muted/50 text-foreground"
+                  >
+                    <X size={24} />
+                  </button>
+                </div>
+
+                {/* Navigation links */}
+                <nav className="flex-1 px-4 py-6 space-y-2 overflow-y-auto">
                   {navLinks.map((link, index) => (
                     <motion.div
                       key={link.href}
-                      initial={{ opacity: 0, x: -20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: 0.1 + index * 0.05, duration: 0.3 }}
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: index * 0.05 }}
                     >
                       {link.isRoute ? (
                         <Link
                           to={link.href}
-                          className="block text-2xl font-medium text-muted-foreground hover:text-foreground hover:pl-2 transition-all py-3 border-b border-border/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded-sm"
                           onClick={() => setIsMenuOpen(false)}
+                          className="flex items-center justify-between py-4 px-5 text-xl font-medium text-foreground active:bg-muted/50 rounded-2xl transition-colors"
                         >
                           {link.label}
+                          <ChevronRight className="w-5 h-5 text-muted-foreground" />
                         </Link>
                       ) : (
                         <a
                           href={link.href}
-                          className="block text-2xl font-medium text-muted-foreground hover:text-foreground hover:pl-2 transition-all py-3 border-b border-border/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded-sm"
                           onClick={() => setIsMenuOpen(false)}
+                          className="flex items-center justify-between py-4 px-5 text-xl font-medium text-foreground active:bg-muted/50 rounded-2xl transition-colors"
                         >
                           {link.label}
+                          <ChevronRight className="w-5 h-5 text-muted-foreground" />
                         </a>
                       )}
                     </motion.div>
                   ))}
+                </nav>
+
+                {/* Theme Toggle for Mobile */}
+                <div className="px-4 py-3 border-t border-border">
+                  <div className="flex items-center justify-between py-2 px-2">
+                    <span className="text-sm text-muted-foreground">Appearance</span>
+                    <ThemeToggle variant="dropdown" />
+                  </div>
                 </div>
 
-                {/* Mobile Auth/User Section */}
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.3, duration: 0.3 }}
-                  className="mt-auto pb-8 space-y-4"
-                >
+                {/* Bottom section with safe area */}
+                <div className="p-4 pb-8 border-t border-border space-y-3" style={{ paddingBottom: 'max(2rem, env(safe-area-inset-bottom))' }}>
                   {user ? (
-                    <div className="bg-card border border-border rounded-xl p-4 shadow-sm">
-                      <div className="flex items-center gap-3 mb-4">
-                        <div className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 ${isAnonymous
-                          ? 'bg-muted border border-border'
-                          : 'bg-gradient-to-br from-primary to-rose-500'
+                    <>
+                      {/* User info card */}
+                      <div className="flex items-center gap-3 p-4 bg-card border border-border rounded-2xl">
+                        <div className={`w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 ${isAnonymous ? 'bg-muted border border-border' : 'bg-gradient-to-br from-primary to-rose-500'
                           }`}>
                           {isAnonymous ? (
                             <User className="w-5 h-5 text-muted-foreground" />
                           ) : (
-                            getAvatarContent()
+                            <span className="text-base font-medium text-white">{getInitials()}</span>
                           )}
                         </div>
-                        <div className="overflow-hidden">
-                          <p className="font-medium text-foreground truncate">
-                            {profile?.display_name || profile?.full_name || (isAnonymous ? 'Guest Practitioner' : 'Practitioner')}
+                        <div className="flex-1 min-w-0">
+                          <p className="font-medium text-foreground text-base truncate">
+                            {profile?.display_name || (isAnonymous ? 'Guest' : 'User')}
                           </p>
-                          <p className="text-xs text-muted-foreground truncate">
-                            {isAnonymous ? 'Progress not saved' : user.email}
+                          <p className="text-sm text-muted-foreground truncate">
+                            {isAnonymous ? 'Not signed in' : user.email}
                           </p>
                         </div>
                       </div>
 
                       <div className="grid grid-cols-2 gap-3">
                         <Link to="/dashboard" onClick={() => setIsMenuOpen(false)}>
-                          <Button variant="outline" className="w-full justify-center h-12 text-base">
+                          <Button variant="crimson" className="w-full h-12 text-base">
                             <Flame className="w-4 h-4 mr-2" />
                             Dashboard
                           </Button>
                         </Link>
-                        <Button variant="ghost" className="w-full justify-center h-12 text-base text-muted-foreground hover:text-destructive hover:bg-destructive/10" onClick={handleSignOut}>
+                        <Button
+                          variant="outline"
+                          className="w-full h-12 text-base text-muted-foreground"
+                          onClick={handleSignOut}
+                        >
                           <LogOut className="w-4 h-4 mr-2" />
                           Sign Out
                         </Button>
                       </div>
-                    </div>
+                    </>
                   ) : (
-                    <div className="grid gap-4">
+                    <div className="space-y-3">
                       <Link to="/auth" onClick={() => setIsMenuOpen(false)}>
-                        <Button variant="crimson" className="w-full justify-center h-14 text-lg shadow-lg shadow-primary/20">
-                          Begin Your Journey
+                        <Button variant="crimson" className="w-full h-14 text-lg shadow-lg">
+                          Start Your Practice
                         </Button>
                       </Link>
                       <Link to="/auth" onClick={() => setIsMenuOpen(false)}>
-                        <Button variant="ghost" className="w-full justify-center h-12 text-base">
-                          Sign In
+                        <Button variant="ghost" className="w-full h-12 text-base">
+                          Already have an account? Sign In
                         </Button>
                       </Link>
                     </div>
                   )}
-                </motion.div>
-              </nav>
+                </div>
+              </motion.div>
             </motion.div>
           )}
         </AnimatePresence>,

@@ -120,7 +120,7 @@ const Dashboard = () => {
                 <motion.div
                   initial={{ scale: 0.9, opacity: 0 }}
                   animate={{ scale: 1, opacity: 1 }}
-                  className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-primary/10 border border-primary/20 mr-2"
+                  className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-muted/50 border border-border mr-2"
                 >
                   <Flame className="w-3.5 h-3.5 text-primary" />
                   <span className="text-xs font-medium text-primary">
@@ -134,7 +134,7 @@ const Dashboard = () => {
                 <Button
                   variant="outline"
                   size="sm"
-                  className="h-9 border-primary/30 text-primary hover:bg-primary/10 gap-1.5"
+                  className="h-9 border-border text-foreground hover:bg-muted gap-1.5"
                   onClick={() => setShowUpgradeDialog(true)}
                 >
                   <Save className="h-4 w-4" />
@@ -225,11 +225,11 @@ const Dashboard = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4 }}
-              className="bg-gradient-to-r from-primary/10 via-primary/5 to-rose-500/10 border border-primary/20 rounded-xl p-4 sm:p-5"
+              className="bg-card border border-border rounded-xl p-4 sm:p-5"
             >
               <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                 <div className="flex items-start sm:items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center flex-shrink-0">
+                  <div className="w-10 h-10 rounded-full bg-muted flex items-center justify-center flex-shrink-0">
                     <Shield className="w-5 h-5 text-primary" />
                   </div>
                   <div>

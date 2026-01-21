@@ -233,12 +233,12 @@ const Profile = () => {
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.5 }}
-                        className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-primary/20 via-background to-rose-500/10 border border-border"
+                        className="relative overflow-hidden rounded-3xl bg-card border border-border"
                     >
                         {/* Background Pattern */}
-                        <div className="absolute inset-0 opacity-30">
-                            <div className="absolute top-0 right-0 w-64 h-64 bg-primary/20 rounded-full blur-3xl" />
-                            <div className="absolute bottom-0 left-0 w-48 h-48 bg-rose-500/20 rounded-full blur-3xl" />
+                        <div className="absolute inset-0 opacity-20">
+                            <div className="absolute top-0 right-0 w-64 h-64 bg-muted rounded-full blur-3xl" />
+                            <div className="absolute bottom-0 left-0 w-48 h-48 bg-muted rounded-full blur-3xl" />
                         </div>
 
                         <div className="relative p-6 sm:p-8">
@@ -247,9 +247,9 @@ const Profile = () => {
                                 <motion.div
                                     initial={{ opacity: 0, y: -10 }}
                                     animate={{ opacity: 1, y: 0 }}
-                                    className="mb-6 flex items-center gap-3 p-3 bg-primary/10 backdrop-blur-sm rounded-xl border border-primary/20"
+                                    className="mb-6 flex items-center gap-3 p-3 bg-muted/50 backdrop-blur-sm rounded-xl border border-border"
                                 >
-                                    <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center flex-shrink-0">
+                                    <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center flex-shrink-0">
                                         <Shield className="w-4 h-4 text-primary" />
                                     </div>
                                     <div className="flex-1 min-w-0">

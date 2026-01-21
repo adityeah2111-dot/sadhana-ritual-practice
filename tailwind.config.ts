@@ -116,6 +116,9 @@ export default {
         '18': '4.5rem',
         '22': '5.5rem',
       },
+      backgroundImage: {
+        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+      },
     },
   },
   plugins: [require("tailwindcss-animate")],

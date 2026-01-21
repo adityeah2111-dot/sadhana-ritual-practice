@@ -71,21 +71,20 @@ const PricingSection = () => {
           className="flex items-center justify-center mb-10 sm:mb-12"
         >
           <div className="relative inline-flex items-center bg-card border border-border rounded-full p-1 shadow-sm">
-            {/* Background slider - Using transform for reliable mobile positioning */}
-            <motion.div
-              className="absolute top-1 bottom-1 w-[calc(50%-4px)] rounded-full bg-primary shadow-md"
-              initial={false}
-              animate={{
-                x: isYearly ? 'calc(100% + 4px)' : '0px',
+            {/* Background slider - Simple CSS transition for smooth mobile */}
+            <div
+              className={`absolute top-1 bottom-1 rounded-full bg-primary shadow-md transition-transform duration-200 ease-out will-change-transform ${isYearly ? 'translate-x-full' : 'translate-x-0'
+                }`}
+              style={{
+                width: 'calc(50% - 4px)',
+                left: '4px',
               }}
-              style={{ left: '4px' }}
-              transition={{ type: "spring", stiffness: 400, damping: 30 }}
             />
 
             {/* Monthly button */}
             <button
               onClick={() => setIsYearly(false)}
-              className={`relative z-10 px-3 sm:px-6 py-2 text-sm font-medium rounded-full transition-colors duration-200 min-w-[70px] sm:min-w-[90px] ${!isYearly ? 'text-primary-foreground' : 'text-muted-foreground hover:text-foreground'
+              className={`relative z-10 px-4 sm:px-6 py-2.5 text-sm font-medium rounded-full transition-colors duration-150 min-w-[80px] sm:min-w-[100px] ${!isYearly ? 'text-primary-foreground' : 'text-muted-foreground'
                 }`}
             >
               Monthly
@@ -94,11 +93,11 @@ const PricingSection = () => {
             {/* Yearly button */}
             <button
               onClick={() => setIsYearly(true)}
-              className={`relative z-10 px-3 sm:px-6 py-2 text-sm font-medium rounded-full transition-colors duration-200 flex items-center justify-center gap-0 min-w-[70px] sm:min-w-[90px] ${isYearly ? 'text-primary-foreground' : 'text-muted-foreground hover:text-foreground'
+              className={`relative z-10 px-4 sm:px-6 py-2.5 text-sm font-medium rounded-full transition-colors duration-150 flex items-center justify-center gap-1 min-w-[80px] sm:min-w-[100px] ${isYearly ? 'text-primary-foreground' : 'text-muted-foreground'
                 }`}
             >
               <span>Yearly</span>
-              <span className={`text-[9px] sm:text-xs px-0 sm:px-1.5 py-0.5 rounded-full transition-colors ${isYearly ? 'bg-white/20 text-white' : 'bg-primary/10 text-primary'
+              <span className={`text-[10px] sm:text-xs ml-0.5 transition-colors ${isYearly ? 'text-white/80' : 'text-primary'
                 }`}>-33%</span>
             </button>
           </div>

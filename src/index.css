@@ -72,6 +72,76 @@
     --gold-muted: 35 40% 50%;
   }
 
+  /* Smooth Theme Transitions */
+  * {
+    border-color: hsl(var(--border));
+  }
+
+  body {
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+
+  /* Light Mode Theme */
+  .light {
+    /* Core backgrounds - Clean Rice Paper / Off-White */
+    --background: 30 10% 98%;
+    --foreground: 0 0% 15%;
+
+    /* Card surfaces */
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 15%;
+
+    /* Popover/Modal surfaces */
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 15%;
+
+    /* Primary accent - Vivid Crimson */
+    --primary: 350 70% 45%;
+    --primary-foreground: 0 0% 100%;
+
+    /* Secondary */
+    --secondary: 30 10% 95%;
+    --secondary-foreground: 0 0% 20%;
+
+    /* Muted elements */
+    --muted: 30 5% 94%;
+    --muted-foreground: 0 0% 45%;
+
+    /* Accent - Subtle Warmth */
+    --accent: 30 15% 95%;
+    --accent-foreground: 0 0% 20%;
+
+    /* Destructive/Warning */
+    --destructive: 0 70% 50%;
+    --destructive-foreground: 0 0% 100%;
+
+    /* Borders and inputs - Crisp definition */
+    --border: 30 5% 90%;
+    --input: 30 5% 90%;
+    --ring: 350 70% 45%;
+
+    /* Sidebar tokens */
+    --sidebar-background: 30 10% 98%;
+    --sidebar-foreground: 0 0% 20%;
+    --sidebar-primary: 350 70% 45%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 30 15% 94%;
+    --sidebar-accent-foreground: 0 0% 20%;
+    --sidebar-border: 30 5% 88%;
+    --sidebar-ring: 350 70% 45%;
+
+    /* Custom Sadhana tokens */
+    --surface-elevated: 0 0% 100%;
+    --surface-overlay: 30 10% 98%;
+    --text-primary: 0 0% 15%;
+    --text-secondary: 0 0% 40%;
+    --text-muted: 0 0% 55%;
+    --crimson: 350 70% 45%;
+    --crimson-glow: 350 60% 60%;
+    --gold-muted: 35 40% 45%;
+  }
+
+  /* Dark Mode Theme (default) */
   .dark {
     --background: 0 0% 4%;
     --foreground: 40 10% 92%;
@@ -109,7 +179,10 @@
     font-family: 'Inter', system-ui, sans-serif;
   }
 
-  h1, h2, h3, h4 {
+  h1,
+  h2,
+  h3,
+  h4 {
     font-family: 'Inter', system-ui, sans-serif;
     font-weight: 600;
     letter-spacing: -0.02em;
@@ -121,6 +194,7 @@
 }
 
 @layer utilities {
+
   /* Subtle glow for accent elements */
   .glow-crimson {
     box-shadow: 0 0 40px -10px hsl(var(--crimson) / 0.4);
@@ -165,24 +239,37 @@
 
   /* Animations */
   @keyframes fade-in {
-    from { opacity: 0; }
-    to { opacity: 1; }
+    from {
+      opacity: 0;
+    }
+
+    to {
+      opacity: 1;
+    }
   }
 
   @keyframes slide-up {
-    from { 
+    from {
       opacity: 0;
       transform: translateY(20px);
     }
-    to { 
+
+    to {
       opacity: 1;
       transform: translateY(0);
     }
   }
 
   @keyframes pulse-subtle {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.7; }
+
+    0%,
+    100% {
+      opacity: 1;
+    }
+
+    50% {
+      opacity: 0.7;
+    }
   }
 
   .animate-fade-in {
@@ -197,14 +284,80 @@
     animation: pulse-subtle 3s ease-in-out infinite;
   }
 
-  .animation-delay-100 { animation-delay: 100ms; }
-  .animation-delay-200 { animation-delay: 200ms; }
-  .animation-delay-300 { animation-delay: 300ms; }
-  .animation-delay-400 { animation-delay: 400ms; }
-  .animation-delay-500 { animation-delay: 500ms; }
+  .animation-delay-100 {
+    animation-delay: 100ms;
+  }
+
+  .animation-delay-200 {
+    animation-delay: 200ms;
+  }
+
+  .animation-delay-300 {
+    animation-delay: 300ms;
+  }
+
+  .animation-delay-400 {
+    animation-delay: 400ms;
+  }
+
+  .animation-delay-500 {
+    animation-delay: 500ms;
+  }
+
+  /* GPU acceleration for smooth animations */
+  .gpu-accelerate {
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    perspective: 1000px;
+  }
+
+  /* Smooth performant transitions */
+  .transition-smooth {
+    transition-property: transform, opacity;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 300ms;
+    will-change: transform, opacity;
+  }
+
+  /* Touch-friendly interactive elements */
+  @media (hover: none) and (pointer: coarse) {
+    .hover\:scale-105:active {
+      transform: scale(1.02);
+    }
+
+    /* Faster transitions on mobile */
+    * {
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    button,
+    a {
+      transition-duration: 150ms !important;
+    }
+  }
+
+  /* Prevent layout shifts */
+  .contain-layout {
+    contain: layout;
+  }
+
+  /* Mobile-optimized blurs - less intense for performance */
+  @media (max-width: 640px) {
+    .blur-3xl {
+      filter: blur(40px);
+    }
+
+    .blur-2xl {
+      filter: blur(30px);
+    }
+
+    .backdrop-blur-sm {
+      backdrop-filter: blur(4px);
+    }
+  }
 
   /* ===== ACCESSIBILITY UTILITIES ===== */
-  
+
   /* Screen reader only - hidden visually but accessible to screen readers */
   .sr-only {
     position: absolute;
@@ -257,12 +410,14 @@
     -ms-overflow-style: none;
     scrollbar-width: none;
   }
+
   .scrollbar-hide::-webkit-scrollbar {
     display: none;
   }
 
   /* Reduced motion - respect user preferences */
   @media (prefers-reduced-motion: reduce) {
+
     *,
     ::before,
     ::after {
@@ -278,11 +433,11 @@
     .border-border {
       border-color: hsl(var(--foreground)) !important;
     }
-    
+
     .text-muted-foreground {
       color: hsl(var(--foreground)) !important;
     }
-    
+
     .bg-primary\/10,
     .bg-primary\/20 {
       background-color: transparent !important;
@@ -291,14 +446,29 @@
   }
 
   /* Ensure touch targets are at least 44x44px for mobile */
-  @media (pointer: coarse) {
-    button,
-    a,
-    input,
-    select {
-      min-height: 44px;
-      min-width: 44px;
-    }
+  input,
+  select {
+    min-height: 44px;
+    min-width: 44px;
   }
 }
 
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--muted-foreground) / 0.3);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--muted-foreground) / 0.5);
+}
+}

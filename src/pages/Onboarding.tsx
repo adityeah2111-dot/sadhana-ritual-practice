@@ -127,7 +127,7 @@ const Onboarding = () => {
 
   const slideVariants = {
     enter: (direction: number) => ({
-      x: direction > 0 ? 100 : -100,
+      x: direction > 0 ? 50 : -50,
       opacity: 0,
     }),
     center: {
@@ -135,7 +135,7 @@ const Onboarding = () => {
       opacity: 1,
     },
     exit: (direction: number) => ({
-      x: direction > 0 ? -100 : 100,
+      x: direction > 0 ? -50 : 50,
       opacity: 0,
     }),
   };
@@ -145,20 +145,10 @@ const Onboarding = () => {
 
   return (
     <div className="min-h-screen bg-background flex flex-col relative overflow-hidden">
-      {/* Background Effects */}
+      {/* Simplified Background - static for better mobile performance */}
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/5 rounded-full blur-3xl" />
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-primary/3 rounded-full blur-3xl" />
-        <motion.div
-          className="absolute top-1/2 left-1/2 w-[600px] h-[600px] -translate-x-1/2 -translate-y-1/2"
-          animate={{ rotate: 360 }}
-          transition={{ duration: 120, repeat: Infinity, ease: "linear" }}
-        >
-          <div className="absolute top-0 left-1/2 w-1 h-1 bg-primary/20 rounded-full" />
-          <div className="absolute bottom-0 left-1/2 w-1.5 h-1.5 bg-primary/15 rounded-full" />
-          <div className="absolute left-0 top-1/2 w-1 h-1 bg-primary/20 rounded-full" />
-          <div className="absolute right-0 top-1/2 w-1.5 h-1.5 bg-primary/15 rounded-full" />
-        </motion.div>
+        <div className="absolute top-1/4 left-1/4 w-64 sm:w-96 h-64 sm:h-96 bg-muted/20 rounded-full blur-3xl" />
+        <div className="absolute bottom-1/4 right-1/4 w-64 sm:w-96 h-64 sm:h-96 bg-muted/15 rounded-full blur-3xl" />
       </div>
 
       {/* Header */}
@@ -215,7 +205,7 @@ const Onboarding = () => {
                           className={`w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 ${isCompleted
                             ? 'bg-primary text-primary-foreground'
                             : isCurrent
-                              ? 'bg-primary/20 border-2 border-primary text-primary'
+                              ? 'bg-muted border-2 border-primary text-primary'
                               : 'bg-card border-2 border-border text-muted-foreground'
                             }`}
                           animate={isCurrent ? { scale: [1, 1.05, 1] } : {}}
@@ -253,8 +243,8 @@ const Onboarding = () => {
             initial="enter"
             animate="center"
             exit="exit"
-            transition={{ duration: 0.3, ease: "easeInOut" }}
-            className="w-full"
+            transition={{ duration: 0.2, ease: "easeOut" }}
+            className="w-full will-change-transform"
           >
             {step === 'welcome' && (
               <WelcomeStep onContinue={handleWelcomeContinue} userName={userName} />

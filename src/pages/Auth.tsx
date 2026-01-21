@@ -30,9 +30,9 @@ const Auth = () => {
     <div className="min-h-screen bg-background relative overflow-hidden flex flex-col items-center justify-center">
       {/* Background Atmosphere */}
       <div className="absolute inset-0 z-0">
-        <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_50%_50%,hsl(var(--crimson)/0.1),transparent_70%)]" />
-        <div className="absolute top-[-20%] left-[-10%] w-[60%] h-[60%] bg-primary/5 rounded-full blur-[120px]" />
-        <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-rose-500/5 rounded-full blur-[100px]" />
+        <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_50%_50%,hsl(var(--muted)/0.3),transparent_70%)]" />
+        <div className="absolute top-[-20%] left-[-10%] w-[60%] h-[60%] bg-muted/30 rounded-full blur-[120px]" />
+        <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-muted/20 rounded-full blur-[100px]" />
       </div>
 
       <div className="relative z-10 w-full max-w-screen-xl px-4 flex flex-col items-center py-10 sm:py-20">
@@ -44,7 +44,7 @@ const Auth = () => {
           className="mb-8 sm:mb-12 text-center"
         >
           <a href="/" className="inline-flex flex-col items-center gap-3 group">
-            <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-primary to-rose-600 flex items-center justify-center shadow-xl shadow-primary/20 group-hover:shadow-primary/40 transition-all duration-500 transform group-hover:scale-105 group-hover:-translate-y-1">
+            <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-primary to-rose-600 flex items-center justify-center shadow-xl shadow-black/20 group-hover:shadow-black/30 transition-all duration-500 transform group-hover:scale-105 group-hover:-translate-y-1">
               <div className="w-6 h-6 bg-white rounded-full opacity-90 shadow-inner" />
             </div>
             <span className="text-3xl font-bold tracking-tighter text-foreground group-hover:text-primary transition-colors duration-300">Sadhana</span>
