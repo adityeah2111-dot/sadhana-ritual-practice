@@ -53,7 +53,7 @@ const HeroSection = () => {
             className="absolute inset-0"
           >
             <div
-              className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+              className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-all duration-700 dark:filter-none filter sepia-[0.15] saturate-[0.8] contrast-[1.05] brightness-[1.05]"
               style={{
                 backgroundImage: imagesLoaded[currentImageIndex]
                   ? `url(${backgroundImages[currentImageIndex].url})`
@@ -63,9 +63,10 @@ const HeroSection = () => {
           </motion.div>
         </AnimatePresence>
 
-        {/* Elegant dark overlays for text readability */}
-        <div className="absolute inset-0 bg-gradient-to-b from-background/90 via-background/60 to-background" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,hsl(var(--background))_100%)] opacity-80" />
+        {/* Elegant overlays for text readability */}
+        {/* Adjusted gradients: More transparency in middle to let image show, heavy fade at edges */}
+        <div className="absolute inset-0 bg-gradient-to-b from-background/95 via-background/50 to-background" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,hsl(var(--background))_100%)] dark:opacity-80 opacity-60" />
 
         {/* Subtle Grid Pattern */}
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] pointer-events-none" />
