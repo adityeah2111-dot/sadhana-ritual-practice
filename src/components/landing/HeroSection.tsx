@@ -40,14 +40,14 @@ const HeroSection = () => {
   return (
     <section className="relative min-h-[100svh] flex items-center justify-center overflow-hidden">
       {/* Background Image Slideshow */}
-      <div className="absolute inset-0">
+      <div className="absolute inset-0 z-0">
         <div className="absolute inset-0 bg-background" />
 
         <AnimatePresence mode="sync">
           <motion.div
             key={currentImageIndex}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
+            initial={{ opacity: 0, scale: 1.1 }}
+            animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 1.5, ease: "easeInOut" }}
             className="absolute inset-0"
@@ -65,22 +65,25 @@ const HeroSection = () => {
 
         {/* Elegant dark overlays for text readability */}
         <div className="absolute inset-0 bg-gradient-to-b from-background/90 via-background/60 to-background" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,hsl(var(--background))_70%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,hsl(var(--background))_100%)] opacity-80" />
+
+        {/* Subtle Grid Pattern */}
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] pointer-events-none" />
       </div>
 
       {/* Main content */}
-      <div className="container relative z-10 px-4 sm:px-6 lg:px-8 py-20 sm:py-24">
-        <div className="max-w-3xl mx-auto text-center">
+      <div className="container relative z-10 px-4 sm:px-6 lg:px-8 flex flex-col items-center justify-center min-h-[100svh] pt-20 pb-10">
+        <div className="max-w-4xl mx-auto text-center">
           {/* Badge */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="flex justify-center mb-6 sm:mb-8"
+            className="flex justify-center mb-8"
           >
-            <div className="inline-flex items-center gap-2 px-3 sm:px-4 py-1.5 bg-card/80 backdrop-blur-sm rounded-full border border-border/50">
-              <Flame className="w-3.5 h-3.5 text-primary/80" />
-              <span className="text-[11px] sm:text-xs font-medium text-foreground/90 uppercase tracking-wider">
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-card/50 backdrop-blur-md rounded-full border border-border/40 shadow-sm">
+              <Flame className="w-4 h-4 text-primary animate-pulse" />
+              <span className="text-xs font-semibold text-foreground/80 uppercase tracking-widest">
                 Discipline over motivation
               </span>
             </div>
@@ -91,7 +94,7 @@ const HeroSection = () => {
             initial={{ opacity: 0, y: 25 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.1 }}
-            className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight leading-[1.1] mb-5 sm:mb-6"
+            className="text-5xl sm:text-7xl lg:text-[7rem] font-bold tracking-tighter leading-[1.05] mb-8"
           >
             <span className="text-foreground">Your daily</span>
             <br />
@@ -122,7 +125,7 @@ const HeroSection = () => {
               <Button
                 variant="hero"
                 size="lg"
-                className="w-full sm:w-auto group text-base px-8 py-6 h-auto rounded-xl shadow-lg shadow-black/20 hover:shadow-xl hover:shadow-black/30 transition-all duration-300"
+                className="w-full sm:w-auto group text-base px-8 py-5 h-auto rounded-lg shadow-lg shadow-black/20 hover:shadow-xl hover:shadow-black/30 transition-all duration-300"
               >
                 <span>Start Your Practice</span>
                 <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
@@ -160,14 +163,14 @@ const HeroSection = () => {
       {/* Scroll indicator - visible on all screens */}
       <motion.div
         initial={{ opacity: 0 }}
-        animate={{ opacity: 0.8 }}
+        animate={{ opacity: 1 }}
         transition={{ delay: 1.5 }}
-        className="absolute bottom-6 sm:bottom-8 left-1/2 -translate-x-1/2"
+        className="absolute bottom-6 sm:bottom-8 left-1/2 -translate-x-1/2 z-20"
       >
         <motion.div
           animate={{ y: [0, 6, 0] }}
           transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
-          className="w-5 h-9 rounded-full border border-muted-foreground/40 flex items-start justify-center pt-2"
+          className="w-5 h-9 rounded-full border-[1.5px] border-muted-foreground/60 flex items-start justify-center pt-2"
         >
           <motion.div
             animate={{ y: [0, 10, 0] }}
