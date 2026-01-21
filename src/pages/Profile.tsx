@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate, Link } from 'react-router-dom';
 import {
     User,
@@ -14,9 +14,12 @@ import {
     Target,
     Edit2,
     Camera,
-    Chrome,
     Shield,
-    UserCircle
+    UserCircle,
+    Check,
+    X,
+    Sparkles,
+    TrendingUp
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -52,38 +55,82 @@ const Profile = () => {
             if (profile.avatar_url) {
                 setAvatarPreview(profile.avatar_url);
             }
-        } else if (user?.email) {
-            setDisplayName(user.email.split('@')[0]);
+        } else {
+            // Fallback: Try to load from localStorage (for local dev)
+            try {
+                const localProfile = JSON.parse(localStorage.getItem('sadhana_profile') || '{}');
+                if (localProfile.display_name) setDisplayName(localProfile.display_name);
+                if (localProfile.full_name) setFullName(localProfile.full_name);
+                if (localProfile.date_of_birth) setDateOfBirth(localProfile.date_of_birth);
+                if (localProfile.gender) setGender(localProfile.gender);
+            } catch {
+                // Ignore localStorage errors
+            }
+
+            // Default display name from email if nothing else is set
+            if (!displayName && user?.email) {
+                setDisplayName(user.email.split('@')[0]);
+            }
         }
     }, [profile, user]);
 
-    const handleSave = async () => {
-        // If anonymous user, show Google login prompt
-        if (isAnonymous) {
-            setShowSavePrompt(true);
-            return;
-        }
+    // Calculate profile completion percentage
+    const getProfileCompletion = () => {
+        let completed = 0;
+        const total = 5;
+        if (displayName) completed++;
+        if (fullName) completed++;
+        if (dateOfBirth) completed++;
+        if (gender) completed++;
+        if (avatarPreview) completed++;
+        return Math.round((completed / total) * 100);
+    };
 
+    const profileCompletion = getProfileCompletion();
+
+    const handleSave = async () => {
         setIsSaving(true);
-        const result = await updateProfile({
+
+        // Only display_name exists in the database - other fields are stored locally
+        const dbUpdates = {
+            display_name: displayName || null,
+        };
+
+        // Additional profile data stored in localStorage
+        const localUpdates = {
             display_name: displayName || null,
             full_name: fullName || null,
             date_of_birth: dateOfBirth || null,
             gender: gender || null,
-        });
+        };
+
+        // Try to save display_name to database
+        const result = await updateProfile(dbUpdates);
+
+        // Always save all data to localStorage as backup/extended storage
+        try {
+            const localProfile = JSON.parse(localStorage.getItem('sadhana_profile') || '{}');
+            const updatedProfile = { ...localProfile, ...localUpdates };
+            localStorage.setItem('sadhana_profile', JSON.stringify(updatedProfile));
+        } catch {
+            // Ignore localStorage errors
+        }
+
         setIsSaving(false);
+        setIsEditing(false);
 
         if (result) {
-            setIsEditing(false);
             toast({
                 title: 'Profile updated',
-                description: 'Your changes have been saved.',
+                description: isAnonymous
+                    ? 'Changes saved for this session. Link Google to keep permanently.'
+                    : 'Your changes have been saved.',
             });
         } else {
+            // DB save failed but localStorage worked
             toast({
-                title: 'Error',
-                description: 'Failed to update profile. Please try again.',
-                variant: 'destructive',
+                title: 'Profile saved locally',
+                description: 'Changes saved to this browser.',
             });
         }
     };
@@ -98,7 +145,6 @@ const Profile = () => {
             const reader = new FileReader();
             reader.onloadend = () => {
                 setAvatarPreview(reader.result as string);
-                // TODO: Upload to storage and update profile
                 toast({
                     title: 'Avatar selected',
                     description: 'Avatar upload will be available soon.',
@@ -180,68 +226,85 @@ const Profile = () => {
             </header>
 
             <main className="container mx-auto px-4 lg:px-6 py-8 sm:py-12">
-                <div className="max-w-2xl mx-auto space-y-6">
-                    {/* Page Title */}
+                <div className="max-w-3xl mx-auto space-y-6">
+
+                    {/* Hero Profile Card */}
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.4 }}
+                        transition={{ duration: 0.5 }}
+                        className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-primary/20 via-background to-rose-500/10 border border-border"
                     >
-                        <h1 className="text-2xl sm:text-3xl font-semibold text-foreground">Your Profile</h1>
-                        <p className="text-muted-foreground mt-1">View and manage your account details</p>
-                    </motion.div>
+                        {/* Background Pattern */}
+                        <div className="absolute inset-0 opacity-30">
+                            <div className="absolute top-0 right-0 w-64 h-64 bg-primary/20 rounded-full blur-3xl" />
+                            <div className="absolute bottom-0 left-0 w-48 h-48 bg-rose-500/20 rounded-full blur-3xl" />
+                        </div>
 
-                    {/* Anonymous User Banner */}
-                    {isAnonymous && (
-                        <motion.div
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.4, delay: 0.05 }}
-                            className="bg-primary/5 border border-primary/20 rounded-xl p-4"
-                        >
-                            <div className="flex items-center gap-3">
-                                <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
-                                    <Shield className="w-5 h-5 text-primary" />
-                                </div>
-                                <div className="flex-1">
-                                    <p className="text-sm font-medium text-foreground">You're using a guest account</p>
-                                    <p className="text-xs text-muted-foreground">Connect with Google to save your profile permanently</p>
-                                </div>
-                                <Button
-                                    variant="crimson"
-                                    size="sm"
-                                    className="gap-2"
-                                    onClick={() => signInWithGoogle()}
+                        <div className="relative p-6 sm:p-8">
+                            {/* Guest Banner - Integrated at top */}
+                            {isAnonymous && (
+                                <motion.div
+                                    initial={{ opacity: 0, y: -10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    className="mb-6 flex items-center gap-3 p-3 bg-primary/10 backdrop-blur-sm rounded-xl border border-primary/20"
                                 >
-                                    <Chrome className="w-4 h-4" />
-                                    Connect
-                                </Button>
-                            </div>
-                        </motion.div>
-                    )}
+                                    <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center flex-shrink-0">
+                                        <Shield className="w-4 h-4 text-primary" />
+                                    </div>
+                                    <div className="flex-1 min-w-0">
+                                        <p className="text-sm font-medium text-foreground">Guest Account</p>
+                                        <p className="text-xs text-muted-foreground truncate">Your progress isn't saved permanently</p>
+                                    </div>
+                                    <Button
+                                        variant="crimson"
+                                        size="sm"
+                                        className="gap-2 flex-shrink-0"
+                                        onClick={() => signInWithGoogle()}
+                                    >
+                                        <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+                                            <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4" />
+                                            <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853" />
+                                            <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05" />
+                                            <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335" />
+                                        </svg>
+                                        <span className="hidden sm:inline">Link Google</span>
+                                    </Button>
+                                </motion.div>
+                            )}
 
-                    {/* Profile Card */}
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.4, delay: 0.1 }}
-                        className="bg-card border border-border rounded-2xl overflow-hidden"
-                    >
-                        {/* Profile Header */}
-                        <div className="bg-gradient-to-r from-primary/10 to-primary/5 border-b border-border p-6 sm:p-8">
-                            <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6">
-                                {/* Avatar with upload */}
-                                <div className="relative group">
-                                    <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-full bg-gradient-to-br from-primary to-rose-500 flex items-center justify-center text-white text-3xl sm:text-4xl font-bold shadow-lg overflow-hidden">
+                            {/* Avatar Section */}
+                            <div className="flex flex-col sm:flex-row items-center gap-6">
+                                <div className="relative">
+                                    {/* Animated Ring */}
+                                    <motion.div
+                                        className="absolute -inset-1.5 rounded-full bg-gradient-to-r from-primary via-rose-500 to-primary"
+                                        animate={{ rotate: 360 }}
+                                        transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
+                                        style={{ opacity: 0.6 }}
+                                    />
+
+                                    {/* Avatar */}
+                                    <div
+                                        className="relative w-28 h-28 sm:w-32 sm:h-32 rounded-full bg-gradient-to-br from-primary to-rose-500 flex items-center justify-center text-white text-4xl sm:text-5xl font-bold shadow-2xl overflow-hidden cursor-pointer group"
+                                        onClick={handleAvatarClick}
+                                    >
                                         {avatarPreview ? (
                                             <img src={avatarPreview} alt="Profile" className="w-full h-full object-cover" />
                                         ) : (
                                             displayName?.charAt(0)?.toUpperCase() || 'U'
                                         )}
+
+                                        {/* Hover Overlay */}
+                                        <div className="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                                            <Camera className="w-8 h-8 text-white" />
+                                        </div>
                                     </div>
+
+                                    {/* Camera Button */}
                                     <button
                                         onClick={handleAvatarClick}
-                                        className="absolute bottom-0 right-0 w-8 h-8 bg-primary rounded-full flex items-center justify-center shadow-lg border-2 border-background hover:bg-primary/90 transition-colors"
+                                        className="absolute -bottom-1 -right-1 w-10 h-10 bg-primary rounded-full flex items-center justify-center shadow-lg border-4 border-background hover:bg-primary/90 transition-colors"
                                     >
                                         <Camera className="w-4 h-4 text-white" />
                                     </button>
@@ -254,160 +317,300 @@ const Profile = () => {
                                     />
                                 </div>
 
+                                {/* Profile Info */}
                                 <div className="flex-1 text-center sm:text-left">
-                                    {isEditing ? (
-                                        <div className="space-y-3">
-                                            <Input
-                                                value={displayName}
-                                                onChange={(e) => setDisplayName(e.target.value)}
-                                                placeholder="Display name"
-                                                className="max-w-[250px]"
-                                            />
-                                            <div className="flex gap-2 justify-center sm:justify-start">
-                                                <Button
-                                                    size="sm"
-                                                    variant="crimson"
-                                                    onClick={handleSave}
-                                                    disabled={isSaving}
-                                                >
-                                                    <Save className="w-4 h-4 mr-1" />
-                                                    Save
-                                                </Button>
-                                                <Button
-                                                    size="sm"
-                                                    variant="ghost"
-                                                    onClick={() => setIsEditing(false)}
-                                                >
-                                                    Cancel
-                                                </Button>
-                                            </div>
+                                    <AnimatePresence mode="wait">
+                                        {isEditing ? (
+                                            <motion.div
+                                                key="editing"
+                                                initial={{ opacity: 0 }}
+                                                animate={{ opacity: 1 }}
+                                                exit={{ opacity: 0 }}
+                                                className="space-y-3"
+                                            >
+                                                <Input
+                                                    value={displayName}
+                                                    onChange={(e) => setDisplayName(e.target.value)}
+                                                    placeholder="Display name"
+                                                    className="max-w-[280px] h-12 text-lg bg-background/50"
+                                                />
+                                                <div className="flex gap-2 justify-center sm:justify-start">
+                                                    <Button
+                                                        size="sm"
+                                                        variant="crimson"
+                                                        onClick={handleSave}
+                                                        disabled={isSaving}
+                                                        className="gap-1.5"
+                                                    >
+                                                        <Check className="w-4 h-4" />
+                                                        Save
+                                                    </Button>
+                                                    <Button
+                                                        size="sm"
+                                                        variant="ghost"
+                                                        onClick={() => setIsEditing(false)}
+                                                        className="gap-1.5"
+                                                    >
+                                                        <X className="w-4 h-4" />
+                                                        Cancel
+                                                    </Button>
+                                                </div>
+                                            </motion.div>
+                                        ) : (
+                                            <motion.div
+                                                key="display"
+                                                initial={{ opacity: 0 }}
+                                                animate={{ opacity: 1 }}
+                                                exit={{ opacity: 0 }}
+                                            >
+                                                <div className="flex items-center gap-2 justify-center sm:justify-start mb-1">
+                                                    <h1 className="text-2xl sm:text-3xl font-bold text-foreground">
+                                                        {displayName || fullName || 'Practitioner'}
+                                                    </h1>
+                                                    <button
+                                                        onClick={() => setIsEditing(true)}
+                                                        className="p-1.5 rounded-lg hover:bg-white/10 transition-colors"
+                                                    >
+                                                        <Edit2 className="w-4 h-4 text-muted-foreground hover:text-foreground" />
+                                                    </button>
+                                                </div>
+                                                <p className="text-muted-foreground flex items-center gap-1.5 justify-center sm:justify-start">
+                                                    <Mail className="w-4 h-4" />
+                                                    {user?.email || (isAnonymous ? 'Guest Account' : 'No email')}
+                                                </p>
+                                                <p className="text-sm text-muted-foreground mt-1">
+                                                    Member since {getMemberSince()}
+                                                </p>
+                                            </motion.div>
+                                        )}
+                                    </AnimatePresence>
+                                </div>
+                            </div>
+
+                            {/* Profile Completion Bar */}
+                            {profileCompletion < 100 && (
+                                <motion.div
+                                    initial={{ opacity: 0, y: 10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ delay: 0.2 }}
+                                    className="mt-6 p-4 bg-background/50 backdrop-blur-sm rounded-xl border border-border/50"
+                                >
+                                    <div className="flex items-center justify-between mb-2">
+                                        <div className="flex items-center gap-2">
+                                            <Sparkles className="w-4 h-4 text-primary" />
+                                            <span className="text-sm font-medium text-foreground">Profile Completion</span>
                                         </div>
+                                        <span className="text-sm font-bold text-primary">{profileCompletion}%</span>
+                                    </div>
+                                    <div className="h-2 bg-muted rounded-full overflow-hidden">
+                                        <motion.div
+                                            className="h-full bg-gradient-to-r from-primary to-rose-500 rounded-full"
+                                            initial={{ width: 0 }}
+                                            animate={{ width: `${profileCompletion}%` }}
+                                            transition={{ duration: 0.8, delay: 0.3 }}
+                                        />
+                                    </div>
+                                    <p className="text-xs text-muted-foreground mt-2">
+                                        Complete your profile for a personalized experience
+                                    </p>
+                                </motion.div>
+                            )}
+                        </div>
+                    </motion.div>
+
+                    {/* Stats Grid */}
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.5, delay: 0.1 }}
+                        className="grid grid-cols-3 gap-3 sm:gap-4"
+                    >
+                        {[
+                            { icon: Flame, label: 'Day Streak', value: stats.currentStreak, color: 'from-orange-500 to-red-500' },
+                            { icon: Trophy, label: 'Sessions', value: stats.totalSessions, color: 'from-amber-500 to-orange-500' },
+                            { icon: Target, label: 'Minutes', value: stats.totalMinutes, color: 'from-rose-500 to-pink-500' },
+                        ].map((stat, index) => (
+                            <motion.div
+                                key={stat.label}
+                                initial={{ opacity: 0, scale: 0.9 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                transition={{ delay: 0.2 + index * 0.1 }}
+                                className="relative overflow-hidden bg-card border border-border rounded-2xl p-4 sm:p-6 text-center group hover:border-primary/50 transition-colors"
+                            >
+                                {/* Background Glow */}
+                                <div className={`absolute inset-0 bg-gradient-to-br ${stat.color} opacity-0 group-hover:opacity-5 transition-opacity`} />
+
+                                <div className={`w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-gradient-to-br ${stat.color} flex items-center justify-center mx-auto mb-3 shadow-lg`}>
+                                    <stat.icon className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
+                                </div>
+                                <p className="text-2xl sm:text-3xl font-bold text-foreground">{stat.value}</p>
+                                <p className="text-xs sm:text-sm text-muted-foreground">{stat.label}</p>
+                            </motion.div>
+                        ))}
+                    </motion.div>
+
+                    {/* Details Cards */}
+                    <div className="grid gap-4 sm:gap-6 sm:grid-cols-2">
+                        {/* Personal Information */}
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.5, delay: 0.2 }}
+                            className="bg-card border border-border rounded-2xl overflow-hidden"
+                        >
+                            <div className="p-4 sm:p-5 border-b border-border bg-muted/30">
+                                <h3 className="font-semibold text-foreground flex items-center gap-2">
+                                    <UserCircle className="w-5 h-5 text-primary" />
+                                    Personal Information
+                                </h3>
+                            </div>
+                            <div className="p-4 sm:p-5 space-y-4">
+                                {/* Full Name */}
+                                <div className="flex items-center justify-between">
+                                    <span className="text-sm text-muted-foreground">Full Name</span>
+                                    {isEditing ? (
+                                        <Input
+                                            value={fullName}
+                                            onChange={(e) => setFullName(e.target.value)}
+                                            placeholder="Enter name"
+                                            className="max-w-[180px] h-9 text-sm"
+                                        />
                                     ) : (
-                                        <>
-                                            <div className="flex items-center gap-2 justify-center sm:justify-start">
-                                                <h2 className="text-xl sm:text-2xl font-semibold text-foreground">
-                                                    {displayName || fullName || 'Practitioner'}
-                                                </h2>
-                                                <button
-                                                    onClick={() => setIsEditing(true)}
-                                                    className="p-1.5 rounded-lg hover:bg-background/50 transition-colors"
-                                                >
-                                                    <Edit2 className="w-4 h-4 text-muted-foreground" />
-                                                </button>
-                                            </div>
-                                            <p className="text-sm text-muted-foreground mt-1 flex items-center gap-1.5 justify-center sm:justify-start">
-                                                <Mail className="w-3.5 h-3.5" />
-                                                {user?.email || user?.phone || (isAnonymous ? 'Guest Account' : 'No email')}
-                                            </p>
-                                        </>
+                                        <span className={`text-sm ${fullName ? 'text-foreground font-medium' : 'text-muted-foreground italic'}`}>
+                                            {fullName || 'Not set'}
+                                        </span>
+                                    )}
+                                </div>
+
+                                {/* Date of Birth */}
+                                <div className="flex items-center justify-between">
+                                    <span className="text-sm text-muted-foreground">Date of Birth</span>
+                                    {isEditing ? (
+                                        <Input
+                                            type="date"
+                                            value={dateOfBirth}
+                                            onChange={(e) => setDateOfBirth(e.target.value)}
+                                            className="max-w-[180px] h-9 text-sm"
+                                        />
+                                    ) : (
+                                        <span className={`text-sm ${dateOfBirth ? 'text-foreground font-medium' : 'text-muted-foreground italic'}`}>
+                                            {formatDOB(dateOfBirth)}
+                                        </span>
+                                    )}
+                                </div>
+
+                                {/* Gender */}
+                                <div className="flex items-center justify-between">
+                                    <span className="text-sm text-muted-foreground">Gender</span>
+                                    {isEditing ? (
+                                        <select
+                                            value={gender}
+                                            onChange={(e) => setGender(e.target.value as typeof gender)}
+                                            className="max-w-[180px] h-9 px-3 text-sm rounded-md border border-input bg-background text-foreground"
+                                        >
+                                            <option value="">Select</option>
+                                            <option value="male">Male</option>
+                                            <option value="female">Female</option>
+                                            <option value="other">Other</option>
+                                            <option value="prefer_not_to_say">Prefer not to say</option>
+                                        </select>
+                                    ) : (
+                                        <span className={`text-sm ${gender ? 'text-foreground font-medium' : 'text-muted-foreground italic'}`}>
+                                            {formatGender(gender)}
+                                        </span>
                                     )}
                                 </div>
                             </div>
-                        </div>
+                        </motion.div>
 
-                        {/* Profile Details */}
-                        <div className="p-6 sm:p-8 space-y-6">
-                            {/* Personal Information */}
-                            <div>
-                                <h3 className="text-sm font-medium text-muted-foreground mb-4 uppercase tracking-wider flex items-center gap-2">
-                                    <UserCircle className="w-4 h-4" />
-                                    Personal Information
-                                </h3>
-                                <div className="space-y-3">
-                                    <div className="flex items-center justify-between py-3 border-b border-border/50">
-                                        <span className="text-foreground">Full Name</span>
-                                        <span className="text-muted-foreground">{fullName || 'Not set'}</span>
-                                    </div>
-                                    <div className="flex items-center justify-between py-3 border-b border-border/50">
-                                        <span className="text-foreground">Date of Birth</span>
-                                        <span className="text-muted-foreground">{formatDOB(dateOfBirth)}</span>
-                                    </div>
-                                    <div className="flex items-center justify-between py-3">
-                                        <span className="text-foreground">Gender</span>
-                                        <span className="text-muted-foreground">{formatGender(gender)}</span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            {/* Practice Stats */}
-                            <div>
-                                <h3 className="text-sm font-medium text-muted-foreground mb-4 uppercase tracking-wider flex items-center gap-2">
-                                    <Flame className="w-4 h-4" />
-                                    Practice Stats
-                                </h3>
-                                <div className="grid grid-cols-3 gap-3 sm:gap-4">
-                                    <div className="bg-background rounded-xl p-3 sm:p-4 text-center">
-                                        <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-2">
-                                            <Flame className="w-4 h-4 sm:w-5 sm:h-5 text-primary" />
-                                        </div>
-                                        <p className="text-xl sm:text-2xl font-bold text-foreground">{stats.currentStreak}</p>
-                                        <p className="text-[10px] sm:text-xs text-muted-foreground">Day Streak</p>
-                                    </div>
-                                    <div className="bg-background rounded-xl p-3 sm:p-4 text-center">
-                                        <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-2">
-                                            <Trophy className="w-4 h-4 sm:w-5 sm:h-5 text-primary" />
-                                        </div>
-                                        <p className="text-xl sm:text-2xl font-bold text-foreground">{stats.totalSessions}</p>
-                                        <p className="text-[10px] sm:text-xs text-muted-foreground">Sessions</p>
-                                    </div>
-                                    <div className="bg-background rounded-xl p-3 sm:p-4 text-center">
-                                        <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-2">
-                                            <Target className="w-4 h-4 sm:w-5 sm:h-5 text-primary" />
-                                        </div>
-                                        <p className="text-xl sm:text-2xl font-bold text-foreground">{stats.totalMinutes}</p>
-                                        <p className="text-[10px] sm:text-xs text-muted-foreground">Minutes</p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            {/* Practice Settings */}
-                            <div>
-                                <h3 className="text-sm font-medium text-muted-foreground mb-4 uppercase tracking-wider flex items-center gap-2">
-                                    <Clock className="w-4 h-4" />
+                        {/* Practice Settings */}
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.5, delay: 0.3 }}
+                            className="bg-card border border-border rounded-2xl overflow-hidden"
+                        >
+                            <div className="p-4 sm:p-5 border-b border-border bg-muted/30">
+                                <h3 className="font-semibold text-foreground flex items-center gap-2">
+                                    <Clock className="w-5 h-5 text-primary" />
                                     Practice Settings
                                 </h3>
-                                <div className="space-y-3">
-                                    <div className="flex items-center justify-between py-3 border-b border-border/50">
-                                        <div className="flex items-center gap-3">
-                                            <Clock className="w-5 h-5 text-primary" />
-                                            <span className="text-foreground">Daily Practice Time</span>
-                                        </div>
-                                        <span className="text-muted-foreground">{formatTime(profile?.practice_time || null)}</span>
+                            </div>
+                            <div className="p-4 sm:p-5 space-y-4">
+                                <div className="flex items-center justify-between">
+                                    <div className="flex items-center gap-2">
+                                        <Clock className="w-4 h-4 text-primary" />
+                                        <span className="text-sm text-muted-foreground">Daily Time</span>
                                     </div>
-                                    <div className="flex items-center justify-between py-3 border-b border-border/50">
-                                        <div className="flex items-center gap-3">
-                                            <Globe className="w-5 h-5 text-primary" />
-                                            <span className="text-foreground">Timezone</span>
-                                        </div>
-                                        <span className="text-muted-foreground">{profile?.timezone || 'Not set'}</span>
+                                    <span className="text-sm text-foreground font-medium">
+                                        {formatTime(profile?.practice_time || null)}
+                                    </span>
+                                </div>
+                                <div className="flex items-center justify-between">
+                                    <div className="flex items-center gap-2">
+                                        <Globe className="w-4 h-4 text-primary" />
+                                        <span className="text-sm text-muted-foreground">Timezone</span>
                                     </div>
-                                    <div className="flex items-center justify-between py-3">
-                                        <div className="flex items-center gap-3">
-                                            <Calendar className="w-5 h-5 text-primary" />
-                                            <span className="text-foreground">Member Since</span>
-                                        </div>
-                                        <span className="text-muted-foreground">{getMemberSince()}</span>
+                                    <span className="text-sm text-foreground font-medium">
+                                        {profile?.timezone || 'Not set'}
+                                    </span>
+                                </div>
+                                <div className="flex items-center justify-between">
+                                    <div className="flex items-center gap-2">
+                                        <Calendar className="w-4 h-4 text-primary" />
+                                        <span className="text-sm text-muted-foreground">Member Since</span>
                                     </div>
+                                    <span className="text-sm text-foreground font-medium">
+                                        {getMemberSince()}
+                                    </span>
                                 </div>
                             </div>
+                        </motion.div>
+                    </div>
 
-                            {/* Actions */}
-                            <div className="pt-4 space-y-3">
+                    {/* Action Buttons */}
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.5, delay: 0.4 }}
+                        className="flex flex-col sm:flex-row gap-3"
+                    >
+                        {!isEditing ? (
+                            <Button
+                                variant="crimson"
+                                className="flex-1 h-12 gap-2"
+                                onClick={() => setIsEditing(true)}
+                            >
+                                <Edit2 className="w-4 h-4" />
+                                Edit Profile
+                            </Button>
+                        ) : (
+                            <>
                                 <Button
-                                    variant="subtle"
-                                    className="w-full"
-                                    onClick={() => setIsEditing(true)}
+                                    variant="crimson"
+                                    className="flex-1 h-12 gap-2"
+                                    onClick={handleSave}
+                                    disabled={isSaving}
                                 >
-                                    <Edit2 className="w-4 h-4 mr-2" />
-                                    Edit Profile
+                                    <Save className="w-4 h-4" />
+                                    {isSaving ? 'Saving...' : 'Save Changes'}
                                 </Button>
-                                <Link to="/settings" className="block">
-                                    <Button variant="outline" className="w-full">
-                                        Edit Practice Settings
-                                    </Button>
-                                </Link>
-                            </div>
-                        </div>
+                                <Button
+                                    variant="outline"
+                                    className="flex-1 h-12 gap-2"
+                                    onClick={() => setIsEditing(false)}
+                                >
+                                    <X className="w-4 h-4" />
+                                    Cancel
+                                </Button>
+                            </>
+                        )}
+                        <Link to="/settings" className="flex-1">
+                            <Button variant="outline" className="w-full h-12 gap-2">
+                                <TrendingUp className="w-4 h-4" />
+                                Practice Settings
+                            </Button>
+                        </Link>
                     </motion.div>
                 </div>
             </main>

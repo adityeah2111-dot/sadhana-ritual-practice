@@ -62,7 +62,7 @@ const PricingSection = () => {
           </motion.p>
         </div>
 
-        {/* Billing Toggle - Improved Mobile Design */}
+        {/* Billing Toggle - Fixed Mobile Design */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -71,21 +71,21 @@ const PricingSection = () => {
           className="flex items-center justify-center mb-10 sm:mb-12"
         >
           <div className="relative inline-flex items-center bg-card border border-border rounded-full p-1 shadow-sm">
-            {/* Background slider */}
+            {/* Background slider - Using transform for reliable mobile positioning */}
             <motion.div
-              className="absolute top-1 bottom-1 rounded-full bg-primary shadow-md"
+              className="absolute top-1 bottom-1 w-[calc(50%-4px)] rounded-full bg-primary shadow-md"
               initial={false}
               animate={{
-                left: isYearly ? 'calc(50% + 2px)' : '4px',
-                right: isYearly ? '4px' : 'calc(50% + 2px)',
+                x: isYearly ? 'calc(100% + 4px)' : '0px',
               }}
+              style={{ left: '4px' }}
               transition={{ type: "spring", stiffness: 400, damping: 30 }}
             />
 
             {/* Monthly button */}
             <button
               onClick={() => setIsYearly(false)}
-              className={`relative z-10 px-4 sm:px-6 py-2 text-sm font-medium rounded-full transition-colors duration-200 ${!isYearly ? 'text-primary-foreground' : 'text-muted-foreground hover:text-foreground'
+              className={`relative z-10 px-3 sm:px-6 py-2 text-sm font-medium rounded-full transition-colors duration-200 min-w-[70px] sm:min-w-[90px] ${!isYearly ? 'text-primary-foreground' : 'text-muted-foreground hover:text-foreground'
                 }`}
             >
               Monthly
@@ -94,14 +94,12 @@ const PricingSection = () => {
             {/* Yearly button */}
             <button
               onClick={() => setIsYearly(true)}
-              className={`relative z-10 px-4 sm:px-6 py-2 text-sm font-medium rounded-full transition-colors duration-200 flex items-center gap-1.5 ${isYearly ? 'text-primary-foreground' : 'text-muted-foreground hover:text-foreground'
+              className={`relative z-10 px-3 sm:px-6 py-2 text-sm font-medium rounded-full transition-colors duration-200 flex items-center justify-center gap-0 min-w-[70px] sm:min-w-[90px] ${isYearly ? 'text-primary-foreground' : 'text-muted-foreground hover:text-foreground'
                 }`}
             >
-              Yearly
-              <span className={`text-[10px] sm:text-xs px-1.5 py-0.5 rounded-full transition-colors ${isYearly ? 'bg-white/20 text-white' : 'bg-primary/10 text-primary'
-                }`}>
-                -33%
-              </span>
+              <span>Yearly</span>
+              <span className={`text-[9px] sm:text-xs px-0 sm:px-1.5 py-0.5 rounded-full transition-colors ${isYearly ? 'bg-white/20 text-white' : 'bg-primary/10 text-primary'
+                }`}>-33%</span>
             </button>
           </div>
         </motion.div>

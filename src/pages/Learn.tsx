@@ -217,6 +217,198 @@ const blogPosts = [
         author: 'Sadhana Team',
         date: 'January 1, 2026',
     },
+    {
+        id: 'pranayama-breath-mastery',
+        category: 'Yoga Philosophy',
+        title: 'Pranayama: The Ancient Science of Breath Control',
+        excerpt: 'The Vedas teach that breath is the bridge between body and mind. Master your breath, master your life through these time-tested techniques.',
+        content: `
+      <p>In the Vedic tradition, prana is not merely breath—it is the vital life force that animates all living beings. Pranayama, the fourth limb of yoga, is the science of controlling this life force through regulated breathing practices.</p>
+      
+      <h3>The Vedic Understanding of Prana</h3>
+      <p>The Upanishads describe five types of prana (pancha prana) governing different functions: Prana (inhalation), Apana (elimination), Samana (digestion), Udana (speech/growth), and Vyana (circulation). When these are balanced, health and clarity naturally arise.</p>
+      
+      <h3>Three Essential Pranayama Techniques</h3>
+      <p><strong>Nadi Shodhana (Alternate Nostril Breathing):</strong> This practice balances the left and right energy channels (ida and pingala), calming the mind and preparing it for meditation. Practice for 5-10 minutes daily.</p>
+      <p><strong>Kapalabhati (Skull-Shining Breath):</strong> A cleansing breath that energizes the body and clears mental fog. Start with 30 rapid exhalations, then rest and observe.</p>
+      <p><strong>Bhramari (Humming Bee Breath):</strong> The vibration of humming calms the nervous system and is especially effective before sleep or meditation.</p>
+      
+      <h3>The Science Behind Ancient Wisdom</h3>
+      <p>Modern research confirms what the Vedas taught millennia ago: controlled breathing activates the parasympathetic nervous system, reduces cortisol, and increases heart rate variability—a marker of resilience and longevity.</p>
+      
+      <blockquote>"When the breath wanders the mind also is unsteady. But when the breath is calmed the mind too will be still." — Hatha Yoga Pradipika</blockquote>
+    `,
+        readTime: '10 min read',
+        icon: Sparkles,
+        gradient: 'from-cyan-500 to-blue-500',
+        author: 'Sadhana Team',
+        date: 'December 28, 2025',
+    },
+    {
+        id: 'gita-action-philosophy',
+        category: 'Discipline',
+        title: 'The Gita\'s Philosophy of Action: Nishkama Karma',
+        excerpt: 'The Bhagavad Gita teaches us to act without attachment to results. Discover how this ancient wisdom transforms both practice and daily life.',
+        content: `
+      <p>The Bhagavad Gita, spoken on the battlefield of Kurukshetra, contains perhaps the most practical philosophy of action ever articulated. At its heart is the concept of Nishkama Karma—action without attachment to fruits.</p>
+      
+      <h3>Understanding Nishkama Karma</h3>
+      <p>Lord Krishna teaches Arjuna: "You have the right to work, but never to the fruit of work." This doesn't mean we shouldn't have goals—it means we shouldn't be enslaved by them. We act because it is right to act, not because of what we might receive.</p>
+      
+      <h3>Why Attachment Destroys Practice</h3>
+      <p>When we practice only for results—weight loss, flexibility, peace of mind—we set ourselves up for disappointment. Results are never fully in our control. The weather of life interferes. But the act of showing up? That's always within our power.</p>
+      
+      <h3>Applying the Gita to Your Sadhana</h3>
+      <ul>
+        <li><strong>Focus on the process:</strong> Each breath, each moment of presence is complete in itself.</li>
+        <li><strong>Release comparison:</strong> Your practice is yours alone. Another's progress is irrelevant.</li>
+        <li><strong>Find joy in discipline:</strong> The act of showing up becomes its own reward.</li>
+        <li><strong>Accept all outcomes:</strong> A "bad" practice day is still a practice day.</li>
+      </ul>
+      
+      <h3>The Paradox of Detachment</h3>
+      <p>Ironically, when we release attachment to outcomes, we often achieve more. Freed from anxiety about results, our practice deepens. Our actions become more skillful. The Gita's wisdom is paradoxical but profoundly practical.</p>
+      
+      <blockquote>"Perform your obligatory duty, because action is indeed better than inaction." — Bhagavad Gita 3.8</blockquote>
+    `,
+        readTime: '12 min read',
+        icon: Target,
+        gradient: 'from-orange-500 to-amber-500',
+        author: 'Sadhana Team',
+        date: 'December 22, 2025',
+    },
+    {
+        id: 'tapas-transformative-heat',
+        category: 'Yoga Philosophy',
+        title: 'Tapas: The Transformative Fire of Discipline',
+        excerpt: 'In yoga philosophy, Tapas is the internal heat generated through disciplined practice. Learn how voluntary discomfort leads to profound transformation.',
+        content: `
+      <p>Tapas, from the Sanskrit root "tap" meaning "to burn," is one of the Niyamas (personal observances) in Patanjali's Yoga Sutras. It refers to the disciplined use of energy—the willingness to undergo voluntary hardship for growth.</p>
+      
+      <h3>The Alchemy of Discomfort</h3>
+      <p>Just as gold is purified by fire, the practitioner is purified by Tapas. This doesn't mean extreme asceticism—it means choosing the harder right over the easier wrong, consistently.</p>
+      
+      <h3>Modern Applications of Tapas</h3>
+      <ul>
+        <li><strong>Waking early:</strong> Rising before dawn when the body craves sleep</li>
+        <li><strong>Holding difficult poses:</strong> Staying present when discomfort arises</li>
+        <li><strong>Fasting:</strong> Occasional restraint from food to clarify the mind</li>
+        <li><strong>Cold exposure:</strong> Brief cold showers to build mental resilience</li>
+        <li><strong>Silence:</strong> Periods of verbal restraint to conserve energy</li>
+      </ul>
+      
+      <h3>Tapas vs. Self-Punishment</h3>
+      <p>True Tapas is not self-torture. It is chosen, conscious, and purposeful. The intent is transformation, not punishment. If a practice creates only suffering without growth, it is not Tapas—it is violence against the self.</p>
+      
+      <h3>Building Your Tapas Practice</h3>
+      <p>Start small. Choose one area where you will exercise deliberate restraint or discipline. Practice it daily for 40 days—the traditional period for establishing a Samskara (mental impression). Observe how the initial difficulty transforms into ease, then into strength.</p>
+      
+      <blockquote>"Through Tapas, impurities are destroyed and there comes perfection of the body and the senses." — Yoga Sutras 2.43</blockquote>
+    `,
+        readTime: '9 min read',
+        icon: Flame,
+        gradient: 'from-red-600 to-orange-500',
+        author: 'Sadhana Team',
+        date: 'December 15, 2025',
+    },
+    {
+        id: 'karma-yoga-daily-life',
+        category: 'Discipline',
+        title: 'Karma Yoga: Finding Practice in Every Action',
+        excerpt: 'Every action can become yoga when performed with awareness and dedication. Transform mundane tasks into spiritual practice.',
+        content: `
+      <p>Karma Yoga, the yoga of action, teaches that liberation is possible not by renouncing the world, but by transforming our relationship to action. Every task, no matter how mundane, can become a spiritual practice.</p>
+      
+      <h3>The Three Principles of Karma Yoga</h3>
+      <p><strong>Skill in Action:</strong> Whatever you do, do it excellently. Half-hearted effort creates neither worldly success nor spiritual progress.</p>
+      <p><strong>Detachment from Results:</strong> Act fully, then release. The outcome is not yours to control.</p>
+      <p><strong>Dedication to Something Higher:</strong> Offer your actions to the Divine, to humanity, or to your highest ideal. This transforms ego-driven action into service.</p>
+      
+      <h3>Finding Yoga in the Everyday</h3>
+      <ul>
+        <li><strong>Cooking:</strong> Prepare food with full attention, as an offering</li>
+        <li><strong>Cleaning:</strong> See each stroke as purifying your external and internal environment</li>
+        <li><strong>Work:</strong> Perform duties excellently, without obsession over recognition</li>
+        <li><strong>Relationships:</strong> Serve others without keeping score</li>
+      </ul>
+      
+      <h3>The Integration of Practice and Life</h3>
+      <p>Many practitioners make the mistake of separating "practice time" from "regular life." But the mat is just training ground. The real test is how we show up when the timer stops—in traffic, in conflict, in boredom.</p>
+      
+      <blockquote>"Yoga is skill in action." — Bhagavad Gita 2.50</blockquote>
+    `,
+        readTime: '8 min read',
+        icon: Brain,
+        gradient: 'from-violet-500 to-purple-500',
+        author: 'Sadhana Team',
+        date: 'December 10, 2025',
+    },
+    {
+        id: 'meditation-neuroscience',
+        category: 'Habit Formation',
+        title: 'The Neuroscience of Meditation: What the Vedas Knew',
+        excerpt: 'Modern science is finally catching up to ancient wisdom. Discover how meditation physically rewires your brain for clarity and calm.',
+        content: `
+      <p>For thousands of years, the Vedic tradition has taught that meditation transforms consciousness. Now, neuroscience provides the evidence: meditation literally rewires the brain.</p>
+      
+      <h3>Structural Brain Changes</h3>
+      <p><strong>Increased Gray Matter:</strong> Studies show meditation increases gray matter density in areas responsible for learning, memory, and emotional regulation.</p>
+      <p><strong>Reduced Amygdala Activity:</strong> The brain's fear center becomes less reactive, leading to decreased anxiety and stress responses.</p>
+      <p><strong>Thicker Prefrontal Cortex:</strong> Enhanced activity in areas governing decision-making and attention.</p>
+      
+      <h3>The Default Mode Network</h3>
+      <p>Scientists have identified the Default Mode Network (DMN)—brain regions active during mind-wandering and self-referential thinking. Meditation reduces DMN activity, quieting the "monkey mind" the Vedas described millennia ago.</p>
+      
+      <h3>How Long Until Results?</h3>
+      <p>Research suggests changes begin within 8 weeks of consistent practice—approximately the same 40-day period recommended by traditional teachers. Even 10 minutes daily produces measurable effects.</p>
+      
+      <h3>Vedic Categories, Scientific Validation</h3>
+      <p>The ancient texts categorized mental states (vrittis) and prescribed specific practices for each. Modern research validates these categories: focused attention meditation, open monitoring meditation, and loving-kindness meditation each produce distinct but complementary effects.</p>
+      
+      <blockquote>"The mind is everything. What you think, you become." — Buddha (influenced by Vedic tradition)</blockquote>
+    `,
+        readTime: '11 min read',
+        icon: Brain,
+        gradient: 'from-emerald-500 to-teal-500',
+        author: 'Sadhana Team',
+        date: 'December 5, 2025',
+    },
+    {
+        id: 'breaking-bad-habits',
+        category: 'Habit Formation',
+        title: 'Breaking Bad Habits: The Samskara Approach',
+        excerpt: 'The Vedic concept of Samskaras explains why habits are so persistent—and how to finally break free from patterns that no longer serve you.',
+        content: `
+      <p>In Vedic psychology, Samskaras are mental impressions left by past actions. Like grooves worn into a path, they make certain behaviors automatic. Understanding Samskaras is key to breaking unwanted habits.</p>
+      
+      <h3>Why Bad Habits Persist</h3>
+      <p>Each time we repeat an action, the Samskara deepens. The behavior becomes more automatic, more compelling. This is why willpower alone rarely succeeds—we're fighting against deeply worn neural pathways.</p>
+      
+      <h3>The Vedic Strategy for Change</h3>
+      <p><strong>Awareness (Viveka):</strong> First, observe the habit without judgment. Notice the trigger, the craving, the action, the temporary relief, the eventual dissatisfaction.</p>
+      <p><strong>New Samskaras:</strong> Replace the old pattern with a new one. Don't just stop—redirect. When the trigger arises, perform a new, positive action.</p>
+      <p><strong>Repetition:</strong> Repeat the new pattern until it becomes as automatic as the old one was.</p>
+      
+      <h3>The 40-Day Protocol</h3>
+      <p>Traditional teachings suggest 40 consecutive days of practice to establish a new Samskara. Miss a day? Start over. This may seem strict, but it ensures the new pattern is deeply grooved before testing it in difficult conditions.</p>
+      
+      <h3>Practical Steps</h3>
+      <ol>
+        <li>Choose ONE habit to change</li>
+        <li>Identify the trigger precisely</li>
+        <li>Design a replacement behavior</li>
+        <li>Practice for 40 days without exception</li>
+        <li>After 40 days, the new habit will feel natural</li>
+      </ol>
+      
+      <blockquote>"Watch your thoughts, they become your words; watch your words, they become your actions; watch your actions, they become your habits; watch your habits, they become your character." — Upanishadic Wisdom</blockquote>
+    `,
+        readTime: '10 min read',
+        icon: Clock,
+        gradient: 'from-pink-500 to-rose-500',
+        author: 'Sadhana Team',
+        date: 'November 28, 2025',
+    },
 ];
 
 const categories = [
@@ -380,8 +572,8 @@ const Learn = () => {
                                 key={category.name}
                                 onClick={() => setSelectedCategory(category.name)}
                                 className={`px-4 py-2 rounded-full text-sm font-medium transition-all border ${selectedCategory === category.name
-                                        ? 'border-primary bg-primary/10 text-foreground'
-                                        : 'border-border hover:border-primary/50 hover:bg-primary/5 text-muted-foreground hover:text-foreground'
+                                    ? 'border-primary bg-primary/10 text-foreground'
+                                    : 'border-border hover:border-primary/50 hover:bg-primary/5 text-muted-foreground hover:text-foreground'
                                     }`}
                             >
                                 {category.name}

@@ -157,40 +157,51 @@ const PracticeHeatmap = ({ sessions }: PracticeHeatmapProps) => {
                 <div className="flex gap-1 overflow-x-auto pb-2 scrollbar-hide">
                     {weeks.map((week, weekIndex) => (
                         <div key={weekIndex} className="flex flex-col gap-1">
-                            {week.map((day, dayIndex) => (
-                                <motion.div
-                                    key={`${weekIndex}-${dayIndex}`}
-                                    initial={{ scale: 0, opacity: 0 }}
-                                    animate={{ scale: 1, opacity: 1 }}
-                                    transition={{
-                                        delay: weekIndex * 0.02 + dayIndex * 0.01,
-                                        duration: 0.2,
-                                    }}
-                                    className="group relative"
-                                >
-                                    <div
-                                        className={`w-3 h-3 sm:w-4 sm:h-4 rounded-[3px] border transition-all duration-200 cursor-pointer hover:ring-2 hover:ring-primary/30 hover:ring-offset-1 hover:ring-offset-background ${getIntensityClass(
-                                            day.level
-                                        )}`}
-                                    />
+                            {week.map((day, dayIndex) => {
+                                // Determine if tooltip should show below (for top rows)
+                                const showBelow = dayIndex < 3;
 
-                                    {/* Tooltip */}
-                                    <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-2 bg-zinc-900 border border-zinc-700 rounded-lg shadow-xl opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-50 whitespace-nowrap">
-                                        <p className="text-xs font-semibold text-white">
-                                            {formatDate(day.date)}
-                                        </p>
-                                        {day.count > 0 ? (
-                                            <p className="text-[10px] text-zinc-300 mt-0.5">
-                                                {day.count} session{day.count > 1 ? 's' : ''} · {day.minutes} min
+                                return (
+                                    <motion.div
+                                        key={`${weekIndex}-${dayIndex}`}
+                                        initial={{ scale: 0, opacity: 0 }}
+                                        animate={{ scale: 1, opacity: 1 }}
+                                        transition={{
+                                            delay: weekIndex * 0.02 + dayIndex * 0.01,
+                                            duration: 0.2,
+                                        }}
+                                        className="group relative"
+                                    >
+                                        <div
+                                            className={`w-3 h-3 sm:w-4 sm:h-4 rounded-[3px] border transition-all duration-200 cursor-pointer hover:ring-2 hover:ring-primary/30 hover:ring-offset-1 hover:ring-offset-background ${getIntensityClass(
+                                                day.level
+                                            )}`}
+                                        />
+
+                                        {/* Tooltip - Dynamic positioning based on row */}
+                                        <div className={`absolute left-1/2 -translate-x-1/2 px-3 py-2 bg-zinc-900 border border-zinc-700 rounded-lg shadow-xl opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-50 whitespace-nowrap ${showBelow
+                                                ? 'top-full mt-2'
+                                                : 'bottom-full mb-2'
+                                            }`}>
+                                            <p className="text-xs font-semibold text-white">
+                                                {formatDate(day.date)}
                                             </p>
-                                        ) : (
-                                            <p className="text-[10px] text-zinc-400 mt-0.5">No practice</p>
-                                        )}
-                                        {/* Tooltip arrow */}
-                                        <div className="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-zinc-900" />
-                                    </div>
-                                </motion.div>
-                            ))}
+                                            {day.count > 0 ? (
+                                                <p className="text-[10px] text-zinc-300 mt-0.5">
+                                                    {day.count} session{day.count > 1 ? 's' : ''} · {day.minutes} min
+                                                </p>
+                                            ) : (
+                                                <p className="text-[10px] text-zinc-400 mt-0.5">No practice</p>
+                                            )}
+                                            {/* Tooltip arrow - Dynamic */}
+                                            <div className={`absolute left-1/2 -translate-x-1/2 border-4 border-transparent ${showBelow
+                                                    ? 'bottom-full border-b-zinc-900'
+                                                    : 'top-full border-t-zinc-900'
+                                                }`} />
+                                        </div>
+                                    </motion.div>
+                                );
+                            })}
                         </div>
                     ))}
                 </div>

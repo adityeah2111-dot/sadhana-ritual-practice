@@ -44,22 +44,54 @@ export const useProfile = () => {
   };
 
   const updateProfile = async (updates: Partial<Profile>) => {
-    if (!user || !profile) return null;
+    if (!user) return null;
 
-    const { data, error } = await supabase
-      .from('profiles')
-      .update(updates)
-      .eq('user_id', user.id)
-      .select()
-      .single();
+    try {
+      // Try to update first (most common case - profile exists)
+      const { data: updateData, error: updateError } = await supabase
+        .from('profiles')
+        .update({
+          ...updates,
+          updated_at: new Date().toISOString(),
+        })
+        .eq('user_id', user.id)
+        .select()
+        .maybeSingle();
 
-    if (error) {
-      console.error('Error updating profile:', error);
+      if (updateError) {
+        console.error('Error updating profile:', updateError);
+        return null;
+      }
+
+      // If update succeeded (returned data), we're done
+      if (updateData) {
+        setProfile(updateData as Profile);
+        return updateData;
+      }
+
+      // If no data returned (profile doesn't exist), try insert
+      const { data: insertData, error: insertError } = await supabase
+        .from('profiles')
+        .insert({
+          user_id: user.id,
+          ...updates,
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+        })
+        .select()
+        .single();
+
+      if (insertError) {
+        console.error('Error creating profile:', insertError);
+        return null;
+      }
+
+      setProfile(insertData as Profile);
+      return insertData;
+    } catch (err) {
+      console.error('Unexpected error in updateProfile:', err);
       return null;
     }
-
-    setProfile(data as Profile);
-    return data;
   };
 
   const completeOnboarding = async (practiceTime: string, timezone: string, displayName?: string) => {
