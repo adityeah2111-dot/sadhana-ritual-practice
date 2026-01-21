@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, Flame, User, LogOut } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
@@ -91,7 +92,7 @@ const Header = () => {
   return (
     <>
       <header
-        className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-border/50"
+        className="fixed top-0 left-0 right-0 z-[60] bg-background/80 backdrop-blur-md border-b border-border/50"
         role="banner"
       >
         <div className="container mx-auto px-4 lg:px-6">
@@ -256,79 +257,121 @@ const Header = () => {
             </div>
           </div>
         </div>
+      </header>
 
-        {/* Mobile Menu */}
+      {/* Mobile Menu - Full Screen Overlay via Portal */}
+      {createPortal(
         <AnimatePresence>
           {isMenuOpen && (
             <motion.div
               id="mobile-menu"
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: "auto" }}
-              exit={{ opacity: 0, height: 0 }}
-              transition={{ duration: 0.2 }}
-              className="md:hidden bg-background border-b border-border"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
+              className="fixed inset-0 z-50 bg-background/95 backdrop-blur-xl md:hidden flex flex-col pt-20"
               role="dialog"
               aria-modal="true"
               aria-label="Navigation menu"
             >
               <nav
-                className="container mx-auto px-4 py-6 flex flex-col gap-4"
+                className="flex-1 flex flex-col p-6 overflow-y-auto"
                 role="navigation"
                 aria-label="Mobile navigation"
               >
-                {navLinks.map((link) => (
-                  link.isRoute ? (
-                    <Link
+                <div className="flex flex-col gap-1 mb-8">
+                  {navLinks.map((link, index) => (
+                    <motion.div
                       key={link.href}
-                      to={link.href}
-                      className="text-lg text-muted-foreground hover:text-foreground transition-colors py-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded-md px-2"
-                      onClick={() => setIsMenuOpen(false)}
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: 0.1 + index * 0.05, duration: 0.3 }}
                     >
-                      {link.label}
-                    </Link>
-                  ) : (
-                    <a
-                      key={link.href}
-                      href={link.href}
-                      className="text-lg text-muted-foreground hover:text-foreground transition-colors py-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded-md px-2"
-                      onClick={() => setIsMenuOpen(false)}
-                    >
-                      {link.label}
-                    </a>
-                  )
-                ))}
-                <div className="flex flex-col gap-3 pt-4 border-t border-border mt-2">
+                      {link.isRoute ? (
+                        <Link
+                          to={link.href}
+                          className="block text-2xl font-medium text-muted-foreground hover:text-foreground hover:pl-2 transition-all py-3 border-b border-border/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded-sm"
+                          onClick={() => setIsMenuOpen(false)}
+                        >
+                          {link.label}
+                        </Link>
+                      ) : (
+                        <a
+                          href={link.href}
+                          className="block text-2xl font-medium text-muted-foreground hover:text-foreground hover:pl-2 transition-all py-3 border-b border-border/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded-sm"
+                          onClick={() => setIsMenuOpen(false)}
+                        >
+                          {link.label}
+                        </a>
+                      )}
+                    </motion.div>
+                  ))}
+                </div>
+
+                {/* Mobile Auth/User Section */}
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.3, duration: 0.3 }}
+                  className="mt-auto pb-8 space-y-4"
+                >
                   {user ? (
-                    <>
-                      <Link to="/dashboard" onClick={() => setIsMenuOpen(false)}>
-                        <Button variant="ghost" className="w-full justify-center">
-                          Go to Dashboard
+                    <div className="bg-card border border-border rounded-xl p-4 shadow-sm">
+                      <div className="flex items-center gap-3 mb-4">
+                        <div className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 ${isAnonymous
+                          ? 'bg-muted border border-border'
+                          : 'bg-gradient-to-br from-primary to-rose-500'
+                          }`}>
+                          {isAnonymous ? (
+                            <User className="w-5 h-5 text-muted-foreground" />
+                          ) : (
+                            getAvatarContent()
+                          )}
+                        </div>
+                        <div className="overflow-hidden">
+                          <p className="font-medium text-foreground truncate">
+                            {profile?.display_name || profile?.full_name || (isAnonymous ? 'Guest Practitioner' : 'Practitioner')}
+                          </p>
+                          <p className="text-xs text-muted-foreground truncate">
+                            {isAnonymous ? 'Progress not saved' : user.email}
+                          </p>
+                        </div>
+                      </div>
+
+                      <div className="grid grid-cols-2 gap-3">
+                        <Link to="/dashboard" onClick={() => setIsMenuOpen(false)}>
+                          <Button variant="outline" className="w-full justify-center h-12 text-base">
+                            <Flame className="w-4 h-4 mr-2" />
+                            Dashboard
+                          </Button>
+                        </Link>
+                        <Button variant="ghost" className="w-full justify-center h-12 text-base text-muted-foreground hover:text-destructive hover:bg-destructive/10" onClick={handleSignOut}>
+                          <LogOut className="w-4 h-4 mr-2" />
+                          Sign Out
+                        </Button>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="grid gap-4">
+                      <Link to="/auth" onClick={() => setIsMenuOpen(false)}>
+                        <Button variant="crimson" className="w-full justify-center h-14 text-lg shadow-lg shadow-primary/20">
+                          Begin Your Journey
                         </Button>
                       </Link>
-                      <Button variant="outline" className="w-full justify-center" onClick={handleSignOut}>
-                        Sign Out
-                      </Button>
-                    </>
-                  ) : (
-                    <>
                       <Link to="/auth" onClick={() => setIsMenuOpen(false)}>
-                        <Button variant="ghost" className="w-full justify-center">
+                        <Button variant="ghost" className="w-full justify-center h-12 text-base">
                           Sign In
                         </Button>
                       </Link>
-                      <Link to="/auth" onClick={() => setIsMenuOpen(false)}>
-                        <Button variant="crimson" className="w-full justify-center">
-                          Begin Practice
-                        </Button>
-                      </Link>
-                    </>
+                    </div>
                   )}
-                </div>
+                </motion.div>
               </nav>
             </motion.div>
           )}
-        </AnimatePresence>
-      </header>
+        </AnimatePresence>,
+        document.body
+      )}
 
       {/* Google Login Prompt for anonymous users */}
       <GoogleLoginPrompt variant="banner" />

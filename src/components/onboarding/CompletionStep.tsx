@@ -69,7 +69,6 @@ const CompletionStep = ({ onContinue, practiceTime }: CompletionStepProps) => {
             setCountdown(prev => {
                 if (prev <= 1) {
                     clearInterval(timer);
-                    onContinue();
                     return 0;
                 }
                 return prev - 1;
@@ -77,7 +76,14 @@ const CompletionStep = ({ onContinue, practiceTime }: CompletionStepProps) => {
         }, 1000);
 
         return () => clearInterval(timer);
-    }, [showContent, onContinue]);
+    }, [showContent]);
+
+    // Handle redirect when countdown hits zero
+    useEffect(() => {
+        if (countdown === 0 && showContent) {
+            onContinue();
+        }
+    }, [countdown, showContent, onContinue]);
 
     return (
         <div className="text-center max-w-lg mx-auto px-4">
