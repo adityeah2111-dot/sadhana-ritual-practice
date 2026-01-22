@@ -16,6 +16,7 @@ const Dashboard = lazy(() => import("./pages/Dashboard"));
 const Onboarding = lazy(() => import("./pages/Onboarding"));
 const Settings = lazy(() => import("./pages/Settings"));
 const Profile = lazy(() => import("./pages/Profile"));
+const Checkout = lazy(() => import("./pages/Checkout"));
 const Learn = lazy(() => import("./pages/Learn"));
 const Privacy = lazy(() => import("./pages/Privacy"));
 const Terms = lazy(() => import("./pages/Terms"));
@@ -89,6 +90,8 @@ const App = () => (
                   <Route path="/refund" element={<Refund />} />
                   <Route path="/contact" element={<Contact />} />
                   <Route path="/disclaimer" element={<Disclaimer />} />
+                  {/* Checkout / Payment */}
+                  <Route path="/checkout" element={<Checkout />} />
                   {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                   <Route path="*" element={<NotFound />} />
                 </Routes>
