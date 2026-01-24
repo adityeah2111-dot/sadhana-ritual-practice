@@ -122,8 +122,8 @@ class ErrorBoundary extends Component<Props, State> {
 
                             <p className="text-xs text-muted-foreground mt-8">
                                 If this problem persists, please contact{' '}
-                                <a href="mailto:support@sadhana.app" className="text-primary hover:underline">
-                                    support@sadhana.app
+                                <a href="mailto:support@sadhanaweb.vercel.app" className="text-primary hover:underline">
+                                    support@sadhanaweb.vercel.app
                                 </a>
                             </p>
                         </motion.div>

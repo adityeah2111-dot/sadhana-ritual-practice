@@ -36,7 +36,7 @@ export const env: EnvConfig = {
     supabaseAnonKey: getEnvVar('VITE_SUPABASE_ANON_KEY'),
 
     // App configuration
-    appUrl: getEnvVar('VITE_APP_URL', 'https://sadhana.app'),
+    appUrl: getEnvVar('VITE_APP_URL', 'https://sadhanaweb.vercel.app'),
     appName: getEnvVar('VITE_APP_NAME', 'Sadhana'),
 
     // Feature flags

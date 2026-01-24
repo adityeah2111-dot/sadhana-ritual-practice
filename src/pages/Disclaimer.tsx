@@ -148,7 +148,7 @@ const Disclaimer = () => {
                             <h2 className="text-xl font-semibold text-foreground mb-4">Questions?</h2>
                             <p className="text-muted-foreground">
                                 If you have concerns about whether Sadhana is right for you, please consult your healthcare provider or
-                                contact us at <a href="mailto:health@sadhana.app" className="text-primary hover:underline">health@sadhana.app</a>
+                                contact us at <a href="mailto:health@sadhanaweb.vercel.app" className="text-primary hover:underline">health@sadhanaweb.vercel.app</a>
                             </p>
                         </motion.section>
                     </div>

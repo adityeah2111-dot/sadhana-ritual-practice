@@ -134,7 +134,7 @@ const Refund = () => {
                                     </div>
                                     <div>
                                         <p className="font-medium text-foreground">Send us an email</p>
-                                        <p className="text-sm">Contact us at <a href="mailto:support@sadhana.app" className="text-primary hover:underline">support@sadhana.app</a> with your refund request</p>
+                                        <p className="text-sm">Contact us at <a href="mailto:support@sadhanaweb.vercel.app" className="text-primary hover:underline">support@sadhanaweb.vercel.app</a> with your refund request</p>
                                     </div>
                                 </div>
                                 <div className="flex items-start gap-4">
@@ -224,7 +224,7 @@ const Refund = () => {
                                 We're here to help. If you have any questions about refunds or billing:
                             </p>
                             <p className="text-muted-foreground">
-                                Email: <a href="mailto:support@sadhana.app" className="text-primary hover:underline">support@sadhana.app</a>
+                                Email: <a href="mailto:support@sadhanaweb.vercel.app" className="text-primary hover:underline">support@sadhanaweb.vercel.app</a>
                             </p>
                             <p className="text-muted-foreground mt-4 text-sm">
                                 Our support team typically responds within 24 hours.

@@ -256,7 +256,7 @@ const Privacy = () => {
                                 Questions about your privacy? Reach out:
                             </p>
                             <p className="text-muted-foreground">
-                                Email: <a href="mailto:privacy@sadhana.app" className="text-primary hover:underline">privacy@sadhana.app</a>
+                                Email: <a href="mailto:privacy@sadhanaweb.vercel.app" className="text-primary hover:underline">privacy@sadhanaweb.vercel.app</a>
                             </p>
                             <p className="text-muted-foreground mt-4 text-sm">
                                 We respond to all privacy inquiries within 48 hours.

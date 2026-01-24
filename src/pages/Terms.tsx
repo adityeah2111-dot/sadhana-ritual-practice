@@ -305,7 +305,7 @@ const Terms = () => {
                                 Questions about these terms? Reach out:
                             </p>
                             <p className="text-muted-foreground">
-                                Email: <a href="mailto:legal@sadhana.app" className="text-primary hover:underline">legal@sadhana.app</a>
+                                Email: <a href="mailto:legal@sadhanaweb.vercel.app" className="text-primary hover:underline">legal@sadhanaweb.vercel.app</a>
                             </p>
                         </motion.section>
                     </div>

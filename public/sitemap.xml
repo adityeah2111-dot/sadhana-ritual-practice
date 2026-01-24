@@ -1,43 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://sadhana.app/</loc>
+    <loc>https://sadhanaweb.vercel.app/</loc>
     <lastmod>2025-01-21</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://sadhana.app/auth</loc>
+    <loc>https://sadhanaweb.vercel.app/auth</loc>
     <lastmod>2025-01-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://sadhana.app/privacy</loc>
+    <loc>https://sadhanaweb.vercel.app/privacy</loc>
     <lastmod>2025-01-21</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://sadhana.app/terms</loc>
+    <loc>https://sadhanaweb.vercel.app/terms</loc>
     <lastmod>2025-01-21</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://sadhana.app/refund</loc>
+    <loc>https://sadhanaweb.vercel.app/refund</loc>
     <lastmod>2025-01-21</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.4</priority>
   </url>
   <url>
-    <loc>https://sadhana.app/contact</loc>
+    <loc>https://sadhanaweb.vercel.app/contact</loc>
     <lastmod>2025-01-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://sadhana.app/disclaimer</loc>
+    <loc>https://sadhanaweb.vercel.app/disclaimer</loc>
     <lastmod>2025-01-21</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.4</priority>

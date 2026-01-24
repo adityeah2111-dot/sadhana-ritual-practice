@@ -1,5 +1,5 @@
 # Sadhana Robots.txt
-# https://sadhana.app
+# https://sadhanaweb.vercel.app
 
 User-agent: *
 Allow: /
@@ -11,7 +11,7 @@ Disallow: /onboarding
 Disallow: /auth
 
 # Sitemap
-Sitemap: https://sadhana.app/sitemap.xml
+Sitemap: https://sadhanaweb.vercel.app/sitemap.xml
 
 # Crawl-delay for respectful crawling
 Crawl-delay: 1

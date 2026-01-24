@@ -12,7 +12,7 @@
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
 [![Supabase](https://img.shields.io/badge/Supabase-181818?style=for-the-badge&logo=supabase&logoColor=white)](https://supabase.com/)
 
-[Demo](https://sadhana.app) · [Documentation](./docs) · [Report Bug](https://github.com/yourusername/sadhana/issues) · [Request Feature](https://github.com/yourusername/sadhana/issues)
+[Demo](https://sadhanaweb.vercel.app) · [Documentation](./docs) · [Report Bug](https://github.com/yourusername/sadhana/issues) · [Request Feature](https://github.com/yourusername/sadhana/issues)
 
 </div>
 ---
@@ -434,7 +434,7 @@ This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) 
 
 - 💬 [GitHub Discussions](https://github.com/yourusername/sadhana/discussions) - Ask questions, share ideas
 - 🐛 [Issue Tracker](https://github.com/yourusername/sadhana/issues) - Report bugs
-- 📧 Email: support@sadhana.app
+- 📧 Email: support@sadhanaweb.vercel.app
 - 🐦 Twitter: [@sadhanaapp](https://twitter.com/sadhanaapp)
 
 ### Community

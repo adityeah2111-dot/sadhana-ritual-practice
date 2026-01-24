@@ -95,7 +95,7 @@ const Contact = () => {
                                     </div>
                                     <h3 className="font-medium text-foreground">Email Us</h3>
                                 </div>
-                                <a href="mailto:hello@sadhana.app" className="text-primary hover:underline">hello@sadhana.app</a>
+                                <a href="mailto:hello@sadhanaweb.vercel.app" className="text-primary hover:underline">hello@sadhanaweb.vercel.app</a>
                             </div>
                             <div className="bg-card border border-border rounded-lg p-6">
                                 <div className="flex items-center gap-3 mb-3">
