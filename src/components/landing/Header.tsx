@@ -325,19 +325,19 @@ const Header = () => {
                         <Link
                           to={link.href}
                           onClick={() => setIsMenuOpen(false)}
-                          className="flex items-center justify-between py-4 px-5 text-xl font-medium text-foreground active:bg-muted/50 rounded-2xl transition-colors"
+                          className="flex items-center justify-between py-3 px-5 text-lg font-medium text-foreground active:bg-muted/50 rounded-xl transition-colors"
                         >
                           {link.label}
-                          <ChevronRight className="w-5 h-5 text-muted-foreground" />
+                          <ChevronRight className="w-4 h-4 text-muted-foreground" />
                         </Link>
                       ) : (
                         <a
                           href={link.href}
                           onClick={() => setIsMenuOpen(false)}
-                          className="flex items-center justify-between py-4 px-5 text-xl font-medium text-foreground active:bg-muted/50 rounded-2xl transition-colors"
+                          className="flex items-center justify-between py-3 px-5 text-lg font-medium text-foreground active:bg-muted/50 rounded-xl transition-colors"
                         >
                           {link.label}
-                          <ChevronRight className="w-5 h-5 text-muted-foreground" />
+                          <ChevronRight className="w-4 h-4 text-muted-foreground" />
                         </a>
                       )}
                     </motion.div>
