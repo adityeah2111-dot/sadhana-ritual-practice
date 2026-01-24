@@ -78,19 +78,27 @@ const CTASection = () => {
             transition={{ duration: 0.5, delay: 0.3 }}
             className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8"
           >
-            <Link to="/auth">
-              <Button variant="hero" size="lg" className="group h-14 px-8 text-base">
+            <Button variant="hero" size="lg" className="group h-14 px-8 text-base" asChild>
+              <Link to="/checkout">
                 <Flame className="w-5 h-5 mr-2" />
                 Start Your Free Trial
                 <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
-              </Button>
-            </Link>
-            <Link to="/#pricing">
-              <Button variant="outline" size="lg" className="h-14 px-8 text-base">
-                <Sparkles className="w-5 h-5 mr-2" />
-                View Pricing
-              </Button>
-            </Link>
+              </Link>
+            </Button>
+            <Button
+              variant="outline"
+              size="lg"
+              className="h-14 px-8 text-base"
+              onClick={() => {
+                const pricingSection = document.getElementById('pricing');
+                if (pricingSection) {
+                  pricingSection.scrollIntoView({ behavior: 'smooth' });
+                }
+              }}
+            >
+              <Sparkles className="w-5 h-5 mr-2" />
+              View Pricing
+            </Button>
           </motion.div>
 
           {/* Trust badges */}

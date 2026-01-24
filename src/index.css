@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -8,7 +10,7 @@
    All colors in HSL format.
 */
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600&display=swap');
+
 
 @layer base {
   :root {
@@ -83,59 +85,59 @@
 
   /* Light Mode Theme */
   .light {
-    /* Core backgrounds - Clean Rice Paper / Off-White */
-    --background: 30 10% 98%;
-    --foreground: 0 0% 15%;
+    /* Core backgrounds - Pure Clean White */
+    --background: 0 0% 100%;
+    --foreground: 0 0% 5%;
 
-    /* Card surfaces */
-    --card: 0 0% 100%;
-    --card-foreground: 0 0% 15%;
+    /* Card surfaces - Very subtle contrast */
+    --card: 0 0% 98%;
+    --card-foreground: 0 0% 5%;
 
     /* Popover/Modal surfaces */
     --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 15%;
+    --popover-foreground: 0 0% 5%;
 
     /* Primary accent - Vivid Crimson */
     --primary: 350 70% 45%;
     --primary-foreground: 0 0% 100%;
 
     /* Secondary */
-    --secondary: 30 10% 95%;
-    --secondary-foreground: 0 0% 20%;
+    --secondary: 0 0% 96%;
+    --secondary-foreground: 0 0% 15%;
 
     /* Muted elements */
-    --muted: 30 5% 94%;
+    --muted: 0 0% 96%;
     --muted-foreground: 0 0% 45%;
 
     /* Accent - Subtle Warmth */
-    --accent: 30 15% 95%;
-    --accent-foreground: 0 0% 20%;
+    --accent: 30 20% 97%;
+    --accent-foreground: 0 0% 15%;
 
     /* Destructive/Warning */
     --destructive: 0 70% 50%;
     --destructive-foreground: 0 0% 100%;
 
     /* Borders and inputs - Crisp definition */
-    --border: 30 5% 90%;
-    --input: 30 5% 90%;
+    --border: 0 0% 90%;
+    --input: 0 0% 90%;
     --ring: 350 70% 45%;
 
     /* Sidebar tokens */
-    --sidebar-background: 30 10% 98%;
-    --sidebar-foreground: 0 0% 20%;
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 0 0% 15%;
     --sidebar-primary: 350 70% 45%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 30 15% 94%;
-    --sidebar-accent-foreground: 0 0% 20%;
-    --sidebar-border: 30 5% 88%;
+    --sidebar-accent: 0 0% 96%;
+    --sidebar-accent-foreground: 0 0% 15%;
+    --sidebar-border: 0 0% 90%;
     --sidebar-ring: 350 70% 45%;
 
     /* Custom Sadhana tokens */
     --surface-elevated: 0 0% 100%;
-    --surface-overlay: 30 10% 98%;
-    --text-primary: 0 0% 15%;
-    --text-secondary: 0 0% 40%;
-    --text-muted: 0 0% 55%;
+    --surface-overlay: 0 0% 98%;
+    --text-primary: 0 0% 5%;
+    --text-secondary: 0 0% 35%;
+    --text-muted: 0 0% 50%;
     --crimson: 350 70% 45%;
     --crimson-glow: 350 60% 60%;
     --gold-muted: 35 40% 45%;

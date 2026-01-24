@@ -233,14 +233,7 @@ const Header = () => {
 
             {/* Mobile Right Section */}
             <div className="flex lg:hidden items-center gap-1">
-              {/* Mobile CTA (only when not logged in) */}
-              {!loading && !user && (
-                <Link to="/auth" className="mr-1">
-                  <Button variant="crimson" size="sm" className="text-xs px-3 h-8">
-                    Start
-                  </Button>
-                </Link>
-              )}
+
 
               {/* Mobile user avatar */}
               {!loading && user && (

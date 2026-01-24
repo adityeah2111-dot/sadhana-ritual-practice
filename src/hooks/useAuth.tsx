@@ -12,7 +12,7 @@ interface AuthContextType {
   signInWithGoogle: () => Promise<{ error: Error | null }>;
   signInWithPhone: (phone: string) => Promise<{ error: Error | null }>;
   verifyPhoneOtp: (phone: string, token: string) => Promise<{ error: Error | null }>;
-  signInAnonymously: () => Promise<{ error: Error | null }>;
+  signInAnonymously: (captchaToken?: string) => Promise<{ error: Error | null }>;
   linkEmailToAnonymous: (email: string, password: string) => Promise<{ error: Error | null }>;
   signOut: () => Promise<void>;
 }
@@ -49,7 +49,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const signUp = async (email: string, password: string) => {
     const redirectUrl = `${window.location.origin}/`;
-    
+
     const { error } = await supabase.auth.signUp({
       email,
       password,
@@ -100,8 +100,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   // Anonymous sign in - for quick access without account
-  const signInAnonymously = async () => {
-    const { error } = await supabase.auth.signInAnonymously();
+  const signInAnonymously = async (captchaToken?: string) => {
+    const { error } = await supabase.auth.signInAnonymously({
+      options: {
+        captchaToken,
+      }
+    });
     return { error };
   };
 
@@ -119,19 +123,19 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ 
-      user, 
-      session, 
-      loading, 
+    <AuthContext.Provider value={{
+      user,
+      session,
+      loading,
       isAnonymous,
-      signUp, 
-      signIn, 
+      signUp,
+      signIn,
       signInWithGoogle,
       signInWithPhone,
       verifyPhoneOtp,
       signInAnonymously,
       linkEmailToAnonymous,
-      signOut 
+      signOut
     }}>
       {children}
     </AuthContext.Provider>

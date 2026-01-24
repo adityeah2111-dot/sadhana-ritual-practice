@@ -122,42 +122,23 @@ const HeroSection = () => {
             transition={{ duration: 0.5, delay: 0.3 }}
             className="flex flex-col items-center gap-3"
           >
-            <Link to="/auth" className="w-full sm:w-auto">
-              <Button
-                variant="hero"
-                size="lg"
-                className="w-full sm:w-auto group text-base px-8 py-5 h-auto rounded-lg shadow-lg shadow-black/20 hover:shadow-xl hover:shadow-black/30 transition-all duration-300"
-              >
+            <Button
+              asChild
+              variant="hero"
+              size="lg"
+              className="w-full sm:w-auto group text-base px-8 py-5 h-auto rounded-lg shadow-lg shadow-black/20 hover:shadow-xl hover:shadow-black/30 transition-all duration-300"
+            >
+              <Link to="/auth">
                 <span>Start Your Practice</span>
                 <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
-              </Button>
-            </Link>
+              </Link>
+            </Button>
             <p className="text-xs sm:text-sm text-muted-foreground mt-1">
               Free for 7 days • No credit card needed
             </p>
           </motion.div>
 
-          {/* Elegant image progress indicator */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.8 }}
-            className="mt-10 sm:mt-14 flex flex-col items-center gap-2"
-          >
-            {/* Progress bar */}
-            <div className="w-24 h-0.5 bg-border rounded-full overflow-hidden">
-              <motion.div
-                className="h-full bg-primary/60 rounded-full"
-                initial={{ width: '33.33%' }}
-                animate={{ width: `${((currentImageIndex + 1) / backgroundImages.length) * 100}%` }}
-                transition={{ duration: 0.5, ease: "easeOut" }}
-              />
-            </div>
-            {/* Optional: subtle text counter */}
-            <span className="text-[10px] text-muted-foreground/50 tracking-widest">
-              {currentImageIndex + 1} / {backgroundImages.length}
-            </span>
-          </motion.div>
+
         </div>
       </div>
 

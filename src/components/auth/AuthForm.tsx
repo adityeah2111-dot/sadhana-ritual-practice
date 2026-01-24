@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import { useToast } from '@/hooks/use-toast';
 import { z } from 'zod';
 import { InputOTP, InputOTPGroup, InputOTPSlot } from '@/components/ui/input-otp';
+import { Turnstile } from '@marsidev/react-turnstile';
 
 const emailSchema = z.string().email('Please enter a valid email address');
 const passwordSchema = z.string().min(6, 'Password must be at least 6 characters');
@@ -33,6 +34,10 @@ const AuthForm = ({ mode, onToggleMode }: AuthFormProps) => {
   // Phone auth state
   const [phone, setPhone] = useState('');
   const [otp, setOtp] = useState('');
+
+  // Captcha state
+  const [captchaToken, setCaptchaToken] = useState<string | null>(null);
+  const [showCaptcha, setShowCaptcha] = useState(false);
 
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState<{ email?: string; password?: string; phone?: string }>({});
@@ -167,15 +172,25 @@ const AuthForm = ({ mode, onToggleMode }: AuthFormProps) => {
   };
 
   const handleAnonymousSignIn = async () => {
+    // If captcha is not shown yet and we need it (checking environment is tricky client-side, 
+    // but assuming we want to enforce it always for anonymous if configured)
+    if (!captchaToken) {
+      setShowCaptcha(true);
+      return;
+    }
+
     setLoading(true);
     try {
-      const { error } = await signInAnonymously();
+      const { error } = await signInAnonymously(captchaToken);
       if (error) {
         toast({
           variant: 'destructive',
-          title: 'Failed to continue as guest',
+          title: 'Guest access denied',
           description: error.message,
         });
+        // Reset captcha on failure
+        setCaptchaToken(null);
+        setShowCaptcha(false);
       } else {
         toast({
           title: 'Welcome, Guest',
@@ -263,8 +278,8 @@ const AuthForm = ({ mode, onToggleMode }: AuthFormProps) => {
                 setErrors({});
               }}
               className={`flex-1 flex flex-col items-center justify-center gap-2 p-4 rounded-xl border transition-all ${authMethod === 'email'
-                  ? 'border-primary bg-primary/5 text-foreground'
-                  : 'border-border bg-card text-muted-foreground hover:border-primary/30 hover:text-foreground'
+                ? 'border-primary bg-primary/5 text-foreground'
+                : 'border-border bg-card text-muted-foreground hover:border-primary/30 hover:text-foreground'
                 }`}
             >
               <Mail className={`w-5 h-5 ${authMethod === 'email' ? 'text-primary' : ''}`} />
@@ -277,8 +292,8 @@ const AuthForm = ({ mode, onToggleMode }: AuthFormProps) => {
                 resetPhoneFlow();
               }}
               className={`flex-1 flex flex-col items-center justify-center gap-2 p-4 rounded-xl border transition-all ${authMethod === 'phone'
-                  ? 'border-primary bg-primary/5 text-foreground'
-                  : 'border-border bg-card text-muted-foreground hover:border-primary/30 hover:text-foreground'
+                ? 'border-primary bg-primary/5 text-foreground'
+                : 'border-border bg-card text-muted-foreground hover:border-primary/30 hover:text-foreground'
                 }`}
             >
               <Phone className={`w-5 h-5 ${authMethod === 'phone' ? 'text-primary' : ''}`} />
@@ -498,15 +513,27 @@ const AuthForm = ({ mode, onToggleMode }: AuthFormProps) => {
 
         {/* Guest Access - More integrated but secondary */}
         <div className="mt-8 pt-8 border-t border-border/50">
+          {showCaptcha && (
+            <div className="mb-4 flex justify-center">
+              <Turnstile
+                siteKey={import.meta.env.VITE_TURNSTILE_SITE_KEY || "1x00000000000000000000AA"}
+                onSuccess={(token) => {
+                  setCaptchaToken(token);
+                  // Auto-submit once captcha is solved, optional but smooth
+                }}
+              />
+            </div>
+          )}
+
           <Button
             type="button"
             variant="ghost"
             className="w-full h-11 text-muted-foreground hover:text-foreground hover:bg-muted/30 transition-all rounded-xl"
             onClick={handleAnonymousSignIn}
-            disabled={loading}
+            disabled={loading || (showCaptcha && !captchaToken)}
           >
             <User className="w-4 h-4 mr-2" />
-            Continue as a Guest Practitioner
+            {showCaptcha ? (captchaToken ? "Confirm Guest Access" : "Complete Verification") : "Continue as a Guest Practitioner"}
           </Button>
           <div className="flex items-center justify-center gap-2 mt-3 px-8">
             <div className="h-px bg-border flex-1" />

@@ -11,7 +11,7 @@ const Checkout = () => {
     const navigate = useNavigate();
     const { user } = useAuth();
     const { initiatePayment, isProcessing, subscription, fetchSubscription } = usePayment();
-    const [selectedPlan, setSelectedPlan] = useState<'monthly' | 'yearly'>('yearly');
+    const [selectedPlan, setSelectedPlan] = useState<'monthly' | 'yearly' | 'lifetime'>('yearly');
 
     useEffect(() => {
         if (user) {
@@ -44,6 +44,19 @@ const Checkout = () => {
             ],
             popular: true,
             savings: 1199,
+        },
+        lifetime: {
+            ...razorpayConfig.plans.lifetime,
+            features: [
+                'Everything in Yearly',
+                'One-time payment forever',
+                'Founder badge & status',
+                'Priority feature requests',
+                'Direct access to team',
+                'Early beta access',
+            ],
+            popular: false,
+            savings: 5000,
         },
     };
 
@@ -119,8 +132,8 @@ const Checkout = () => {
                                 <button
                                     onClick={() => setSelectedPlan('monthly')}
                                     className={`px-6 py-2.5 rounded-full text-sm font-semibold transition-all duration-200 ${selectedPlan === 'monthly'
-                                            ? 'bg-card text-foreground shadow-sm'
-                                            : 'text-muted-foreground hover:text-foreground'
+                                        ? 'bg-card text-foreground shadow-sm'
+                                        : 'text-muted-foreground hover:text-foreground'
                                         }`}
                                 >
                                     Monthly
@@ -128,13 +141,25 @@ const Checkout = () => {
                                 <button
                                     onClick={() => setSelectedPlan('yearly')}
                                     className={`px-6 py-2.5 rounded-full text-sm font-semibold transition-all duration-200 relative ${selectedPlan === 'yearly'
-                                            ? 'bg-card text-foreground shadow-sm'
-                                            : 'text-muted-foreground hover:text-foreground'
+                                        ? 'bg-card text-foreground shadow-sm'
+                                        : 'text-muted-foreground hover:text-foreground'
                                         }`}
                                 >
                                     Yearly
                                     <span className="absolute -top-2 -right-2 bg-primary text-white text-[10px] font-bold px-2 py-0.5 rounded-full">
                                         -33%
+                                    </span>
+                                </button>
+                                <button
+                                    onClick={() => setSelectedPlan('lifetime')}
+                                    className={`px-6 py-2.5 rounded-full text-sm font-semibold transition-all duration-200 relative ${selectedPlan === 'lifetime'
+                                        ? 'bg-card text-foreground shadow-sm'
+                                        : 'text-muted-foreground hover:text-foreground'
+                                        }`}
+                                >
+                                    Lifetime
+                                    <span className="absolute -top-2 -right-2 bg-gradient-to-r from-amber-500 to-orange-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">
+                                        -50%
                                     </span>
                                 </button>
                             </motion.div>
@@ -147,10 +172,10 @@ const Checkout = () => {
                                         initial={{ opacity: 0, y: 20 }}
                                         animate={{ opacity: 1, y: 0 }}
                                         transition={{ delay: 0.2 + index * 0.1 }}
-                                        onClick={() => setSelectedPlan(key as 'monthly' | 'yearly')}
+                                        onClick={() => setSelectedPlan(key as 'monthly' | 'yearly' | 'lifetime')}
                                         className={`relative p-6 rounded-2xl border-2 cursor-pointer transition-all duration-300 ${selectedPlan === key
-                                                ? 'border-primary bg-primary/5 shadow-lg shadow-primary/10'
-                                                : 'border-border bg-card hover:border-primary/50'
+                                            ? 'border-primary bg-primary/5 shadow-lg shadow-primary/10'
+                                            : 'border-border bg-card hover:border-primary/50'
                                             }`}
                                     >
                                         {plan.popular && (
@@ -170,7 +195,7 @@ const Checkout = () => {
                                                         {formatAmount(plan.amount)}
                                                     </span>
                                                     <span className="text-muted-foreground">
-                                                        /{plan.period === 'monthly' ? 'month' : 'year'}
+                                                        /{plan.period === 'lifetime' ? 'once' : (plan.period === 'monthly' ? 'month' : 'year')}
                                                     </span>
                                                 </div>
                                                 {'savings' in plan && (
@@ -182,8 +207,8 @@ const Checkout = () => {
 
                                             <div
                                                 className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all ${selectedPlan === key
-                                                        ? 'border-primary bg-primary'
-                                                        : 'border-border'
+                                                    ? 'border-primary bg-primary'
+                                                    : 'border-border'
                                                     }`}
                                             >
                                                 {selectedPlan === key && (
@@ -254,6 +279,15 @@ const Checkout = () => {
                                             <span className="text-primary">Savings</span>
                                             <span className="text-primary font-semibold">
                                                 -{formatAmount(plans.yearly.savings)}
+                                            </span>
+                                        </div>
+                                    )}
+
+                                    {selectedPlan === 'lifetime' && (
+                                        <div className="flex justify-between items-center text-sm">
+                                            <span className="text-primary">Savings</span>
+                                            <span className="text-primary font-semibold">
+                                                -{formatAmount(plans.lifetime.savings)}
                                             </span>
                                         </div>
                                     )}

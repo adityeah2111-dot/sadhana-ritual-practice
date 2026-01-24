@@ -27,7 +27,7 @@ const Auth = () => {
   }
 
   return (
-    <div className="min-h-screen bg-background relative overflow-hidden flex flex-col items-center justify-center">
+    <div className="min-h-screen bg-background relative flex flex-col items-center justify-center">
       {/* Background Atmosphere */}
       <div className="absolute inset-0 z-0">
         <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_50%_50%,hsl(var(--muted)/0.3),transparent_70%)]" />
