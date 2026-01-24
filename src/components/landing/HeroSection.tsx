@@ -134,7 +134,7 @@ const HeroSection = () => {
               </Link>
             </Button>
             <p className="text-xs sm:text-sm text-muted-foreground mt-1">
-              Free for 7 days • No credit card needed
+              Instant Access • Cancel Anytime
             </p>
           </motion.div>
 
