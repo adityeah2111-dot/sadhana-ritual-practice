@@ -88,7 +88,7 @@ const NotForEveryoneSection = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
-            className="p-8 lg:p-10 rounded-xl bg-background border border-primary/20 hover:border-primary/40 transition-colors duration-300"
+            className="p-6 md:p-8 lg:p-10 rounded-xl bg-background border border-primary/20 hover:border-primary/40 transition-colors duration-300"
           >
             <motion.h3
               initial={{ opacity: 0 }}
@@ -132,7 +132,7 @@ const NotForEveryoneSection = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: 0.15 }}
-            className="p-8 lg:p-10 rounded-xl bg-background border border-border hover:border-muted-foreground/30 transition-colors duration-300"
+            className="p-6 md:p-8 lg:p-10 rounded-xl bg-background border border-border hover:border-muted-foreground/30 transition-colors duration-300"
           >
             <motion.h3
               initial={{ opacity: 0 }}

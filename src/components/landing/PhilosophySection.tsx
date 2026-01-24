@@ -79,7 +79,7 @@ const PhilosophySection = () => {
               transition={{ duration: 0.5, delay: index * 0.1 }}
               className="group"
             >
-              <div className="relative p-8 lg:p-10 rounded-2xl bg-background border border-border hover:border-primary/30 transition-all duration-300 h-full overflow-hidden">
+              <div className="relative p-6 md:p-8 lg:p-10 rounded-2xl bg-background border border-border hover:border-primary/30 transition-all duration-300 h-full overflow-hidden">
                 {/* Hover gradient */}
                 <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
 
