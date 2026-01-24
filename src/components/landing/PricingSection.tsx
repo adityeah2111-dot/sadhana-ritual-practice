@@ -69,7 +69,7 @@ const PricingSection = () => {
                 }`}
               style={{
                 width: 'calc(50% - 4px)',
-                left: '4px',
+                left: '1px',
               }}
             />
 
@@ -87,7 +87,7 @@ const PricingSection = () => {
                 }`}
             >
               <span>Yearly</span>
-              <span className={`text-xs px-1.5 py-0.5 rounded-full ${selectedPlan === 'yearly' ? 'bg-white/20 text-white' : 'bg-primary/10 text-primary'}`}>
+              <span className={`text-xs px-0.5 py-0.5 rounded-full ${selectedPlan === 'yearly' ? 'bg-white/20 text-white' : 'bg-primary/10 text-primary'}`}>
                 Save 33%
               </span>
             </button>
@@ -211,7 +211,7 @@ const PricingSection = () => {
                 </p>
 
                 <Link to="/checkout">
-                  <Button variant="hero" size="lg" className="w-full mb-4 h-12 sm:h-14 text-base sm:text-lg font-bold px-4 sm:px-8">
+                  <Button variant="hero" size="lg" className="w-fit mb-4 h-12 sm:h-14 text-base sm:text-lg font-bold px-4 sm:px-8">
                     <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 mr-2 flex-shrink-0" />
                     Get Lifetime Access Now
                   </Button>
