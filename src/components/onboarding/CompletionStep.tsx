@@ -11,7 +11,6 @@ interface CompletionStepProps {
 
 const CompletionStep = ({ onContinue, practiceTime }: CompletionStepProps) => {
     const [showContent, setShowContent] = useState(false);
-    const [countdown, setCountdown] = useState(5);
 
     // Format time for display
     const formatTime = (time: string) => {
@@ -61,29 +60,7 @@ const CompletionStep = ({ onContinue, practiceTime }: CompletionStepProps) => {
         return () => clearInterval(interval);
     }, []);
 
-    // Auto-redirect countdown
-    useEffect(() => {
-        if (!showContent) return;
 
-        const timer = setInterval(() => {
-            setCountdown(prev => {
-                if (prev <= 1) {
-                    clearInterval(timer);
-                    return 0;
-                }
-                return prev - 1;
-            });
-        }, 1000);
-
-        return () => clearInterval(timer);
-    }, [showContent]);
-
-    // Handle redirect when countdown hits zero
-    useEffect(() => {
-        if (countdown === 0 && showContent) {
-            onContinue();
-        }
-    }, [countdown, showContent, onContinue]);
 
     return (
         <div className="text-center max-w-lg mx-auto px-4">
@@ -183,16 +160,13 @@ const CompletionStep = ({ onContinue, practiceTime }: CompletionStepProps) => {
                         <Button
                             size="lg"
                             variant="crimson"
-                            className="px-10 h-14 text-base w-full sm:w-auto"
+                            className="w-full sm:w-auto px-12 py-8 text-xl font-bold rounded-2xl shadow-xl shadow-primary/20 hover:shadow-2xl hover:shadow-primary/30 hover:scale-105 active:scale-95 transition-all duration-300 group"
                             onClick={onContinue}
                         >
-                            <Flame className="w-5 h-5 mr-2" />
+                            <Flame className="w-6 h-6 mr-3 group-hover:animate-pulse" />
                             Go to Dashboard
-                            <ArrowRight className="w-5 h-5 ml-2" />
+                            <ArrowRight className="w-6 h-6 ml-3 group-hover:translate-x-1 transition-transform" />
                         </Button>
-                        <p className="text-xs text-muted-foreground">
-                            Redirecting automatically in {countdown} seconds...
-                        </p>
                     </motion.div>
                 </>
             )}
