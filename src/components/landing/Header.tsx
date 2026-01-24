@@ -70,6 +70,7 @@ const Header = () => {
     { label: "Practice", href: "#practice" },
     { label: "Pricing", href: "#pricing" },
     { label: "Learn", href: "/learn", isRoute: true },
+    { label: "Contact", href: "/contact", isRoute: true },
   ];
 
   const getInitials = () => {
