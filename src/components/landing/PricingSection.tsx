@@ -211,7 +211,7 @@ const PricingSection = () => {
                 </p>
 
                 <Link to="/checkout">
-                  <Button variant="hero" size="lg" className="w-full sm:w-fit mb-4 h-12 sm:h-14 text-base sm:text-lg font-bold px-4 sm:px-8">
+                  <Button variant="hero" size="lg" className="w-fit sm:w-fit mb-4 h-12 sm:h-14 text-base sm:text-lg font-bold px-4 sm:px-8">
                     <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 mr-2 flex-shrink-0" />
                     Get Lifetime Access Now
                   </Button>
