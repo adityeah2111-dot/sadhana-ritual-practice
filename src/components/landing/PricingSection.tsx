@@ -152,7 +152,7 @@ const PricingSection = () => {
                 variant={selectedPlan === 'yearly' ? 'crimson' : 'subtle'}
                 className="w-full mb-6 h-12 text-base font-semibold"
               >
-                Start 7-Day Free Trial
+                Choose {selectedPlan === 'yearly' ? 'Yearly' : 'Monthly'} Plan
               </Button>
             </Link>
 
@@ -257,7 +257,7 @@ const PricingSection = () => {
         >
           <div className="flex items-center gap-2">
             <Shield className="w-5 h-5 text-primary" />
-            <span className="font-medium">7-day free trial</span>
+            <span className="font-medium">Instant Access</span>
           </div>
           <div className="flex items-center gap-2">
             <Zap className="w-5 h-5 text-primary" />

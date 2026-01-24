@@ -115,7 +115,7 @@ const Checkout = () => {
                             Choose Your <span className="text-gradient-crimson">Plan</span>
                         </h1>
                         <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-                            Start your journey with discipline. 7-day free trial included.
+                            Start your journey with discipline. Secure your commitment today.
                         </p>
                     </motion.div>
 
@@ -296,11 +296,13 @@ const Checkout = () => {
                                         <div className="flex justify-between items-center text-lg">
                                             <span className="font-bold">Total Due Today</span>
                                             <span className="font-bold text-2xl text-primary">
-                                                ₹0
+                                                {formatAmount(plans[selectedPlan].amount)}
                                             </span>
                                         </div>
                                         <p className="text-xs text-muted-foreground mt-1">
-                                            Free for 7 days, then {formatAmount(plans[selectedPlan].amount)}
+                                            {selectedPlan === 'lifetime'
+                                                ? 'One-time payment'
+                                                : `Billed ${selectedPlan} after payment`}
                                         </p>
                                     </div>
                                 </div>
@@ -318,14 +320,14 @@ const Checkout = () => {
                                         </span>
                                     ) : (
                                         <span className="flex items-center gap-2">
-                                            Start 7-Day Free Trial
+                                            Proceed to Payment
                                             <ArrowLeft className="w-5 h-5 rotate-180" />
                                         </span>
                                     )}
                                 </Button>
 
                                 <p className="text-xs text-center text-muted-foreground mt-4">
-                                    Cancel anytime. No questions asked.
+                                    Secure payment via Razorpay.
                                 </p>
 
                                 {/* Benefits List */}
@@ -338,19 +340,19 @@ const Checkout = () => {
                                             <div className="w-5 h-5 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0 mt-0.5">
                                                 <span className="text-primary text-xs font-bold">1</span>
                                             </div>
-                                            <span>Instant access to all premium features</span>
+                                            <span>Secure checkout process</span>
                                         </li>
                                         <li className="flex items-start gap-2">
                                             <div className="w-5 h-5 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0 mt-0.5">
                                                 <span className="text-primary text-xs font-bold">2</span>
                                             </div>
-                                            <span>7 days to try everything risk-free</span>
+                                            <span>Instant access to all features</span>
                                         </li>
                                         <li className="flex items-start gap-2">
                                             <div className="w-5 h-5 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0 mt-0.5">
                                                 <span className="text-primary text-xs font-bold">3</span>
                                             </div>
-                                            <span>Billing starts only after trial ends</span>
+                                            <span>Receipt sent to your email</span>
                                         </li>
                                     </ul>
                                 </div>
@@ -367,7 +369,7 @@ const Checkout = () => {
                                     30-Day Money-Back Guarantee
                                 </p>
                                 <p className="text-xs text-muted-foreground">
-                                    Not satisfied? Get a full refund, no questions asked.
+                                    Not satisfied? Get a full refund within 30 days.
                                 </p>
                             </motion.div>
                         </motion.div>
