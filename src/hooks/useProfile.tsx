@@ -1,8 +1,8 @@
-import { useState, useEffect } from 'react';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 
-interface Profile {
+export interface Profile {
   id: string;
   user_id: string;
   display_name: string | null;
@@ -19,84 +19,99 @@ interface Profile {
 
 export const useProfile = () => {
   const { user } = useAuth();
-  const [profile, setProfile] = useState<Profile | null>(null);
-  const [loading, setLoading] = useState(true);
+  const queryClient = useQueryClient();
 
-  const fetchProfile = async () => {
-    if (!user) {
-      setLoading(false);
-      return;
-    }
+  // Unique key for the profile query
+  const queryKey = ['profile', user?.id];
 
-    const { data, error } = await supabase
-      .from('profiles')
-      .select('*')
-      .eq('user_id', user.id)
-      .maybeSingle();
+  const { data: profile, isLoading: loading, refetch } = useQuery({
+    queryKey,
+    queryFn: async () => {
+      if (!user) return null;
 
-    if (error) {
-      console.error('Error fetching profile:', error);
-    }
-
-    // Cast to Profile - additional fields will be null if not in DB yet
-    setProfile(data as Profile | null);
-    setLoading(false);
-  };
-
-  const updateProfile = async (updates: Partial<Profile>) => {
-    if (!user) return null;
-
-    try {
-      // Try to update first (most common case - profile exists)
-      const { data: updateData, error: updateError } = await supabase
+      const { data, error } = await supabase
         .from('profiles')
-        .update({
-          ...updates,
-          updated_at: new Date().toISOString(),
-        })
+        .select('*')
         .eq('user_id', user.id)
-        .select()
         .maybeSingle();
 
-      if (updateError) {
-        console.error('Error updating profile:', updateError);
-        return null;
+      if (error) {
+        console.error('Error fetching profile:', error);
+        throw error;
       }
 
-      // If update succeeded (returned data), we're done
-      if (updateData) {
-        setProfile(updateData as Profile);
-        return updateData;
+      return data as Profile | null;
+    },
+    enabled: !!user,
+    // Don't refetch on window focus to prevent unnecessary DB calls, mostly for cost saving
+    refetchOnWindowFocus: false,
+  });
+
+  const updateProfileMutation = useMutation({
+    mutationFn: async (updates: Partial<Profile>) => {
+      if (!user) throw new Error('No user logged in');
+
+      try {
+        // Try to update first (most common case - profile exists)
+        const { data: updateData, error: updateError } = await supabase
+          .from('profiles')
+          .update({
+            ...updates,
+            updated_at: new Date().toISOString(),
+          })
+          .eq('user_id', user.id)
+          .select()
+          .maybeSingle();
+
+        if (updateError) {
+          console.error('Error updating profile:', updateError);
+          throw updateError;
+        }
+
+        // If update succeeded (returned data), we're done
+        if (updateData) {
+          return updateData as Profile;
+        }
+
+        // If no data returned (profile doesn't exist), try insert
+        const { data: insertData, error: insertError } = await supabase
+          .from('profiles')
+          .insert({
+            user_id: user.id,
+            ...updates,
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString(),
+          })
+          .select()
+          .single();
+
+        if (insertError) {
+          console.error('Error creating profile:', insertError);
+          throw insertError;
+        }
+
+        return insertData as Profile;
+      } catch (err) {
+        console.error('Unexpected error in updateProfile:', err);
+        throw err;
       }
+    },
+    onSuccess: (data) => {
+      // Update the cache immediately
+      queryClient.setQueryData(queryKey, data);
+    },
+  });
 
-      // If no data returned (profile doesn't exist), try insert
-      const { data: insertData, error: insertError } = await supabase
-        .from('profiles')
-        .insert({
-          user_id: user.id,
-          ...updates,
-          created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString(),
-        })
-        .select()
-        .single();
-
-      if (insertError) {
-        console.error('Error creating profile:', insertError);
-        return null;
-      }
-
-      setProfile(insertData as Profile);
-      return insertData;
-    } catch (err) {
-      console.error('Unexpected error in updateProfile:', err);
+  // Wrapper for updateProfile to match previous API (returning null on error)
+  const updateProfile = async (updates: Partial<Profile>) => {
+    try {
+      return await updateProfileMutation.mutateAsync(updates);
+    } catch (error) {
       return null;
     }
   };
 
   const completeOnboarding = async (practiceTime: string, timezone: string, displayName?: string) => {
-    if (!user) return null;
-
     const updates = {
       practice_time: practiceTime,
       timezone,
@@ -107,15 +122,11 @@ export const useProfile = () => {
     return updateProfile(updates);
   };
 
-  useEffect(() => {
-    fetchProfile();
-  }, [user]);
-
   return {
-    profile,
+    profile: profile ?? null,
     loading,
     updateProfile,
     completeOnboarding,
-    refetch: fetchProfile,
+    refetch,
   };
 };
