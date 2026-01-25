@@ -14,6 +14,16 @@ import DailyQuote from '@/components/dashboard/DailyQuote';
 import UpgradeAccountDialog from '@/components/auth/UpgradeAccountDialog';
 import { useToast } from '@/hooks/use-toast';
 import { useSound } from '@/hooks/useSound';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 const Dashboard = () => {
   const { user, signOut, isAnonymous, signInWithGoogle } = useAuth();
@@ -22,6 +32,7 @@ const Dashboard = () => {
   const { toast } = useToast();
   const { playCompletionBell, playStart } = useSound();
   const [showUpgradeDialog, setShowUpgradeDialog] = useState(false);
+  const [isLogoutDialogOpen, setIsLogoutDialogOpen] = useState(false);
   const {
     sessions,
     stats,
@@ -160,7 +171,7 @@ const Dashboard = () => {
                   <Settings className="h-4 w-4" />
                 </Button>
               </Link>
-              <Button variant="ghost" size="sm" onClick={handleSignOut} className="h-9 w-9 sm:w-auto p-0 sm:px-3">
+              <Button variant="ghost" size="sm" onClick={() => setIsLogoutDialogOpen(true)} className="h-9 w-9 sm:w-auto p-0 sm:px-3">
                 <LogOut className="h-4 w-4 sm:mr-2" />
                 <span className="hidden sm:inline">Sign Out</span>
               </Button>
@@ -266,6 +277,27 @@ const Dashboard = () => {
         isOpen={showUpgradeDialog}
         onClose={() => setShowUpgradeDialog(false)}
       />
+
+      {/* Logout Confirmation Dialog */}
+      <AlertDialog open={isLogoutDialogOpen} onOpenChange={setIsLogoutDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Are you sure you want to sign out?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Any unsaved progress in an active session may be lost. You will need to sign in again to access your dashboard.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={handleSignOut}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90 transition-colors"
+            >
+              Sign Out
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 };
