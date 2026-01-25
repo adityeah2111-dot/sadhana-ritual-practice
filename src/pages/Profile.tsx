@@ -27,6 +27,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { useProfile } from '@/hooks/useProfile';
 import { useSessions } from '@/hooks/useSessions';
 import { useToast } from '@/hooks/use-toast';
+import { supabase } from '@/integrations/supabase/client';
 import GoogleLoginPrompt from '@/components/auth/GoogleLoginPrompt';
 
 const Profile = () => {
@@ -44,6 +45,7 @@ const Profile = () => {
     const [gender, setGender] = useState<'male' | 'female' | 'other' | 'prefer_not_to_say' | ''>('');
     const [isSaving, setIsSaving] = useState(false);
     const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
+    const [avatarFile, setAvatarFile] = useState<File | null>(null);
     const [showSavePrompt, setShowSavePrompt] = useState(false);
 
     useEffect(() => {
@@ -54,8 +56,15 @@ const Profile = () => {
             setGender(profile.gender || '');
             if (profile.avatar_url) {
                 setAvatarPreview(profile.avatar_url);
+            } else if (user?.user_metadata?.avatar_url || user?.user_metadata?.picture) {
+                setAvatarPreview(user.user_metadata.avatar_url || user.user_metadata.picture);
             }
         } else {
+            // Logged in via Google but no profile yet
+            if (user?.user_metadata?.avatar_url || user?.user_metadata?.picture) {
+                setAvatarPreview(user.user_metadata.avatar_url || user.user_metadata.picture);
+            }
+
             // Fallback: Try to load from localStorage (for local dev)
             try {
                 const localProfile = JSON.parse(localStorage.getItem('sadhana_profile') || '{}');
@@ -63,6 +72,11 @@ const Profile = () => {
                 if (localProfile.full_name) setFullName(localProfile.full_name);
                 if (localProfile.date_of_birth) setDateOfBirth(localProfile.date_of_birth);
                 if (localProfile.gender) setGender(localProfile.gender);
+                if (localProfile.avatar_url) setAvatarPreview(localProfile.avatar_url);
+
+                if (!localProfile.avatar_url && (user?.user_metadata?.avatar_url || user?.user_metadata?.picture)) {
+                    setAvatarPreview(user.user_metadata.avatar_url || user.user_metadata.picture);
+                }
             } catch {
                 // Ignore localStorage errors
             }
@@ -90,34 +104,46 @@ const Profile = () => {
 
     const handleSave = async () => {
         setIsSaving(true);
+        let finalAvatarUrl = avatarPreview;
 
-        // Only display_name exists in the database - other fields are stored locally
+        // Upload avatar if a new file was selected
+        if (avatarFile && user) {
+            try {
+                const fileExt = avatarFile.name.split('.').pop();
+                const filePath = `${user.id}/${Date.now()}.${fileExt}`;
+
+                const { error: uploadError } = await supabase.storage
+                    .from('avatars')
+                    .upload(filePath, avatarFile, { upsert: true });
+
+                if (!uploadError) {
+                    const { data: { publicUrl } } = supabase.storage
+                        .from('avatars')
+                        .getPublicUrl(filePath);
+                    finalAvatarUrl = publicUrl;
+                } else {
+                    console.error('Upload error:', uploadError);
+                }
+            } catch (err) {
+                console.error('Critical upload error:', err);
+            }
+        }
+
+        // Prepare updates for database
         const dbUpdates = {
-            display_name: displayName || null,
-        };
-
-        // Additional profile data stored in localStorage
-        const localUpdates = {
             display_name: displayName || null,
             full_name: fullName || null,
             date_of_birth: dateOfBirth || null,
-            gender: gender || null,
+            gender: gender as any || null,
+            avatar_url: finalAvatarUrl || null,
         };
 
-        // Try to save display_name to database
+        // Save to database
         const result = await updateProfile(dbUpdates);
-
-        // Always save all data to localStorage as backup/extended storage
-        try {
-            const localProfile = JSON.parse(localStorage.getItem('sadhana_profile') || '{}');
-            const updatedProfile = { ...localProfile, ...localUpdates };
-            localStorage.setItem('sadhana_profile', JSON.stringify(updatedProfile));
-        } catch {
-            // Ignore localStorage errors
-        }
 
         setIsSaving(false);
         setIsEditing(false);
+        setAvatarFile(null); // Clear file after save
 
         if (result) {
             toast({
@@ -127,10 +153,10 @@ const Profile = () => {
                     : 'Your changes have been saved.',
             });
         } else {
-            // DB save failed but localStorage worked
             toast({
-                title: 'Profile saved locally',
-                description: 'Changes saved to this browser.',
+                variant: 'destructive',
+                title: 'Save failed',
+                description: 'We couldn\'t update your profile. Please try again.',
             });
         }
     };
@@ -142,12 +168,13 @@ const Profile = () => {
     const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (file) {
+            setAvatarFile(file);
             const reader = new FileReader();
             reader.onloadend = () => {
                 setAvatarPreview(reader.result as string);
                 toast({
-                    title: 'Avatar selected',
-                    description: 'Avatar upload will be available soon.',
+                    title: 'Avatar updated',
+                    description: 'Your new profile picture is ready. Click save to finish.',
                 });
             };
             reader.readAsDataURL(file);
@@ -286,8 +313,8 @@ const Profile = () => {
 
                                     {/* Avatar */}
                                     <div
-                                        className="relative w-28 h-28 sm:w-32 sm:h-32 rounded-full bg-gradient-to-br from-primary to-rose-500 flex items-center justify-center text-white text-4xl sm:text-5xl font-bold shadow-2xl overflow-hidden cursor-pointer group"
-                                        onClick={handleAvatarClick}
+                                        className={`relative w-28 h-28 sm:w-32 sm:h-32 rounded-full bg-gradient-to-br from-primary to-rose-500 flex items-center justify-center text-white text-4xl sm:text-5xl font-bold shadow-2xl overflow-hidden ${isEditing ? 'cursor-pointer group' : 'cursor-default'}`}
+                                        onClick={isEditing ? handleAvatarClick : undefined}
                                     >
                                         {avatarPreview ? (
                                             <img src={avatarPreview} alt="Profile" className="w-full h-full object-cover" />
@@ -296,25 +323,31 @@ const Profile = () => {
                                         )}
 
                                         {/* Hover Overlay */}
-                                        <div className="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                                            <Camera className="w-8 h-8 text-white" />
-                                        </div>
+                                        {isEditing && (
+                                            <div className="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                                                <Camera className="w-8 h-8 text-white" />
+                                            </div>
+                                        )}
                                     </div>
 
                                     {/* Camera Button */}
-                                    <button
-                                        onClick={handleAvatarClick}
-                                        className="absolute -bottom-1 -right-1 w-10 h-10 bg-primary rounded-full flex items-center justify-center shadow-lg border-4 border-background hover:bg-primary/90 transition-colors"
-                                    >
-                                        <Camera className="w-4 h-4 text-white" />
-                                    </button>
-                                    <input
-                                        type="file"
-                                        ref={fileInputRef}
-                                        accept="image/*"
-                                        onChange={handleAvatarChange}
-                                        className="hidden"
-                                    />
+                                    {isEditing && (
+                                        <>
+                                            <button
+                                                onClick={handleAvatarClick}
+                                                className="absolute -bottom-1 -right-1 w-10 h-10 bg-primary rounded-full flex items-center justify-center shadow-lg border-4 border-background hover:bg-primary/90 transition-colors"
+                                            >
+                                                <Camera className="w-4 h-4 text-white" />
+                                            </button>
+                                            <input
+                                                type="file"
+                                                ref={fileInputRef}
+                                                accept="image/*"
+                                                onChange={handleAvatarChange}
+                                                className="hidden"
+                                            />
+                                        </>
+                                    )}
                                 </div>
 
                                 {/* Profile Info */}
@@ -367,12 +400,6 @@ const Profile = () => {
                                                     <h1 className="text-2xl sm:text-3xl font-bold text-foreground">
                                                         {displayName || fullName || 'Practitioner'}
                                                     </h1>
-                                                    <button
-                                                        onClick={() => setIsEditing(true)}
-                                                        className="p-1.5 rounded-lg hover:bg-white/10 transition-colors"
-                                                    >
-                                                        <Edit2 className="w-4 h-4 text-muted-foreground hover:text-foreground" />
-                                                    </button>
                                                 </div>
                                                 <p className="text-muted-foreground flex items-center gap-1.5 justify-center sm:justify-start">
                                                     <Mail className="w-4 h-4" />
