@@ -51,6 +51,9 @@ const Profile = () => {
     const [showSavePrompt, setShowSavePrompt] = useState(false);
 
     useEffect(() => {
+        // Only sync from profile when NOT editing to avoid overwriting user input
+        if (isEditing) return;
+
         if (profile) {
             setDisplayName(profile.display_name || '');
             setFullName(profile.full_name || '');
@@ -63,18 +66,14 @@ const Profile = () => {
                 setAvatarPreview(user.user_metadata.avatar_url || user.user_metadata.picture);
             }
         } else {
-            // Logged in via Google but no profile yet
-            if (user?.user_metadata?.avatar_url || user?.user_metadata?.picture) {
-                setAvatarPreview(user.user_metadata.avatar_url || user.user_metadata.picture);
-            }
-
-            // Fallback: Try to load from localStorage (for local dev)
+            // Try to load from localStorage for Guest users
             try {
                 const localProfile = JSON.parse(localStorage.getItem('sadhana_profile') || '{}');
                 if (localProfile.display_name) setDisplayName(localProfile.display_name);
                 if (localProfile.full_name) setFullName(localProfile.full_name);
                 if (localProfile.date_of_birth) setDateOfBirth(localProfile.date_of_birth);
                 if (localProfile.gender) setGender(localProfile.gender);
+                if (localProfile.bio) setBio(localProfile.bio);
                 if (localProfile.avatar_url) setAvatarPreview(localProfile.avatar_url);
 
                 if (!localProfile.avatar_url && (user?.user_metadata?.avatar_url || user?.user_metadata?.picture)) {
@@ -142,14 +141,21 @@ const Profile = () => {
             bio: bio || null,
         };
 
+        // Also save to localStorage for sync/guest durability
+        try {
+            localStorage.setItem('sadhana_profile', JSON.stringify(dbUpdates));
+        } catch {
+            // Ignore localStorage errors
+        }
+
         // Save to database
         const result = await updateProfile(dbUpdates);
 
         setIsSaving(false);
-        setIsEditing(false);
-        setAvatarFile(null); // Clear file after save
 
         if (result) {
+            setIsEditing(false);
+            setAvatarFile(null); // Clear file after save
             toast({
                 title: 'Profile updated',
                 description: isAnonymous
@@ -160,7 +166,7 @@ const Profile = () => {
             toast({
                 variant: 'destructive',
                 title: 'Save failed',
-                description: 'We couldn\'t update your profile. Please try again.',
+                description: 'We couldn\'t update your profile. Please check your connection and try again.',
             });
         }
     };
@@ -632,10 +638,16 @@ const Profile = () => {
                             <Button
                                 variant="crimson"
                                 className="flex-1 h-12 gap-2"
-                                onClick={() => setIsEditing(true)}
+                                onClick={() => {
+                                    if (isAnonymous) {
+                                        setShowSavePrompt(true);
+                                    } else {
+                                        setIsEditing(true);
+                                    }
+                                }}
                             >
                                 <Edit2 className="w-4 h-4" />
-                                Edit Profile
+                                {isAnonymous ? 'Sign In to Edit Profile' : 'Edit Profile'}
                             </Button>
                         ) : (
                             <>

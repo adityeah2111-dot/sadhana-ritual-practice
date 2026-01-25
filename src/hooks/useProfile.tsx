@@ -10,6 +10,7 @@ export interface Profile {
   date_of_birth: string | null;
   gender: 'male' | 'female' | 'other' | 'prefer_not_to_say' | null;
   avatar_url: string | null;
+  bio: string | null;
   practice_time: string | null;
   timezone: string | null;
   onboarding_completed: boolean | null;
@@ -117,11 +118,21 @@ export const useProfile = () => {
     }
   };
 
-  const completeOnboarding = async (practiceTime: string, timezone: string, displayName?: string) => {
+  const completeOnboarding = async (
+    practiceTime: string,
+    timezone: string,
+    displayName?: string,
+    fullName?: string,
+    dateOfBirth?: string,
+    gender?: string
+  ) => {
     const updates = {
       practice_time: practiceTime,
       timezone,
       display_name: displayName || null,
+      full_name: fullName || null,
+      date_of_birth: dateOfBirth || null,
+      gender: gender as any || null,
       onboarding_completed: true,
     };
 

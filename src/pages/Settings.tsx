@@ -5,7 +5,9 @@ import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useProfile } from '@/hooks/useProfile';
+import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
+import GoogleLoginPrompt from '@/components/auth/GoogleLoginPrompt';
 
 const timeSlots = [
   { id: 'morning', label: 'Early Morning', time: '06:00:00', display: '6:00 AM', icon: Sun },
@@ -27,12 +29,14 @@ const popularTimezones = [
 
 const Settings = () => {
   const { profile, loading, updateProfile } = useProfile();
+  const { isAnonymous } = useAuth();
   const { toast } = useToast();
   const [selectedTime, setSelectedTime] = useState<string | null>(null);
   const [selectedTimezone, setSelectedTimezone] = useState<string | null>(null);
   const [timezoneSearch, setTimezoneSearch] = useState('');
   const [saving, setSaving] = useState(false);
   const [hasChanges, setHasChanges] = useState(false);
+  const [showSavePrompt, setShowSavePrompt] = useState(false);
 
   useEffect(() => {
     if (profile) {
@@ -56,7 +60,7 @@ const Settings = () => {
 
     setSaving(true);
     const slot = timeSlots.find(s => s.id === selectedTime);
-    
+
     const result = await updateProfile({
       practice_time: slot?.time || '06:00:00',
       timezone: selectedTimezone,
@@ -153,25 +157,21 @@ const Settings = () => {
                 <button
                   key={slot.id}
                   onClick={() => setSelectedTime(slot.id)}
-                  className={`w-full flex items-center gap-4 p-3 rounded-lg border transition-all ${
-                    selectedTime === slot.id
-                      ? 'border-primary bg-primary/5'
-                      : 'border-border bg-background hover:border-primary/50'
-                  }`}
+                  className={`w-full flex items-center gap-4 p-3 rounded-lg border transition-all ${selectedTime === slot.id
+                    ? 'border-primary bg-primary/5'
+                    : 'border-border bg-background hover:border-primary/50'
+                    }`}
                 >
-                  <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                    selectedTime === slot.id ? 'bg-primary/20' : 'bg-muted'
-                  }`}>
-                    <slot.icon className={`h-4 w-4 ${
-                      selectedTime === slot.id ? 'text-primary' : 'text-muted-foreground'
-                    }`} />
+                  <div className={`w-8 h-8 rounded-full flex items-center justify-center ${selectedTime === slot.id ? 'bg-primary/20' : 'bg-muted'
+                    }`}>
+                    <slot.icon className={`h-4 w-4 ${selectedTime === slot.id ? 'text-primary' : 'text-muted-foreground'
+                      }`} />
                   </div>
                   <span className="flex-1 text-left text-sm text-foreground">
                     {slot.label}
                   </span>
-                  <span className={`text-xs font-mono ${
-                    selectedTime === slot.id ? 'text-primary' : 'text-muted-foreground'
-                  }`}>
+                  <span className={`text-xs font-mono ${selectedTime === slot.id ? 'text-primary' : 'text-muted-foreground'
+                    }`}>
                     {slot.display}
                   </span>
                 </button>
@@ -212,20 +212,17 @@ const Settings = () => {
                 <button
                   key={tz.id}
                   onClick={() => setSelectedTimezone(tz.id)}
-                  className={`w-full flex items-center justify-between p-3 rounded-lg border transition-all ${
-                    selectedTimezone === tz.id
-                      ? 'border-primary bg-primary/5'
-                      : 'border-border bg-background hover:border-primary/50'
-                  }`}
+                  className={`w-full flex items-center justify-between p-3 rounded-lg border transition-all ${selectedTimezone === tz.id
+                    ? 'border-primary bg-primary/5'
+                    : 'border-border bg-background hover:border-primary/50'
+                    }`}
                 >
-                  <span className={`text-sm ${
-                    selectedTimezone === tz.id ? 'text-foreground font-medium' : 'text-foreground'
-                  }`}>
+                  <span className={`text-sm ${selectedTimezone === tz.id ? 'text-foreground font-medium' : 'text-foreground'
+                    }`}>
                     {tz.label}
                   </span>
-                  <span className={`text-xs font-mono ${
-                    selectedTimezone === tz.id ? 'text-primary' : 'text-muted-foreground'
-                  }`}>
+                  <span className={`text-xs font-mono ${selectedTimezone === tz.id ? 'text-primary' : 'text-muted-foreground'
+                    }`}>
                     UTC{tz.offset}
                   </span>
                 </button>
@@ -242,13 +239,23 @@ const Settings = () => {
             <Button
               size="lg"
               className="w-full"
-              onClick={handleSave}
-              disabled={!hasChanges || saving}
+              onClick={() => {
+                if (isAnonymous) {
+                  setShowSavePrompt(true);
+                } else {
+                  handleSave();
+                }
+              }}
+              disabled={(!hasChanges && !isAnonymous) || saving}
             >
               {saving ? (
                 <>
                   <div className="w-4 h-4 border-2 border-primary-foreground border-t-transparent rounded-full animate-spin mr-2" />
                   Saving...
+                </>
+              ) : isAnonymous ? (
+                <>
+                  Sign In to Save Settings
                 </>
               ) : (
                 <>
@@ -260,6 +267,15 @@ const Settings = () => {
           </motion.div>
         </div>
       </main>
+
+      {/* Google Login Prompt Modal */}
+      {showSavePrompt && (
+        <GoogleLoginPrompt
+          variant="popup"
+          message="Connect your Google account to save your practice settings permanently"
+          onClose={() => setShowSavePrompt(false)}
+        />
+      )}
     </div>
   );
 };

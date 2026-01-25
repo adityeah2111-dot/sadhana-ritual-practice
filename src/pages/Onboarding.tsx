@@ -94,7 +94,14 @@ const Onboarding = () => {
   };
 
   const handleTimezoneSelect = async (timezone: string) => {
-    const result = await completeOnboarding(practiceTime, timezone);
+    const result = await completeOnboarding(
+      practiceTime,
+      timezone,
+      personalInfo.name || undefined,
+      personalInfo.name || undefined,
+      personalInfo.dateOfBirth || undefined,
+      personalInfo.gender || undefined
+    );
 
     // Always proceed to completion step, even if save failed
     // The completion step will redirect to dashboard
