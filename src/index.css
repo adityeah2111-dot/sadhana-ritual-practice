@@ -421,10 +421,12 @@ iframe.goog-te-banner-frame {
   display: none !important;
 }
 
-body {
+body,
+html {
   top: 0 !important;
   margin-top: 0 !important;
   position: static !important;
+  height: 100% !important;
 }
 
 #google_translate_element {

@@ -51,6 +51,45 @@ const LanguageSelector = () => {
         window.location.reload();
     };
 
+    // Nuclear option: Aggressively remove Google Banner via JS
+    useEffect(() => {
+        const removeBanner = () => {
+            const banner = document.querySelector('.goog-te-banner-frame');
+            if (banner) {
+                banner.remove();
+            }
+            const frame = document.querySelector('iframe.goog-te-banner-frame');
+            if (frame) {
+                frame.remove();
+            }
+
+            // Fix body offset
+            document.body.style.top = '0px';
+            document.body.style.marginTop = '0px';
+            document.documentElement.style.height = '100%';
+            document.documentElement.style.top = '0px';
+            document.documentElement.style.marginTop = '0px';
+        };
+
+        // Run immediately
+        removeBanner();
+
+        // Observe DOM changes
+        const observer = new MutationObserver((mutations) => {
+            removeBanner();
+        });
+
+        observer.observe(document.body, { childList: true, subtree: true, attributes: true });
+
+        // Cleanup
+        const interval = setInterval(removeBanner, 500); // Fail-safe polling
+
+        return () => {
+            observer.disconnect();
+            clearInterval(interval);
+        };
+    }, []);
+
     const currentLanguageLabel = LANGUAGES.find(l => l.code === currentLang)?.label || 'Language';
 
     const filteredLanguages = LANGUAGES.filter(lang =>
