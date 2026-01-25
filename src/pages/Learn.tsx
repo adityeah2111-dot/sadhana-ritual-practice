@@ -615,24 +615,22 @@ const Learn = () => {
                                     onClick={() => setSelectedArticle(null)}
                                 >
                                     <ArrowLeft className="w-4 h-4" />
-                                    <span className="hidden sm:inline">Back</span>
+                                    <span className="inline">Back</span>
                                 </Button>
                                 <div className="hidden sm:block h-4 w-px bg-border/50 mx-1" />
 
-                                <div className="hidden sm:block h-4 w-px bg-border/50 mx-1" />
-
-                                {/* Consolidated View Settings */}
+                                {/* Consolidated Settings including Language */}
                                 <DropdownMenu>
                                     <DropdownMenuTrigger asChild>
                                         <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground">
                                             <Settings2 className="w-5 h-5" />
                                         </Button>
                                     </DropdownMenuTrigger>
-                                    <DropdownMenuContent align="end" className="w-56">
+                                    <DropdownMenuContent align="end" className="w-64">
                                         <DropdownMenuLabel>View Options</DropdownMenuLabel>
                                         <DropdownMenuSeparator />
 
-                                        <DropdownMenuItem onClick={() => setReadingMode(!readingMode)} className="flex items-center justify-between cursor-pointer">
+                                        <DropdownMenuItem onSelect={(e) => { e.preventDefault(); setReadingMode(!readingMode); }} className="flex items-center justify-between cursor-pointer">
                                             <div className="flex items-center gap-2">
                                                 <BookOpen className="w-4 h-4" />
                                                 <span>Reading Mode</span>
@@ -640,15 +638,20 @@ const Learn = () => {
                                             {readingMode && <Check className="w-4 h-4 text-primary" />}
                                         </DropdownMenuItem>
 
+                                        <div className="px-2 py-2">
+                                            <div className="flex items-center gap-2 mb-2 text-sm font-medium px-2">
+                                                <ThemeToggle variant="dropdown" className="w-full justify-between" />
+                                            </div>
+                                        </div>
+
                                         <DropdownMenuSeparator />
-                                        <DropdownMenuLabel>Theme</DropdownMenuLabel>
+                                        <DropdownMenuLabel>Language</DropdownMenuLabel>
                                         <div className="px-2 pb-2">
-                                            <ThemeToggle variant="dropdown" className="w-full justify-between" />
+                                            {/* Embed Language Selector logic here or keep it simple */}
+                                            <LanguageSelector />
                                         </div>
                                     </DropdownMenuContent>
                                 </DropdownMenu>
-
-                                <LanguageSelector />
                             </div>
                         </div>
                     </div>
@@ -717,19 +720,18 @@ const Learn = () => {
                     </div>
 
                     <div className="container mx-auto px-4 lg:px-6 py-12">
-                        <article className={`max-w-3xl mx-auto transition-all duration-500 ease-in-out ${readingMode ? 'max-w-2xl' : ''}`}>
+                        <article className="max-w-3xl mx-auto">
                             {/* Pro-tip: Translate widget is now in header for cleaner reading */}
                             <div
-                                className={`prose prose-invert prose-lg max-w-none transition-all duration-500
+                                className="prose prose-invert prose-lg max-w-none
                 prose-headings:text-foreground prose-headings:font-semibold
                 prose-h3:text-xl prose-h3:mt-8 prose-h3:mb-4
-                prose-p:text-muted-foreground prose-p:leading-relaxed ${readingMode ? 'prose-xl prose-p:text-lg sm:prose-p:text-xl' : ''}
- prose-p:mb-4
+                prose-p:text-muted-foreground prose-p:leading-relaxed prose-p:mb-4
                 prose-li:text-muted-foreground prose-li:my-1
                 prose-strong:text-foreground prose-strong:font-semibold
                 prose-blockquote:border-l-primary prose-blockquote:bg-card prose-blockquote:py-4 prose-blockquote:px-6 prose-blockquote:rounded-r-lg prose-blockquote:not-italic prose-blockquote:text-foreground
                 prose-ul:my-4 prose-ol:my-4
-              `}
+              "
                                 dangerouslySetInnerHTML={{ __html: selectedArticle.content }}
                             />
 
