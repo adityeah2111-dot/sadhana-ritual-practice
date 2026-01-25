@@ -6,6 +6,7 @@ import { usePayment } from '@/hooks/usePayment';
 import { useAuth } from '@/hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
 import razorpayConfig, { formatAmount } from '@/lib/razorpay';
+import { Helmet } from 'react-helmet-async';
 
 const Checkout = () => {
     const navigate = useNavigate();
@@ -79,6 +80,11 @@ const Checkout = () => {
 
     return (
         <div className="min-h-screen bg-background">
+            <Helmet>
+                <title>Secure Checkout | Sadhana - Join the Practice</title>
+                <meta name="description" content="Securely subscribe to Sadhana Pro. Choose your plan: Monthly, Yearly, or Lifetime access. 30-day money-back guarantee." />
+                <link rel="canonical" href="https://sadhanaweb.vercel.app/checkout" />
+            </Helmet>
             {/* Header */}
             <header className="border-b border-border bg-card/50 backdrop-blur-sm sticky top-0 z-50">
                 <div className="container mx-auto px-4 sm:px-6 lg:px-8">

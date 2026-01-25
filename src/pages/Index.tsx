@@ -1,4 +1,5 @@
 import { lazy, Suspense } from 'react';
+import { Helmet } from 'react-helmet-async';
 import Header from "@/components/landing/Header";
 import HeroSection from "@/components/landing/HeroSection";
 import PhilosophySection from "@/components/landing/PhilosophySection";
@@ -19,6 +20,11 @@ const Footer = lazy(() => import("@/components/landing/Footer"));
 const Index = () => {
   return (
     <div className="min-h-screen bg-background">
+      <Helmet>
+        <title>Sadhana | Your Daily Practice - Ritual-Based Fitness System</title>
+        <meta name="description" content="Sadhana is a ritual-based fitness system for those done with motivation. No choices, no distractions. Show up. Practice. Leave. Repeat. Discipline over motivation." />
+        <link rel="canonical" href="https://sadhanaweb.vercel.app/" />
+      </Helmet>
       {/* Skip link for keyboard users */}
       <SkipLink href="#main-content">Skip to main content</SkipLink>
 
