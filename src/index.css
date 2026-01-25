@@ -428,3 +428,21 @@ iframe.goog-te-banner-frame {
 #google_translate_element {
   display: none;
 }
+
+/* Hide annoying popups and hover effects */
+.goog-tooltip,
+.goog-te-hover-frame,
+.goog-te-balloon-frame,
+.goog-te-menu-frame {
+  display: none !important;
+}
+
+.goog-text-highlight {
+  background-color: transparent !important;
+  box-shadow: none !important;
+}
+
+font {
+  background-color: transparent !important;
+  box-shadow: none !important;
+}

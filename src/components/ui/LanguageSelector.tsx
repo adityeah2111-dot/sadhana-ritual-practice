@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
-import { Check, ChevronDown, Globe, Languages } from 'lucide-react';
+import { Check, ChevronDown, Languages, Search } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -18,6 +19,9 @@ const LANGUAGES = [
     { code: 'ru', label: 'Russian', native: 'Русский' },
     { code: 'pt', label: 'Portuguese', native: 'Português' },
     { code: 'zh-CN', label: 'Chinese (Simplified)', native: '简体中文' },
+    { code: 'ar', label: 'Arabic', native: 'العربية' },
+    { code: 'it', label: 'Italian', native: 'Italiano' },
+    { code: 'ko', label: 'Korean', native: '한국어' },
 ];
 
 declare global {
@@ -29,9 +33,9 @@ declare global {
 
 const LanguageSelector = () => {
     const [currentLang, setCurrentLang] = useState('en');
+    const [searchQuery, setSearchQuery] = useState('');
 
     useEffect(() => {
-        // Read the googtrans cookie to set initial state
         const cookies = document.cookie.split(';');
         const transCookie = cookies.find(c => c.trim().startsWith('googtrans='));
         if (transCookie) {
@@ -41,25 +45,21 @@ const LanguageSelector = () => {
     }, []);
 
     const handleLanguageChange = (langCode: string) => {
-        // Google Translate works by setting a cookie 'googtrans' 
-        // Format: /source_lang/target_lang (e.g., /auto/es or /en/es)
-
-        // 1. Set the cookie for the root path and domain
         document.cookie = `googtrans=/auto/${langCode}; path=/; domain=${window.location.hostname}`;
-        document.cookie = `googtrans=/auto/${langCode}; path=/;`; // Fallback
-
-        // 2. Update state implies selection
+        document.cookie = `googtrans=/auto/${langCode}; path=/;`;
         setCurrentLang(langCode);
-
-        // 3. Reload page to apply translation
         window.location.reload();
     };
 
     const currentLanguageLabel = LANGUAGES.find(l => l.code === currentLang)?.label || 'Language';
 
+    const filteredLanguages = LANGUAGES.filter(lang =>
+        lang.label.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        lang.native.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+
     return (
         <div className="relative">
-            {/* Hidden container for the Google script to attach to */}
             <div id="google_translate_element" className="hidden" />
 
             <DropdownMenu>
@@ -74,22 +74,43 @@ const LanguageSelector = () => {
                         <ChevronDown className="w-3 h-3 opacity-50" />
                     </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-[200px] max-h-[300px] overflow-y-auto">
-                    {LANGUAGES.map((lang) => (
-                        <DropdownMenuItem
-                            key={lang.code}
-                            onClick={() => handleLanguageChange(lang.code)}
-                            className="flex items-center justify-between cursor-pointer"
-                        >
-                            <span className="flex flex-col">
-                                <span className="text-sm font-medium">{lang.native}</span>
-                                <span className="text-xs text-muted-foreground">{lang.label}</span>
-                            </span>
-                            {currentLang === lang.code && (
-                                <Check className="w-4 h-4 text-primary" />
-                            )}
-                        </DropdownMenuItem>
-                    ))}
+                <DropdownMenuContent align="end" className="w-[250px] max-h-[400px] overflow-hidden flex flex-col">
+                    <div className="p-2 border-b border-border sticky top-0 bg-popover z-10">
+                        <div className="relative">
+                            <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-muted-foreground" />
+                            <Input
+                                placeholder="Search language..."
+                                value={searchQuery}
+                                onChange={(e) => setSearchQuery(e.target.value)}
+                                className="h-8 pl-8 text-xs bg-secondary/50 border-transparent focus:border-primary/20"
+                                onKeyDown={(e) => e.stopPropagation()}
+                            />
+                        </div>
+                    </div>
+
+                    <div className="overflow-y-auto max-h-[300px] p-1">
+                        {filteredLanguages.length === 0 ? (
+                            <div className="p-4 text-center text-xs text-muted-foreground">
+                                No language found
+                            </div>
+                        ) : (
+                            filteredLanguages.map((lang) => (
+                                <DropdownMenuItem
+                                    key={lang.code}
+                                    onClick={() => handleLanguageChange(lang.code)}
+                                    className="flex items-center justify-between cursor-pointer py-2"
+                                >
+                                    <span className="flex flex-col">
+                                        <span className="text-sm font-medium">{lang.native}</span>
+                                        <span className="text-xs text-muted-foreground">{lang.label}</span>
+                                    </span>
+                                    {currentLang === lang.code && (
+                                        <Check className="w-4 h-4 text-primary" />
+                                    )}
+                                </DropdownMenuItem>
+                            ))
+                        )}
+                    </div>
                 </DropdownMenuContent>
             </DropdownMenu>
         </div>

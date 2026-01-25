@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import {
     Flame,
     ArrowLeft,
@@ -485,6 +485,8 @@ const blogPosts = [
     },
 ];
 
+
+
 const categories = [
     { name: 'All', count: blogPosts.length },
     { name: 'Discipline', count: blogPosts.filter(p => p.category === 'Discipline').length },
@@ -493,19 +495,44 @@ const categories = [
 ];
 
 const Learn = () => {
+    const [searchParams, setSearchParams] = useSearchParams();
     const [selectedCategory, setSelectedCategory] = useState('All');
     const [searchQuery, setSearchQuery] = useState('');
-    const [selectedArticle, setSelectedArticle] = useState<typeof blogPosts[0] | null>(null);
+
+    // Initialize article from URL param
+    const articleId = searchParams.get('article');
+    const initialArticle = articleId ? blogPosts.find(p => p.id === articleId) || null : null;
+    const [selectedArticle, _setSelectedArticle] = useState<typeof blogPosts[0] | null>(initialArticle);
+
+    // Wrapper to update URL when article changes
+    const setSelectedArticle = (article: typeof blogPosts[0] | null) => {
+        _setSelectedArticle(article);
+        if (article) {
+            setSearchParams({ article: article.id });
+        } else {
+            setSearchParams({});
+        }
+    };
+
+    // Keep state in sync if URL changes externally (e.g. back button)
+    useEffect(() => {
+        const id = searchParams.get('article');
+        if (id) {
+            const article = blogPosts.find(p => p.id === id);
+            if (article) _setSelectedArticle(article);
+        } else {
+            _setSelectedArticle(null);
+        }
+    }, [searchParams]);
 
     // Initialise Google Translate
     useEffect(() => {
         const initTranslate = () => {
+            // We need the element to exist for the script to attach, even if hidden
             const targetElement = document.getElementById('google_translate_element');
             if (!targetElement) return;
 
             if (window.google && window.google.translate) {
-                // Clear any existing instances to avoid duplicates if possible, though mostly internal
-                // Initialize the widget
                 new window.google.translate.TranslateElement(
                     {
                         pageLanguage: 'en',
@@ -517,10 +544,8 @@ const Learn = () => {
             }
         };
 
-        // Assign to window for the callback
         window.googleTranslateElementInit = initTranslate;
 
-        // Load the script if not present
         const id = 'google-translate-script';
         if (!document.getElementById(id)) {
             const script = document.createElement('script');
@@ -529,7 +554,6 @@ const Learn = () => {
             script.async = true;
             document.body.appendChild(script);
         } else {
-            // If script is already loaded, manually initialize
             initTranslate();
         }
     }, [selectedArticle]);
