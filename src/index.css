@@ -14,156 +14,93 @@
 
 @layer base {
   :root {
-    /* Core backgrounds - Deep charcoal blacks */
-    --background: 0 0% 4%;
-    --foreground: 40 10% 92%;
-
-    /* Card surfaces - Slightly elevated */
-    --card: 0 0% 7%;
-    --card-foreground: 40 10% 92%;
-
-    /* Popover/Modal surfaces */
-    --popover: 0 0% 8%;
-    --popover-foreground: 40 10% 92%;
-
-    /* Primary accent - Deep crimson red */
-    --primary: 0 65% 45%;
-    --primary-foreground: 40 10% 95%;
-
-    /* Secondary - Muted charcoal */
-    --secondary: 0 0% 12%;
-    --secondary-foreground: 40 10% 85%;
-
-    /* Muted elements */
-    --muted: 0 0% 15%;
-    --muted-foreground: 40 5% 55%;
-
-    /* Accent - Subtle warm gold */
-    --accent: 35 30% 20%;
-    --accent-foreground: 40 20% 90%;
-
-    /* Destructive/Warning */
-    --destructive: 0 70% 50%;
-    --destructive-foreground: 40 10% 95%;
-
-    /* Borders and inputs */
-    --border: 0 0% 15%;
-    --input: 0 0% 12%;
-    --ring: 0 65% 45%;
-
-    --radius: 0.5rem;
-
-    /* Sidebar tokens */
-    --sidebar-background: 0 0% 5%;
-    --sidebar-foreground: 40 10% 85%;
-    --sidebar-primary: 0 65% 45%;
-    --sidebar-primary-foreground: 40 10% 95%;
-    --sidebar-accent: 0 0% 10%;
-    --sidebar-accent-foreground: 40 10% 90%;
-    --sidebar-border: 0 0% 12%;
-    --sidebar-ring: 0 65% 45%;
-
-    /* Custom Sadhana tokens */
-    --surface-elevated: 0 0% 9%;
-    --surface-overlay: 0 0% 6%;
-    --text-primary: 40 10% 92%;
-    --text-secondary: 40 5% 65%;
-    --text-muted: 40 5% 45%;
-    --crimson: 0 65% 45%;
-    --crimson-glow: 0 70% 55%;
-    --gold-muted: 35 40% 50%;
-  }
-
-  /* Smooth Theme Transitions */
-  * {
-    border-color: hsl(var(--border));
-  }
-
-  body {
-    transition: background-color 0.3s ease, color 0.3s ease;
-  }
-
-  /* Light Mode Theme */
-  .light {
-    /* Core backgrounds - Pure Clean White */
+    /* Base HSL values */
     --background: 0 0% 100%;
-    --foreground: 0 0% 5%;
+    --foreground: 240 10% 3.9%;
 
-    /* Card surfaces - Very subtle contrast */
-    --card: 0 0% 98%;
-    --card-foreground: 0 0% 5%;
+    --card: 0 0% 100%;
+    --card-foreground: 240 10% 3.9%;
 
-    /* Popover/Modal surfaces */
     --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 5%;
+    --popover-foreground: 240 10% 3.9%;
 
-    /* Primary accent - Vivid Crimson */
-    --primary: 350 70% 45%;
-    --primary-foreground: 0 0% 100%;
+    --primary: 346.8 77.2% 49.8%;
+    --primary-foreground: 355.7 100% 97.3%;
 
-    /* Secondary */
-    --secondary: 0 0% 96%;
-    --secondary-foreground: 0 0% 15%;
+    --secondary: 240 4.8% 95.9%;
+    --secondary-foreground: 240 5.9% 10%;
 
-    /* Muted elements */
-    --muted: 0 0% 96%;
-    --muted-foreground: 0 0% 45%;
+    --muted: 240 4.8% 95.9%;
+    --muted-foreground: 240 3.8% 46.1%;
 
-    /* Accent - Subtle Warmth */
-    --accent: 30 20% 97%;
-    --accent-foreground: 0 0% 15%;
+    --accent: 240 4.8% 95.9%;
+    --accent-foreground: 240 5.9% 10%;
 
-    /* Destructive/Warning */
-    --destructive: 0 70% 50%;
-    --destructive-foreground: 0 0% 100%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
 
-    /* Borders and inputs - Crisp definition */
-    --border: 0 0% 90%;
-    --input: 0 0% 90%;
-    --ring: 350 70% 45%;
+    --border: 240 5.9% 90%;
+    --input: 240 5.9% 90%;
+    --ring: 346.8 77.2% 49.8%;
 
-    /* Sidebar tokens */
+    --radius: 0.75rem;
+
+    /* Custom Tokens */
+    --crimson: 346.8 77.2% 49.8%;
+    --crimson-glow: 346.8 77.2% 65%;
+    --gold-muted: 35 40% 50%;
+
     --sidebar-background: 0 0% 98%;
-    --sidebar-foreground: 0 0% 15%;
-    --sidebar-primary: 350 70% 45%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 0 0% 96%;
-    --sidebar-accent-foreground: 0 0% 15%;
-    --sidebar-border: 0 0% 90%;
-    --sidebar-ring: 350 70% 45%;
-
-    /* Custom Sadhana tokens */
-    --surface-elevated: 0 0% 100%;
-    --surface-overlay: 0 0% 98%;
-    --text-primary: 0 0% 5%;
-    --text-secondary: 0 0% 35%;
-    --text-muted: 0 0% 50%;
-    --crimson: 350 70% 45%;
-    --crimson-glow: 350 60% 60%;
-    --gold-muted: 35 40% 45%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
   }
 
-  /* Dark Mode Theme (default) */
   .dark {
-    --background: 0 0% 4%;
-    --foreground: 40 10% 92%;
-    --card: 0 0% 7%;
-    --card-foreground: 40 10% 92%;
-    --popover: 0 0% 8%;
-    --popover-foreground: 40 10% 92%;
-    --primary: 0 65% 45%;
-    --primary-foreground: 40 10% 95%;
-    --secondary: 0 0% 12%;
-    --secondary-foreground: 40 10% 85%;
+    --background: 20 14.3% 4.1%;
+    --foreground: 0 0% 95%;
+
+    --card: 24 9.8% 10%;
+    --card-foreground: 0 0% 95%;
+
+    --popover: 0 0% 9%;
+    --popover-foreground: 0 0% 95%;
+
+    --primary: 346.8 77.2% 49.8%;
+    --primary-foreground: 355.7 100% 97.3%;
+
+    --secondary: 240 3.7% 15.9%;
+    --secondary-foreground: 0 0% 98%;
+
     --muted: 0 0% 15%;
-    --muted-foreground: 40 5% 55%;
-    --accent: 35 30% 20%;
-    --accent-foreground: 40 20% 90%;
-    --destructive: 0 70% 50%;
-    --destructive-foreground: 40 10% 95%;
-    --border: 0 0% 15%;
-    --input: 0 0% 12%;
-    --ring: 0 65% 45%;
+    --muted-foreground: 240 5% 64.9%;
+
+    --accent: 12 6.5% 15.1%;
+    --accent-foreground: 0 0% 98%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 85.7% 97.3%;
+
+    --border: 240 3.7% 15.9%;
+    --input: 240 3.7% 15.9%;
+    --ring: 346.8 77.2% 49.8%;
+
+    /* Custom Tokens Dark */
+    --crimson: 346.8 77.2% 49.8%;
+    --crimson-glow: 346.8 77.2% 45%;
+
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
   }
 }
 
