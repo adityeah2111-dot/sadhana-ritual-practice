@@ -24,7 +24,7 @@ export const useProfile = () => {
   // Unique key for the profile query
   const queryKey = ['profile', user?.id];
 
-  const { data: profile, isLoading: loading, refetch } = useQuery({
+  const { data: profileData, isLoading: loading, refetch } = useQuery({
     queryKey,
     queryFn: async () => {
       if (!user) return null;
@@ -46,6 +46,12 @@ export const useProfile = () => {
     // Don't refetch on window focus to prevent unnecessary DB calls, mostly for cost saving
     refetchOnWindowFocus: false,
   });
+
+  // Calculate profile with fallbacks
+  const profile = profileData ? {
+    ...profileData,
+    avatar_url: profileData.avatar_url || user?.user_metadata?.avatar_url || user?.user_metadata?.picture || null
+  } : null;
 
   const updateProfileMutation = useMutation({
     mutationFn: async (updates: Partial<Profile>) => {

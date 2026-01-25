@@ -151,12 +151,14 @@ const Header = () => {
                     }}
                     className="flex items-center gap-2 pl-2 pr-3 py-1.5 rounded-full hover:bg-muted/50 transition-colors border border-transparent hover:border-border"
                   >
-                    <div className={`w-8 h-8 rounded-full flex items-center justify-center ${isAnonymous
+                    <div className={`w-8 h-8 rounded-full flex items-center justify-center overflow-hidden ${isAnonymous
                       ? 'bg-muted border border-border'
                       : 'bg-gradient-to-br from-primary to-rose-500'
                       }`}>
                       {isAnonymous ? (
                         <User className="w-4 h-4 text-muted-foreground" />
+                      ) : profile?.avatar_url ? (
+                        <img src={profile.avatar_url} alt="Profile" className="w-full h-full object-cover" />
                       ) : (
                         <span className="text-xs font-medium text-white">{getInitials()}</span>
                       )}
@@ -243,12 +245,14 @@ const Header = () => {
               {/* Mobile user avatar */}
               {!loading && user && (
                 <Link to="/profile" className="p-1.5">
-                  <div className={`w-8 h-8 rounded-full flex items-center justify-center ${isAnonymous
+                  <div className={`w-8 h-8 rounded-full flex items-center justify-center overflow-hidden ${isAnonymous
                     ? 'bg-muted border border-border'
                     : 'bg-gradient-to-br from-primary to-rose-500'
                     }`}>
                     {isAnonymous ? (
                       <User className="w-4 h-4 text-muted-foreground" />
+                    ) : profile?.avatar_url ? (
+                      <img src={profile.avatar_url} alt="Profile" className="w-full h-full object-cover" />
                     ) : (
                       <span className="text-xs font-medium text-white">{getInitials()}</span>
                     )}
@@ -365,10 +369,12 @@ const Header = () => {
                     <>
                       {/* User info card */}
                       <div className="flex items-center gap-3 p-4 bg-card border border-border rounded-2xl">
-                        <div className={`w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 ${isAnonymous ? 'bg-muted border border-border' : 'bg-gradient-to-br from-primary to-rose-500'
+                        <div className={`w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 overflow-hidden ${isAnonymous ? 'bg-muted border border-border' : 'bg-gradient-to-br from-primary to-rose-500'
                           }`}>
                           {isAnonymous ? (
                             <User className="w-5 h-5 text-muted-foreground" />
+                          ) : profile?.avatar_url ? (
+                            <img src={profile.avatar_url} alt="Profile" className="w-full h-full object-cover" />
                           ) : (
                             <span className="text-base font-medium text-white">{getInitials()}</span>
                           )}

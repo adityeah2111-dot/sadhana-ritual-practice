@@ -142,8 +142,12 @@ const Dashboard = () => {
                 </Button>
               ) : (
                 <Link to="/profile" className="flex items-center gap-1.5 sm:gap-2 px-2 py-1.5 rounded-lg hover:bg-muted/50 transition-colors">
-                  <div className="w-7 h-7 rounded-full bg-gradient-to-br from-primary to-rose-500 flex items-center justify-center text-white text-xs font-medium">
-                    {firstName?.charAt(0) || <User className="h-3.5 w-3.5" />}
+                  <div className="w-7 h-7 rounded-full bg-gradient-to-br from-primary to-rose-500 flex items-center justify-center text-white text-xs font-medium overflow-hidden">
+                    {profile?.avatar_url ? (
+                      <img src={profile.avatar_url} alt="Profile" className="w-full h-full object-cover" />
+                    ) : (
+                      firstName?.charAt(0) || <User className="h-3.5 w-3.5" />
+                    )}
                   </div>
                   <span className="hidden sm:inline text-sm text-muted-foreground max-w-[120px] truncate">
                     {firstName || user?.email?.split('@')[0]}
