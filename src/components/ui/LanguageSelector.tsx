@@ -66,23 +66,28 @@ const LanguageSelector = () => {
             // Fix body offset
             document.body.style.top = '0px';
             document.body.style.marginTop = '0px';
+            document.body.style.position = ''; // Allow static
+
+            // Fix HTML offset (critical for mobile)
             document.documentElement.style.height = '100%';
             document.documentElement.style.top = '0px';
             document.documentElement.style.marginTop = '0px';
+            document.documentElement.style.position = '';
         };
 
         // Run immediately
         removeBanner();
 
-        // Observe DOM changes
+        // Observe DOM changes - Watch BODY and HTML
         const observer = new MutationObserver((mutations) => {
             removeBanner();
         });
 
-        observer.observe(document.body, { childList: true, subtree: true, attributes: true });
+        observer.observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ['style', 'class'] });
+        observer.observe(document.documentElement, { attributes: true, attributeFilter: ['style', 'class'] });
 
         // Cleanup
-        const interval = setInterval(removeBanner, 500); // Fail-safe polling
+        const interval = setInterval(removeBanner, 100); // More aggressive polling for first few seconds
 
         return () => {
             observer.disconnect();
