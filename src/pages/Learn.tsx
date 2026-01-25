@@ -17,6 +17,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useEffect } from 'react';
+import LanguageSelector from '@/components/ui/LanguageSelector';
 
 declare global {
     interface Window {
@@ -565,10 +566,7 @@ const Learn = () => {
                     <article className="max-w-3xl mx-auto">
                         {/* Translate Widget - Placed cleanly above content */}
                         <div className="flex justify-end mb-6">
-                            <div className="flex items-center gap-1.5 px-2 py-1 rounded-full bg-secondary/30 border border-border sm:px-3 sm:py-1.5 sm:gap-2">
-                                <Languages className="w-3.5 h-3.5 text-muted-foreground sm:w-4 sm:h-4" />
-                                <div id="google_translate_element" className="min-w-[0px]" />
-                            </div>
+                            <LanguageSelector />
                         </div>
 
                         {/* Category & Date */}
