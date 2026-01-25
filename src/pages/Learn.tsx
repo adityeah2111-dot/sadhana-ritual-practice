@@ -613,10 +613,14 @@ const Learn = () => {
 
                 <main className="flex-1">
                     {/* Hero Section */}
-                    <div className={`relative w-full min-h-[45vh] flex items-center justify-center bg-gradient-to-br ${selectedArticle.gradient || 'from-slate-800 to-slate-950'} text-white overflow-hidden mobile-hero-padding`}>
+                    <div className={`relative w-full min-h-[45vh] flex items-center justify-center overflow-hidden mobile-hero-padding`}>
+                        {/* Dynamic Background with Overlay */}
+                        <div className={`absolute inset-0 bg-gradient-to-br ${selectedArticle.gradient || 'from-slate-800 to-slate-950'} opacity-30`} />
+                        <div className="absolute inset-0 bg-background/60 backdrop-blur-[1px]" />
+
                         {/* Background Pattern/Watermark */}
-                        <div className="absolute right-0 bottom-0 opacity-10 translate-y-1/3 translate-x-1/4 pointer-events-none">
-                            <selectedArticle.icon className="w-64 h-64 sm:w-96 sm:h-96" />
+                        <div className="absolute right-0 bottom-0 opacity-5 translate-y-1/3 translate-x-1/4 pointer-events-none">
+                            <selectedArticle.icon className="w-64 h-64 sm:w-96 sm:h-96 text-foreground" />
                         </div>
 
                         <div className="container mx-auto px-4 lg:px-6 py-12 sm:py-20 relative z-10 w-full">
@@ -625,7 +629,7 @@ const Learn = () => {
                                 <motion.div
                                     initial={{ opacity: 0, y: 20 }}
                                     animate={{ opacity: 1, y: 0 }}
-                                    className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 text-xs font-medium tracking-wider uppercase shadow-sm"
+                                    className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-secondary/80 backdrop-blur-sm border border-border text-xs font-medium tracking-wider uppercase shadow-sm text-foreground"
                                 >
                                     <selectedArticle.icon className="w-3 h-3" />
                                     {selectedArticle.category}
@@ -636,7 +640,7 @@ const Learn = () => {
                                     initial={{ opacity: 0, y: 20 }}
                                     animate={{ opacity: 1, y: 0 }}
                                     transition={{ delay: 0.1 }}
-                                    className="text-3xl sm:text-5xl lg:text-7xl font-bold tracking-tight leading-[1.1] break-words drop-shadow-sm"
+                                    className="text-3xl sm:text-5xl lg:text-7xl font-bold tracking-tight leading-[1.1] break-words drop-shadow-sm text-foreground"
                                 >
                                     {selectedArticle.title}
                                 </motion.h1>
@@ -646,21 +650,21 @@ const Learn = () => {
                                     initial={{ opacity: 0, y: 20 }}
                                     animate={{ opacity: 1, y: 0 }}
                                     transition={{ delay: 0.2 }}
-                                    className="flex flex-wrap items-center justify-center gap-y-3 gap-x-4 sm:gap-6 text-sm sm:text-base text-white/90"
+                                    className="flex flex-wrap items-center justify-center gap-y-3 gap-x-4 sm:gap-6 text-sm sm:text-base text-muted-foreground"
                                 >
-                                    <div className="flex items-center gap-2 bg-black/20 px-3 py-1.5 rounded-full backdrop-blur-sm">
-                                        <div className="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center text-[10px] font-bold">
+                                    <div className="flex items-center gap-2 bg-secondary/50 px-3 py-1.5 rounded-full backdrop-blur-sm">
+                                        <div className="w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center text-[10px] font-bold text-primary">
                                             {selectedArticle.author.charAt(0)}
                                         </div>
                                         <span>{selectedArticle.author}</span>
                                     </div>
 
-                                    <div className="flex items-center gap-2 opacity-80">
+                                    <div className="flex items-center gap-2">
                                         <Calendar className="w-4 h-4" />
                                         <span>{selectedArticle.date}</span>
                                     </div>
 
-                                    <div className="flex items-center gap-2 opacity-80">
+                                    <div className="flex items-center gap-2">
                                         <Clock className="w-4 h-4" />
                                         <span>{selectedArticle.readTime}</span>
                                     </div>
