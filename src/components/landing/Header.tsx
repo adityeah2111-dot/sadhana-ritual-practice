@@ -335,10 +335,6 @@ const Header = () => {
                 {/* Settings Section for Mobile */}
                 <div className="px-4 py-3 border-t border-border space-y-2">
                   <div className="flex items-center justify-between py-2 px-2">
-                    <span className="text-sm font-medium text-muted-foreground">Language</span>
-                    <LanguageSelector variant="default" />
-                  </div>
-                  <div className="flex items-center justify-between py-2 px-2">
                     <span className="text-sm font-medium text-muted-foreground">Appearance</span>
                     <ThemeToggle variant="dropdown" />
                   </div>
