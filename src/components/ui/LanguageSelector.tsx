@@ -13,7 +13,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 
 interface LanguageSelectorProps {
-    variant?: 'default' | 'submenu';
+    variant?: 'default' | 'submenu' | 'icon';
 }
 
 const LANGUAGES = [
@@ -57,6 +57,46 @@ const LanguageSelector = ({ variant = 'default' }: LanguageSelectorProps) => {
         setCurrentLang(langCode);
         window.location.reload();
     };
+
+    // Initialize Google Translate script
+    useEffect(() => {
+        const initTranslate = () => {
+            const targetElement = document.getElementById('google_translate_element');
+            if (!targetElement) return;
+
+            if (window.google && window.google.translate) {
+                new window.google.translate.TranslateElement(
+                    {
+                        pageLanguage: 'en',
+                        layout: window.google.translate.TranslateElement.InlineLayout.SIMPLE,
+                        autoDisplay: false,
+                    },
+                    'google_translate_element'
+                );
+            }
+        };
+
+        window.googleTranslateElementInit = initTranslate;
+
+        const id = 'google-translate-script';
+        if (!document.getElementById(id)) {
+            const script = document.createElement('script');
+            script.id = id;
+            script.src = '//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
+            script.async = true;
+            document.body.appendChild(script);
+        } else {
+            initTranslate();
+        }
+
+        // Ensure the target element exists in body
+        if (!document.getElementById('google_translate_element')) {
+            const div = document.createElement('div');
+            div.id = 'google_translate_element';
+            div.className = 'hidden';
+            document.body.appendChild(div);
+        }
+    }, []);
 
     // Nuclear option: Aggressively hide Google Banner via JS (Do not remove, just hide)
     useEffect(() => {
@@ -160,19 +200,31 @@ const LanguageSelector = ({ variant = 'default' }: LanguageSelectorProps) => {
         );
     }
 
+    const isIconVariant = variant === 'icon';
+
     return (
         <div className="relative">
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                    <Button
-                        variant="outline"
-                        size="sm"
-                        className="gap-2 bg-card border-border hover:bg-secondary/50 hover:text-primary transition-all rounded-full"
-                    >
-                        <Languages className="w-4 h-4" />
-                        <span className="hidden xs:inline">{currentLanguageLabel}</span>
-                        <ChevronDown className="w-3 h-3 opacity-50" />
-                    </Button>
+                    {isIconVariant ? (
+                        <Button
+                            variant="ghost"
+                            size="icon"
+                            className="w-10 h-10 rounded-full text-muted-foreground hover:text-foreground transition-colors"
+                        >
+                            <Languages className="w-5 h-5" />
+                        </Button>
+                    ) : (
+                        <Button
+                            variant="outline"
+                            size="sm"
+                            className="gap-2 bg-card border-border hover:bg-secondary/50 hover:text-primary transition-all rounded-full"
+                        >
+                            <Languages className="w-4 h-4" />
+                            <span className="hidden xs:inline">{currentLanguageLabel}</span>
+                            <ChevronDown className="w-3 h-3 opacity-50" />
+                        </Button>
+                    )}
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-[250px] max-h-[400px] overflow-hidden flex flex-col">
                     <div className="p-2 border-b border-border sticky top-0 bg-popover z-10">

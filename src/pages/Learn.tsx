@@ -552,40 +552,6 @@ const Learn = () => {
         }
     }, [selectedArticle]);
 
-    // Initialise Google Translate
-    useEffect(() => {
-        const initTranslate = () => {
-            // We need the element to exist for the script to attach, even if hidden
-            const targetElement = document.getElementById('google_translate_element');
-            if (!targetElement) return;
-
-            if (window.google && window.google.translate) {
-                new window.google.translate.TranslateElement(
-                    {
-                        pageLanguage: 'en',
-                        layout: window.google.translate.TranslateElement.InlineLayout.SIMPLE,
-                        autoDisplay: false,
-                    },
-                    'google_translate_element'
-                );
-            }
-        };
-
-        window.googleTranslateElementInit = initTranslate;
-
-        const id = 'google-translate-script';
-        if (!document.getElementById(id)) {
-            const script = document.createElement('script');
-            script.id = id;
-            script.src = '//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
-            script.async = true;
-            document.body.appendChild(script);
-        } else {
-            initTranslate();
-        }
-    }, [selectedArticle]);
-
-
     const filteredPosts = blogPosts.filter(post => {
         const matchesCategory = selectedCategory === 'All' || post.category === selectedCategory;
         const matchesSearch = post.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -597,9 +563,6 @@ const Learn = () => {
     if (selectedArticle) {
         return (
             <div className="min-h-screen bg-background">
-                {/* Permanent Google Translate Target (Hidden) */}
-                <div id="google_translate_element" className="hidden" />
-
                 {/* Enhanced Sticky Header */}
                 <header className="border-b border-border/40 bg-background/80 backdrop-blur-md sticky top-0 z-50 supports-[backdrop-filter]:bg-background/60">
                     <div className="container mx-auto px-4 lg:px-6">

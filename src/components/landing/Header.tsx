@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
 import { useProfile } from "@/hooks/useProfile";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
+import LanguageSelector from "@/components/ui/LanguageSelector";
 import GoogleLoginPrompt from "@/components/auth/GoogleLoginPrompt";
 
 const Header = () => {
@@ -135,6 +136,9 @@ const Header = () => {
 
             {/* Desktop CTA / User Profile */}
             <div className="hidden lg:flex items-center gap-2">
+              {/* Language Selector */}
+              <LanguageSelector variant="icon" />
+
               {/* Theme Toggle */}
               <ThemeToggle variant="icon" />
 
@@ -251,6 +255,9 @@ const Header = () => {
                   </div>
                 </Link>
               )}
+
+              {/* Mobile Language Selector */}
+              <LanguageSelector variant="icon" />
 
               {/* Mobile theme toggle */}
               <ThemeToggle variant="icon" className="lg:hidden" />
