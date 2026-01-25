@@ -51,9 +51,9 @@ const LanguageSelector = () => {
         window.location.reload();
     };
 
-    // Nuclear option: Aggressively remove Google Banner via JS
+    // Nuclear option: Aggressively hide Google Banner via JS (Do not remove, just hide)
     useEffect(() => {
-        const removeBanner = () => {
+        const hideBanner = () => {
             // Target all known Google Translate banner classes
             const selectors = [
                 '.goog-te-banner-frame',
@@ -66,7 +66,17 @@ const LanguageSelector = () => {
 
             selectors.forEach(selector => {
                 const elements = document.querySelectorAll(selector);
-                elements.forEach(el => el.remove());
+                elements.forEach(el => {
+                    const element = el as HTMLElement;
+                    element.style.display = 'none';
+                    element.style.visibility = 'hidden';
+                    element.style.height = '0';
+                    element.style.width = '0';
+                    element.style.opacity = '0';
+                    element.style.pointerEvents = 'none';
+                    element.style.position = 'absolute';
+                    element.style.zIndex = '-9999';
+                });
             });
 
             // Fix body offset
@@ -82,18 +92,18 @@ const LanguageSelector = () => {
         };
 
         // Run immediately
-        removeBanner();
+        hideBanner();
 
         // Observe DOM changes - Watch BODY and HTML
         const observer = new MutationObserver((mutations) => {
-            removeBanner();
+            hideBanner();
         });
 
         observer.observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ['style', 'class'] });
         observer.observe(document.documentElement, { attributes: true, attributeFilter: ['style', 'class'] });
 
         // Cleanup
-        const interval = setInterval(removeBanner, 100); // More aggressive polling for first few seconds
+        const interval = setInterval(hideBanner, 100); // More aggressive polling for first few seconds
 
         return () => {
             observer.disconnect();
