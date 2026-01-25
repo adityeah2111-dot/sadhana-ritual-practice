@@ -525,6 +525,13 @@ const Learn = () => {
         }
     }, [searchParams]);
 
+    // Scroll to top when article is opened
+    useEffect(() => {
+        if (selectedArticle) {
+            window.scrollTo(0, 0);
+        }
+    }, [selectedArticle]);
+
     // Initialise Google Translate
     useEffect(() => {
         const initTranslate = () => {
