@@ -23,6 +23,7 @@ import {
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
 import { useAuth } from '@/hooks/useAuth';
 import { useProfile } from '@/hooks/useProfile';
 import { useSessions } from '@/hooks/useSessions';
@@ -43,6 +44,7 @@ const Profile = () => {
     const [fullName, setFullName] = useState('');
     const [dateOfBirth, setDateOfBirth] = useState('');
     const [gender, setGender] = useState<'male' | 'female' | 'other' | 'prefer_not_to_say' | ''>('');
+    const [bio, setBio] = useState('');
     const [isSaving, setIsSaving] = useState(false);
     const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
     const [avatarFile, setAvatarFile] = useState<File | null>(null);
@@ -54,6 +56,7 @@ const Profile = () => {
             setFullName(profile.full_name || '');
             setDateOfBirth(profile.date_of_birth || '');
             setGender(profile.gender || '');
+            setBio(profile.bio || '');
             if (profile.avatar_url) {
                 setAvatarPreview(profile.avatar_url);
             } else if (user?.user_metadata?.avatar_url || user?.user_metadata?.picture) {
@@ -136,6 +139,7 @@ const Profile = () => {
             date_of_birth: dateOfBirth || null,
             gender: gender as any || null,
             avatar_url: finalAvatarUrl || null,
+            bio: bio || null,
         };
 
         // Save to database
@@ -365,8 +369,17 @@ const Profile = () => {
                                                     value={displayName}
                                                     onChange={(e) => setDisplayName(e.target.value)}
                                                     placeholder="Display name"
-                                                    className="max-w-[280px] h-12 text-lg bg-background/50"
+                                                    className="max-w-[280px] h-11 text-lg bg-background/50 mb-3"
                                                 />
+                                                <div className="space-y-1 pb-2">
+                                                    <label className="text-[10px] uppercase tracking-wider text-muted-foreground font-semibold px-1">About You</label>
+                                                    <Textarea
+                                                        value={bio}
+                                                        onChange={(e) => setBio(e.target.value)}
+                                                        placeholder="Share a bit about your practice journey..."
+                                                        className="max-w-md bg-background/50 resize-none h-20 text-sm"
+                                                    />
+                                                </div>
                                                 <div className="flex gap-2 justify-center sm:justify-start">
                                                     <Button
                                                         size="sm"
@@ -414,13 +427,12 @@ const Profile = () => {
                                 </div>
                             </div>
 
-                            {/* Profile Completion Bar */}
-                            {profileCompletion < 100 && (
+                            {/* Dynamic Section: Bio (Normal) or Completion (Editing) */}
+                            {isEditing ? (
                                 <motion.div
-                                    initial={{ opacity: 0, y: 10 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    transition={{ delay: 0.2 }}
-                                    className="mt-6 p-4 bg-background/50 backdrop-blur-sm rounded-xl border border-border/50"
+                                    initial={{ opacity: 0, scale: 0.95 }}
+                                    animate={{ opacity: 1, scale: 1 }}
+                                    className="mt-6 p-4 bg-primary/5 backdrop-blur-sm rounded-2xl border border-primary/20 shadow-sm"
                                 >
                                     <div className="flex items-center justify-between mb-2">
                                         <div className="flex items-center gap-2">
@@ -437,8 +449,22 @@ const Profile = () => {
                                             transition={{ duration: 0.8, delay: 0.3 }}
                                         />
                                     </div>
-                                    <p className="text-xs text-muted-foreground mt-2">
-                                        Complete your profile for a personalized experience
+                                    <p className="text-[10px] text-muted-foreground mt-2 text-center">
+                                        Complete your profile to unlock more personalization
+                                    </p>
+                                </motion.div>
+                            ) : (
+                                <motion.div
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: 1 }}
+                                    className="mt-6 p-5 bg-muted/30 rounded-2xl border border-border/50"
+                                >
+                                    <div className="flex items-center gap-2 mb-2 text-muted-foreground">
+                                        <UserCircle className="w-4 h-4" />
+                                        <span className="text-xs font-semibold uppercase tracking-wider">Practitioner Bio</span>
+                                    </div>
+                                    <p className={`text-sm leading-relaxed ${bio ? 'text-foreground' : 'text-muted-foreground italic'}`}>
+                                        {bio || "You haven't added a bio yet. Tell the community about your journey!"}
                                     </p>
                                 </motion.div>
                             )}
