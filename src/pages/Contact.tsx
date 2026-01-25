@@ -36,7 +36,7 @@ const Contact = () => {
                         <Link to="/" className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors">
                             <ArrowLeft className="h-4 w-4" /><span className="text-sm">Back to Home</span>
                         </Link>
-                        <Link to="/" className="flex items-center gap-2">
+                        <Link to="/" className="hidden md:flex items-center gap-2">
                             <Flame className="w-5 h-5 text-primary" />
                             <span className="text-xl font-semibold text-foreground">Sadhana</span>
                         </Link>
@@ -64,7 +64,7 @@ const Contact = () => {
                     <Link to="/" className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors">
                         <ArrowLeft className="h-4 w-4" /><span className="text-sm">Back to Home</span>
                     </Link>
-                    <Link to="/" className="flex items-center gap-2">
+                    <Link to="/" className="hidden md:flex items-center gap-2">
                         <Flame className="w-5 h-5 text-primary" />
                         <span className="text-xl font-semibold text-foreground">Sadhana</span>
                     </Link>
