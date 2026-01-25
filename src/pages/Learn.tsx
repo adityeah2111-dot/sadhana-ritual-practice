@@ -499,6 +499,9 @@ const Learn = () => {
     // Initialise Google Translate
     useEffect(() => {
         const initTranslate = () => {
+            const targetElement = document.getElementById('google_translate_element');
+            if (!targetElement) return;
+
             if (window.google && window.google.translate) {
                 // Clear any existing instances to avoid duplicates if possible, though mostly internal
                 // Initialize the widget
@@ -528,7 +531,7 @@ const Learn = () => {
             // If script is already loaded, manually initialize
             initTranslate();
         }
-    }, []);
+    }, [selectedArticle]);
 
 
     const filteredPosts = blogPosts.filter(post => {
