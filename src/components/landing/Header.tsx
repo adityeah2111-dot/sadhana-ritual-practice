@@ -240,32 +240,6 @@ const Header = () => {
 
             {/* Mobile Right Section */}
             <div className="flex lg:hidden items-center gap-1">
-
-
-              {/* Mobile user avatar */}
-              {!loading && user && (
-                <Link to="/profile" className="p-1.5">
-                  <div className={`w-8 h-8 rounded-full flex items-center justify-center overflow-hidden ${isAnonymous
-                    ? 'bg-muted border border-border'
-                    : 'bg-gradient-to-br from-primary to-rose-500'
-                    }`}>
-                    {isAnonymous ? (
-                      <User className="w-4 h-4 text-muted-foreground" />
-                    ) : profile?.avatar_url ? (
-                      <img src={profile.avatar_url} alt="Profile" className="w-full h-full object-cover" />
-                    ) : (
-                      <span className="text-xs font-medium text-white">{getInitials()}</span>
-                    )}
-                  </div>
-                </Link>
-              )}
-
-              {/* Mobile Language Selector */}
-              <LanguageSelector variant="icon" />
-
-              {/* Mobile theme toggle */}
-              <ThemeToggle variant="icon" className="lg:hidden" />
-
               {/* Hamburger menu */}
               <button
                 className="p-2 text-foreground rounded-lg hover:bg-muted/50 transition-colors"
@@ -355,10 +329,14 @@ const Header = () => {
                   ))}
                 </nav>
 
-                {/* Theme Toggle for Mobile */}
-                <div className="px-4 py-3 border-t border-border">
+                {/* Settings Section for Mobile */}
+                <div className="px-4 py-3 border-t border-border space-y-2">
                   <div className="flex items-center justify-between py-2 px-2">
-                    <span className="text-sm text-muted-foreground">Appearance</span>
+                    <span className="text-sm font-medium text-muted-foreground">Language</span>
+                    <LanguageSelector variant="default" />
+                  </div>
+                  <div className="flex items-center justify-between py-2 px-2">
+                    <span className="text-sm font-medium text-muted-foreground">Appearance</span>
                     <ThemeToggle variant="dropdown" />
                   </div>
                 </div>
@@ -368,7 +346,11 @@ const Header = () => {
                   {user ? (
                     <>
                       {/* User info card */}
-                      <div className="flex items-center gap-3 p-4 bg-card border border-border rounded-2xl">
+                      <Link
+                        to="/profile"
+                        onClick={() => setIsMenuOpen(false)}
+                        className="flex items-center gap-3 p-4 bg-card border border-border rounded-2xl hover:bg-muted/50 transition-colors active:scale-95 transition-transform"
+                      >
                         <div className={`w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 overflow-hidden ${isAnonymous ? 'bg-muted border border-border' : 'bg-gradient-to-br from-primary to-rose-500'
                           }`}>
                           {isAnonymous ? (
@@ -387,7 +369,8 @@ const Header = () => {
                             {isAnonymous ? 'Not signed in' : user.email}
                           </p>
                         </div>
-                      </div>
+                        <ChevronRight className="w-5 h-5 text-muted-foreground" />
+                      </Link>
 
                       <div className="grid grid-cols-2 gap-3">
                         <Link to="/dashboard" onClick={() => setIsMenuOpen(false)}>
