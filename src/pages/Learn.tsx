@@ -553,24 +553,24 @@ const Learn = () => {
                                 <span className="hidden xs:inline">Sadhana</span>
                             </Link>
 
-                            <div className="flex items-center gap-2 sm:gap-4">
-                                {/* Google Translate Container */}
-                                <div className="flex items-center gap-1.5 px-2 py-1 rounded-full bg-secondary/30 border border-border sm:px-3 sm:py-1.5 sm:gap-2">
-                                    <Languages className="w-3.5 h-3.5 text-muted-foreground sm:w-4 sm:h-4" />
-                                    <div id="google_translate_element" className="min-w-[0px]" />
-                                </div>
-
-                                <Button variant="ghost" size="sm" className="gap-2 px-2 sm:px-4" onClick={() => setSelectedArticle(null)}>
-                                    <ArrowLeft className="w-4 h-4" />
-                                    <span className="hidden sm:inline">Back</span>
-                                </Button>
-                            </div>
+                            <Button variant="ghost" size="sm" className="gap-2 px-2 sm:px-4" onClick={() => setSelectedArticle(null)}>
+                                <ArrowLeft className="w-4 h-4" />
+                                <span className="hidden sm:inline">Back</span>
+                            </Button>
                         </div>
                     </div>
                 </header>
 
                 <main className="container mx-auto px-4 lg:px-6 py-12">
                     <article className="max-w-3xl mx-auto">
+                        {/* Translate Widget - Placed cleanly above content */}
+                        <div className="flex justify-end mb-6">
+                            <div className="flex items-center gap-1.5 px-2 py-1 rounded-full bg-secondary/30 border border-border sm:px-3 sm:py-1.5 sm:gap-2">
+                                <Languages className="w-3.5 h-3.5 text-muted-foreground sm:w-4 sm:h-4" />
+                                <div id="google_translate_element" className="min-w-[0px]" />
+                            </div>
+                        </div>
+
                         {/* Category & Date */}
                         <div className="flex items-center gap-3 mb-4">
                             <span className="text-xs font-medium text-primary uppercase tracking-wider">
