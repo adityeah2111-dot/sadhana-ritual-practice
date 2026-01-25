@@ -301,7 +301,7 @@ const Header = () => {
                 </div>
 
                 {/* Navigation links */}
-                <nav className="flex-1 px-4 py-6 space-y-2 overflow-y-auto">
+                <nav className="flex-1 px-4 py-4 space-y-1 overflow-y-auto">
                   {navLinks.map((link, index) => (
                     <motion.div
                       key={link.href}
@@ -313,7 +313,7 @@ const Header = () => {
                         <Link
                           to={link.href}
                           onClick={() => setIsMenuOpen(false)}
-                          className="flex items-center justify-between py-3 px-5 text-lg font-medium text-foreground active:bg-muted/50 rounded-xl transition-colors"
+                          className="flex items-center justify-between py-2.5 px-5 text-lg font-medium text-foreground active:bg-muted/50 rounded-xl transition-colors"
                         >
                           {link.label}
                           <ChevronRight className="w-4 h-4 text-muted-foreground" />
@@ -322,7 +322,7 @@ const Header = () => {
                         <a
                           href={link.href}
                           onClick={() => setIsMenuOpen(false)}
-                          className="flex items-center justify-between py-3 px-5 text-lg font-medium text-foreground active:bg-muted/50 rounded-xl transition-colors"
+                          className="flex items-center justify-between py-2.5 px-5 text-lg font-medium text-foreground active:bg-muted/50 rounded-xl transition-colors"
                         >
                           {link.label}
                           <ChevronRight className="w-4 h-4 text-muted-foreground" />
@@ -333,22 +333,22 @@ const Header = () => {
                 </nav>
 
                 {/* Settings Section for Mobile */}
-                <div className="px-4 py-3 border-t border-border space-y-2">
-                  <div className="flex items-center justify-between py-2 px-2">
+                <div className="px-4 py-2 border-t border-border space-y-1">
+                  <div className="flex items-center justify-between py-1.5 px-2">
                     <span className="text-sm font-medium text-muted-foreground">Appearance</span>
                     <ThemeToggle variant="dropdown" />
                   </div>
                 </div>
 
                 {/* Bottom section with safe area */}
-                <div className="p-4 pb-8 border-t border-border space-y-3" style={{ paddingBottom: 'max(2rem, env(safe-area-inset-bottom))' }}>
+                <div className="p-3 pb-6 border-t border-border space-y-3" style={{ paddingBottom: 'max(1.5rem, env(safe-area-inset-bottom))' }}>
                   {user ? (
                     <>
                       {/* User info card */}
                       <Link
                         to="/profile"
                         onClick={() => setIsMenuOpen(false)}
-                        className="flex items-center gap-3 p-4 bg-card border border-border rounded-2xl hover:bg-muted/50 transition-colors active:scale-95 transition-transform"
+                        className="flex items-center gap-3 p-3 bg-card border border-border rounded-xl hover:bg-muted/50 transition-colors active:scale-95 transition-transform"
                       >
                         <div className={`w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 overflow-hidden ${isAnonymous ? 'bg-muted border border-border' : 'bg-gradient-to-br from-primary to-rose-500'
                           }`}>
@@ -371,7 +371,7 @@ const Header = () => {
                         <ChevronRight className="w-5 h-5 text-muted-foreground" />
                       </Link>
 
-                      <div className="grid grid-cols-2 gap-3">
+                      <div className="grid grid-cols-2 gap-2">
                         <Link to="/dashboard" onClick={() => setIsMenuOpen(false)}>
                           <Button variant="crimson" className="w-full h-12 text-base">
                             <Flame className="w-4 h-4 mr-2" />
@@ -389,15 +389,15 @@ const Header = () => {
                       </div>
                     </>
                   ) : (
-                    <div className="space-y-5 pt-2">
+                    <div className="space-y-3 pt-1">
                       <Link to="/auth" onClick={() => setIsMenuOpen(false)} className="block">
-                        <Button variant="crimson" className="w-full h-14 text-lg shadow-lg">
+                        <Button variant="crimson" className="w-full h-12 text-base shadow-lg">
                           Start Your Practice
                         </Button>
                       </Link>
                       <Link to="/auth" onClick={() => setIsMenuOpen(false)} className="block">
-                        <Button variant="outline" className="w-full h-12 text-base border-border hover:border-primary/50 transition-all font-medium group bg-background/50 backdrop-blur-sm">
-                          Already a practitioner? <span className="text-primary font-bold ml-1.5 group-hover:underline underline-offset-4 decoration-2">Sign In</span>
+                        <Button variant="outline" className="w-full h-11 text-sm border-border hover:border-primary/50 transition-all font-medium group bg-background/50 backdrop-blur-sm">
+                          Already a practitioner? <span className="text-primary font-bold ml-1 group-hover:underline underline-offset-4 decoration-2">Sign In</span>
                         </Button>
                       </Link>
                     </div>
