@@ -240,6 +240,9 @@ const Header = () => {
 
             {/* Mobile Right Section */}
             <div className="flex lg:hidden items-center gap-1">
+              {/* Mobile Language Selector */}
+              <LanguageSelector variant="icon" />
+
               {/* Hamburger menu */}
               <button
                 className="p-2 text-foreground rounded-lg hover:bg-muted/50 transition-colors"
