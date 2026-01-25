@@ -396,8 +396,8 @@ const Header = () => {
                         </Button>
                       </Link>
                       <Link to="/auth" onClick={() => setIsMenuOpen(false)}>
-                        <Button variant="ghost" className="w-full h-12 text-base">
-                          Already have an account? Sign In
+                        <Button variant="outline" className="w-full h-12 text-base border-border hover:border-primary/50 transition-all font-medium group bg-background/50 backdrop-blur-sm">
+                          Already a practitioner? <span className="text-primary font-bold ml-1.5 group-hover:underline underline-offset-4 decoration-2">Sign In</span>
                         </Button>
                       </Link>
                     </div>
