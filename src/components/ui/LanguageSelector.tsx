@@ -127,7 +127,7 @@ const LanguageSelector = ({ variant = 'default' }: LanguageSelectorProps) => {
 
     if (variant === 'submenu') {
         return (
-            <div className="relative">
+            <>
                 <div id="google_translate_element" className="hidden" />
                 <DropdownMenuSub>
                     <DropdownMenuSubTrigger className="gap-2">
@@ -157,7 +157,7 @@ const LanguageSelector = ({ variant = 'default' }: LanguageSelectorProps) => {
                         ))}
                     </DropdownMenuSubContent>
                 </DropdownMenuSub>
-            </div>
+            </>
         );
     }
 
