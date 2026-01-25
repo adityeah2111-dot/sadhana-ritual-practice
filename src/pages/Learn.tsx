@@ -498,9 +498,10 @@ const Learn = () => {
 
     // Initialise Google Translate
     useEffect(() => {
-        // Define the initialization function
-        window.googleTranslateElementInit = () => {
+        const initTranslate = () => {
             if (window.google && window.google.translate) {
+                // Clear any existing instances to avoid duplicates if possible, though mostly internal
+                // Initialize the widget
                 new window.google.translate.TranslateElement(
                     {
                         pageLanguage: 'en',
@@ -512,6 +513,9 @@ const Learn = () => {
             }
         };
 
+        // Assign to window for the callback
+        window.googleTranslateElementInit = initTranslate;
+
         // Load the script if not present
         const id = 'google-translate-script';
         if (!document.getElementById(id)) {
@@ -520,9 +524,9 @@ const Learn = () => {
             script.src = '//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
             script.async = true;
             document.body.appendChild(script);
-        } else if (window.google && window.google.translate) {
-            // If script is already loaded but component re-mounted, try to re-init (though usually id check covers it)
-            // window.googleTranslateElementInit();
+        } else {
+            // If script is already loaded, manually initialize
+            initTranslate();
         }
     }, []);
 
@@ -543,19 +547,19 @@ const Learn = () => {
                         <div className="flex items-center justify-between h-16">
                             <Link to="/" className="flex items-center gap-2 text-xl font-semibold tracking-tight text-foreground hover:text-foreground/90 transition-colors">
                                 <Flame className="w-5 h-5 text-primary" />
-                                Sadhana
+                                <span className="hidden xs:inline">Sadhana</span>
                             </Link>
 
-                            <div className="flex items-center gap-4">
+                            <div className="flex items-center gap-2 sm:gap-4">
                                 {/* Google Translate Container */}
-                                <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full bg-secondary/50 border border-border">
-                                    <Languages className="w-4 h-4 text-muted-foreground" />
-                                    <div id="google_translate_element" className="min-w-[100px]" />
+                                <div className="flex items-center gap-1.5 px-2 py-1 rounded-full bg-secondary/30 border border-border sm:px-3 sm:py-1.5 sm:gap-2">
+                                    <Languages className="w-3.5 h-3.5 text-muted-foreground sm:w-4 sm:h-4" />
+                                    <div id="google_translate_element" className="min-w-[0px]" />
                                 </div>
 
-                                <Button variant="ghost" size="sm" className="gap-2" onClick={() => setSelectedArticle(null)}>
+                                <Button variant="ghost" size="sm" className="gap-2 px-2 sm:px-4" onClick={() => setSelectedArticle(null)}>
                                     <ArrowLeft className="w-4 h-4" />
-                                    <span className="hidden sm:inline">Back to Articles</span>
+                                    <span className="hidden sm:inline">Back</span>
                                 </Button>
                             </div>
                         </div>
