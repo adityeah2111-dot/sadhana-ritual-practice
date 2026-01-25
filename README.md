@@ -99,7 +99,22 @@ No streaks to chase. No points to earn. Just you and your commitment.
 - Offline-ready progressive web app (PWA)
 - Fast page loads with code splitting
 
+### 💳 **Payments & Subscriptions**
+- Integrated Razorpay Payment Gateway
+- Flexible Plans: Monthly, Yearly (33% off), Lifetime (50% off)
+- Secure checkout with "Instant Access" model
+- 30-Day Money-Back Guarantee
+- Automatic invoice generation via Razorpay
+
+### 🚀 **SEO & Performance**
+- Fully optimized with `react-helmet-async`
+- Dynamic meta tags (Title, Description, Canonical URLs) for every page
+- `robots.txt` and `sitemap.xml` configured for indexing
+- Lazy loading and code splitting for optimal performance
+- 100/100 Lighthouse Performance score target
+
 ### 🔒 **Security & Privacy**
+- Cloudflare Turnstile CAPTCHA for bot protection
 - Row-level security (RLS) on all database tables
 - Secure file uploads for avatars
 - No tracking or analytics without consent
@@ -312,6 +327,8 @@ npm run format
 | `VITE_SUPABASE_URL` | Supabase project URL | Yes |
 | `VITE_SUPABASE_ANON_KEY` | Supabase anonymous key | Yes |
 | `VITE_SUPABASE_PUBLISHABLE_KEY` | Same as anon key | Yes |
+| `VITE_RAZORPAY_KEY_ID` | Razorpay Key ID (Live/Test) | Yes |
+| `VITE_TURNSTILE_SITE_KEY` | Cloudflare Turnstile Site Key | Yes |
 
 ---
 
@@ -466,7 +483,8 @@ Special thanks to:
 - ✅ **Authentication**: Email & Google OAuth
 - ✅ **Practice Tracking**: Full functionality
 - ✅ **Dark/Light Themes**: Implemented
-- 🚧 **Payments (Razorpay)**: Planned
+- ✅ **Payments (Razorpay)**: Complete (Live Mode Ready)
+- ✅ **SEO & Meta Tags**: Implemented
 - 🚧 **Mobile App (React Native)**: Planned
 - 🚧 **Notifications**: Planned
 
