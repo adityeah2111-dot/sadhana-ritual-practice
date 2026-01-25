@@ -408,8 +408,13 @@
 }
 
 /* Google Translate Customization - Hiding Default UI */
-.goog-te-banner-frame.skiptranslate {
+.goog-te-banner-frame.skiptranslate,
+.goog-te-banner-frame,
+iframe.goog-te-banner-frame {
   display: none !important;
+  visibility: hidden !important;
+  height: 0 !important;
+  width: 0 !important;
 }
 
 .goog-te-gadget-icon {
@@ -417,16 +422,31 @@
 }
 
 body {
-  top: 0px !important;
-}
-
-/* Hide the default widget completely */
-iframe.goog-te-banner-frame {
-  display: none !important;
+  top: 0 !important;
+  margin-top: 0 !important;
+  position: static !important;
 }
 
 #google_translate_element {
   display: none;
+}
+
+/* Hide annoying popups and hover effects */
+.goog-tooltip,
+.goog-te-hover-frame,
+.goog-te-balloon-frame,
+.goog-te-menu-frame {
+  display: none !important;
+}
+
+.goog-text-highlight {
+  background-color: transparent !important;
+  box-shadow: none !important;
+}
+
+font {
+  background-color: transparent !important;
+  box-shadow: none !important;
 }
 
 /* Hide annoying popups and hover effects */

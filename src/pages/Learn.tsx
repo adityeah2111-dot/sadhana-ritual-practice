@@ -529,6 +529,12 @@ const Learn = () => {
     useEffect(() => {
         if (selectedArticle) {
             window.scrollTo(0, 0);
+
+            // Adding a small delay to handle browser scroll restoration after reload
+            const timeout = setTimeout(() => {
+                window.scrollTo(0, 0);
+            }, 100);
+            return () => clearTimeout(timeout);
         }
     }, [selectedArticle]);
 
