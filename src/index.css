@@ -407,6 +407,55 @@
   border-radius: 9999px;
 }
 
-::-webkit-scrollbar-thumb:hover {
-  background: hsl(var(--muted-foreground) / 0.5);
+/* Google Translate Customization */
+.goog-te-banner-frame.skiptranslate {
+  display: none !important;
+}
+
+body {
+  top: 0px !important;
+}
+
+.goog-te-gadget {
+  font-family: 'Inter', system-ui, sans-serif !important;
+  color: hsl(var(--foreground)) !important;
+}
+
+.goog-te-gadget-simple {
+  background-color: hsl(var(--card)) !important;
+  border: 1px solid hsl(var(--border)) !important;
+  padding: 6px 12px !important;
+  border-radius: var(--radius) !important;
+  font-size: 0.875rem !important;
+  line-height: 1.25rem !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  transition: all 0.2s ease !important;
+  cursor: pointer !important;
+}
+
+.goog-te-gadget-simple:hover {
+  border-color: hsl(var(--primary) / 0.5) !important;
+  background-color: hsl(var(--primary) / 0.05) !important;
+}
+
+.goog-te-gadget-simple .goog-te-menu-value {
+  color: hsl(var(--foreground)) !important;
+  font-weight: 500 !important;
+}
+
+.goog-te-gadget-simple .goog-te-menu-value span {
+  color: hsl(var(--foreground)) !important;
+  border-left: none !important;
+}
+
+/* Hide the Google Icon if desired for cleaner look, or style it */
+.goog-te-gadget-icon {
+  display: none !important;
+}
+
+/* Dropdown menu styling - difficult to override fully due to iframe, but we can try */
+.goog-te-menu-frame {
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1) !important;
+  border-radius: 0.5rem !important;
 }

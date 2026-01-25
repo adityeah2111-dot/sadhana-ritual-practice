@@ -11,10 +11,19 @@ import {
     Clock,
     ChevronRight,
     Flower2,
-    Search
+    Search,
+    Languages
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { useEffect } from 'react';
+
+declare global {
+    interface Window {
+        googleTranslateElementInit: () => void;
+        google: any;
+    }
+}
 
 // Full blog post content
 const blogPosts = [
@@ -487,6 +496,37 @@ const Learn = () => {
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedArticle, setSelectedArticle] = useState<typeof blogPosts[0] | null>(null);
 
+    // Initialise Google Translate
+    useEffect(() => {
+        // Define the initialization function
+        window.googleTranslateElementInit = () => {
+            if (window.google && window.google.translate) {
+                new window.google.translate.TranslateElement(
+                    {
+                        pageLanguage: 'en',
+                        layout: window.google.translate.TranslateElement.InlineLayout.SIMPLE,
+                        autoDisplay: false,
+                    },
+                    'google_translate_element'
+                );
+            }
+        };
+
+        // Load the script if not present
+        const id = 'google-translate-script';
+        if (!document.getElementById(id)) {
+            const script = document.createElement('script');
+            script.id = id;
+            script.src = '//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
+            script.async = true;
+            document.body.appendChild(script);
+        } else if (window.google && window.google.translate) {
+            // If script is already loaded but component re-mounted, try to re-init (though usually id check covers it)
+            // window.googleTranslateElementInit();
+        }
+    }, []);
+
+
     const filteredPosts = blogPosts.filter(post => {
         const matchesCategory = selectedCategory === 'All' || post.category === selectedCategory;
         const matchesSearch = post.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -505,10 +545,19 @@ const Learn = () => {
                                 <Flame className="w-5 h-5 text-primary" />
                                 Sadhana
                             </Link>
-                            <Button variant="ghost" size="sm" className="gap-2" onClick={() => setSelectedArticle(null)}>
-                                <ArrowLeft className="w-4 h-4" />
-                                <span className="hidden sm:inline">Back to Articles</span>
-                            </Button>
+
+                            <div className="flex items-center gap-4">
+                                {/* Google Translate Container */}
+                                <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full bg-secondary/50 border border-border">
+                                    <Languages className="w-4 h-4 text-muted-foreground" />
+                                    <div id="google_translate_element" className="min-w-[100px]" />
+                                </div>
+
+                                <Button variant="ghost" size="sm" className="gap-2" onClick={() => setSelectedArticle(null)}>
+                                    <ArrowLeft className="w-4 h-4" />
+                                    <span className="hidden sm:inline">Back to Articles</span>
+                                </Button>
+                            </div>
                         </div>
                     </div>
                 </header>
