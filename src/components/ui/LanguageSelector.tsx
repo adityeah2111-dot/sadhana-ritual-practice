@@ -125,6 +125,42 @@ const LanguageSelector = ({ variant = 'default' }: LanguageSelectorProps) => {
         lang.native.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
+    if (variant === 'submenu') {
+        return (
+            <div className="relative">
+                <div id="google_translate_element" className="hidden" />
+                <DropdownMenuSub>
+                    <DropdownMenuSubTrigger className="gap-2">
+                        <Languages className="w-4 h-4" />
+                        <span>{currentLanguageLabel}</span>
+                    </DropdownMenuSubTrigger>
+                    <DropdownMenuSubContent className="w-[200px] max-h-[300px] overflow-y-auto">
+                        <div className="p-2 border-b border-border sticky top-0 bg-popover z-10">
+                            <input
+                                placeholder="Search..."
+                                value={searchQuery}
+                                onChange={(e) => setSearchQuery(e.target.value)}
+                                className="w-full h-8 px-2 text-xs bg-secondary/50 rounded border-transparent focus:outline-none"
+                                onClick={(e) => e.stopPropagation()}
+                                onKeyDown={(e) => e.stopPropagation()}
+                            />
+                        </div>
+                        {filteredLanguages.map((lang) => (
+                            <DropdownMenuItem
+                                key={lang.code}
+                                onClick={() => handleLanguageChange(lang.code)}
+                                className="flex items-center justify-between cursor-pointer py-2"
+                            >
+                                <span className="text-sm">{lang.native}</span>
+                                {currentLang === lang.code && <Check className="w-4 h-4 text-primary" />}
+                            </DropdownMenuItem>
+                        ))}
+                    </DropdownMenuSubContent>
+                </DropdownMenuSub>
+            </div>
+        );
+    }
+
     return (
         <div className="relative">
             <div id="google_translate_element" className="hidden" />
