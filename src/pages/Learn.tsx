@@ -12,7 +12,9 @@ import {
     ChevronRight,
     Flower2,
     Search,
-    Languages
+    Languages,
+    Calendar,
+    User
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -583,7 +585,8 @@ const Learn = () => {
     if (selectedArticle) {
         return (
             <div className="min-h-screen bg-background">
-                <header className="border-b border-border bg-card/50 backdrop-blur-sm sticky top-0 z-10">
+                {/* Enhanced Sticky Header */}
+                <header className="border-b border-border/40 bg-background/80 backdrop-blur-md sticky top-0 z-50 supports-[backdrop-filter]:bg-background/60">
                     <div className="container mx-auto px-4 lg:px-6">
                         <div className="flex items-center justify-between h-16">
                             <Link to="/" className="flex items-center gap-2 text-xl font-semibold tracking-tight text-foreground hover:text-foreground/90 transition-colors">
@@ -591,51 +594,86 @@ const Learn = () => {
                                 <span className="hidden xs:inline">Sadhana</span>
                             </Link>
 
-                            <Button variant="ghost" size="sm" className="gap-2 px-2 sm:px-4" onClick={() => setSelectedArticle(null)}>
-                                <ArrowLeft className="w-4 h-4" />
-                                <span className="hidden sm:inline">Back</span>
-                            </Button>
+                            <div className="flex items-center gap-2">
+                                <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    className="gap-2 px-2 sm:px-4 text-muted-foreground hover:text-foreground"
+                                    onClick={() => setSelectedArticle(null)}
+                                >
+                                    <ArrowLeft className="w-4 h-4" />
+                                    <span className="hidden sm:inline">Back</span>
+                                </Button>
+                                <div className="hidden sm:block h-4 w-px bg-border/50 mx-1" />
+                                <LanguageSelector />
+                            </div>
                         </div>
                     </div>
                 </header>
 
-                <main className="container mx-auto px-4 lg:px-6 py-12">
-                    <article className="max-w-3xl mx-auto">
-                        {/* Translate Widget - Placed cleanly above content */}
-                        <div className="flex justify-end mb-6">
-                            <LanguageSelector />
+                <main className="flex-1">
+                    {/* Hero Section */}
+                    <div className={`relative w-full min-h-[45vh] flex items-center justify-center bg-gradient-to-br ${selectedArticle.gradient || 'from-slate-800 to-slate-950'} text-white overflow-hidden mobile-hero-padding`}>
+                        {/* Background Pattern/Watermark */}
+                        <div className="absolute right-0 bottom-0 opacity-10 translate-y-1/3 translate-x-1/4 pointer-events-none">
+                            <selectedArticle.icon className="w-64 h-64 sm:w-96 sm:h-96" />
                         </div>
 
-                        {/* Category & Date */}
-                        <div className="flex items-center gap-3 mb-4">
-                            <span className="text-xs font-medium text-primary uppercase tracking-wider">
-                                {selectedArticle.category}
-                            </span>
-                            <span className="text-xs text-muted-foreground">•</span>
-                            <span className="text-xs text-muted-foreground">{selectedArticle.date}</span>
-                            <span className="text-xs text-muted-foreground">•</span>
-                            <span className="text-xs text-muted-foreground">{selectedArticle.readTime}</span>
-                        </div>
+                        <div className="container mx-auto px-4 lg:px-6 py-12 sm:py-20 relative z-10 w-full">
+                            <div className="max-w-4xl mx-auto text-center space-y-6 sm:space-y-8">
+                                {/* Category Pill */}
+                                <motion.div
+                                    initial={{ opacity: 0, y: 20 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 text-xs font-medium tracking-wider uppercase shadow-sm"
+                                >
+                                    <selectedArticle.icon className="w-3 h-3" />
+                                    {selectedArticle.category}
+                                </motion.div>
 
-                        {/* Title */}
-                        <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-foreground mb-6 leading-tight">
-                            {selectedArticle.title}
-                        </h1>
+                                {/* Title */}
+                                <motion.h1
+                                    initial={{ opacity: 0, y: 20 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ delay: 0.1 }}
+                                    className="text-3xl sm:text-5xl lg:text-7xl font-bold tracking-tight leading-[1.1] break-words drop-shadow-sm"
+                                >
+                                    {selectedArticle.title}
+                                </motion.h1>
 
-                        {/* Author */}
-                        <div className="flex items-center gap-3 mb-8 pb-8 border-b border-border">
-                            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-rose-500 flex items-center justify-center text-white font-medium">
-                                S
+                                {/* Metadata Row */}
+                                <motion.div
+                                    initial={{ opacity: 0, y: 20 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ delay: 0.2 }}
+                                    className="flex flex-wrap items-center justify-center gap-y-3 gap-x-4 sm:gap-6 text-sm sm:text-base text-white/90"
+                                >
+                                    <div className="flex items-center gap-2 bg-black/20 px-3 py-1.5 rounded-full backdrop-blur-sm">
+                                        <div className="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center text-[10px] font-bold">
+                                            {selectedArticle.author.charAt(0)}
+                                        </div>
+                                        <span>{selectedArticle.author}</span>
+                                    </div>
+
+                                    <div className="flex items-center gap-2 opacity-80">
+                                        <Calendar className="w-4 h-4" />
+                                        <span>{selectedArticle.date}</span>
+                                    </div>
+
+                                    <div className="flex items-center gap-2 opacity-80">
+                                        <Clock className="w-4 h-4" />
+                                        <span>{selectedArticle.readTime}</span>
+                                    </div>
+                                </motion.div>
                             </div>
-                            <div>
-                                <p className="text-sm font-medium text-foreground">{selectedArticle.author}</p>
-                                <p className="text-xs text-muted-foreground">Sadhana Editorial Team</p>
-                            </div>
                         </div>
+                    </div>
 
-                        {/* Content */}
-                        <div
-                            className="prose prose-invert prose-lg max-w-none
+                    <div className="container mx-auto px-4 lg:px-6 py-12">
+                        <article className="max-w-3xl mx-auto">
+                            {/* Pro-tip: Translate widget is now in header for cleaner reading */}
+                            <div
+                                className="prose prose-invert prose-lg max-w-none
                 prose-headings:text-foreground prose-headings:font-semibold
                 prose-h3:text-xl prose-h3:mt-8 prose-h3:mb-4
                 prose-p:text-muted-foreground prose-p:leading-relaxed prose-p:mb-4
@@ -644,17 +682,18 @@ const Learn = () => {
                 prose-blockquote:border-l-primary prose-blockquote:bg-card prose-blockquote:py-4 prose-blockquote:px-6 prose-blockquote:rounded-r-lg prose-blockquote:not-italic prose-blockquote:text-foreground
                 prose-ul:my-4 prose-ol:my-4
               "
-                            dangerouslySetInnerHTML={{ __html: selectedArticle.content }}
-                        />
+                                dangerouslySetInnerHTML={{ __html: selectedArticle.content }}
+                            />
 
-                        {/* Back button */}
-                        <div className="mt-12 pt-8 border-t border-border">
-                            <Button variant="subtle" onClick={() => setSelectedArticle(null)} className="gap-2">
-                                <ArrowLeft className="w-4 h-4" />
-                                Back to All Articles
-                            </Button>
-                        </div>
-                    </article>
+                            {/* Back button */}
+                            <div className="mt-12 pt-8 border-t border-border">
+                                <Button variant="subtle" onClick={() => setSelectedArticle(null)} className="gap-2">
+                                    <ArrowLeft className="w-4 h-4" />
+                                    Back to All Articles
+                                </Button>
+                            </div>
+                        </article>
+                    </div>
                 </main>
             </div>
         );
