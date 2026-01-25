@@ -54,14 +54,20 @@ const LanguageSelector = () => {
     // Nuclear option: Aggressively remove Google Banner via JS
     useEffect(() => {
         const removeBanner = () => {
-            const banner = document.querySelector('.goog-te-banner-frame');
-            if (banner) {
-                banner.remove();
-            }
-            const frame = document.querySelector('iframe.goog-te-banner-frame');
-            if (frame) {
-                frame.remove();
-            }
+            // Target all known Google Translate banner classes
+            const selectors = [
+                '.goog-te-banner-frame',
+                'iframe.goog-te-banner-frame',
+                '.VIpgJd-ZVi9od-ORHb',
+                '.VIpgJd-ZVi9od-ORHb-OEVmcd',
+                '.VIpgJd-ZVi9od-aXJM1c',
+                '#goog-gt-tt'
+            ];
+
+            selectors.forEach(selector => {
+                const elements = document.querySelectorAll(selector);
+                elements.forEach(el => el.remove());
+            });
 
             // Fix body offset
             document.body.style.top = '0px';

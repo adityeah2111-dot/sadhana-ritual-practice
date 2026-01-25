@@ -410,7 +410,10 @@
 /* Google Translate Customization - Hiding Default UI */
 .goog-te-banner-frame.skiptranslate,
 .goog-te-banner-frame,
-iframe.goog-te-banner-frame {
+iframe.goog-te-banner-frame,
+.VIpgJd-ZVi9od-ORHb,
+.VIpgJd-ZVi9od-ORHb-OEVmcd,
+.VIpgJd-ZVi9od-aXJM1c {
   display: none !important;
   visibility: hidden !important;
   height: 0 !important;
@@ -419,6 +422,7 @@ iframe.goog-te-banner-frame {
   z-index: -9999 !important;
   position: absolute !important;
   top: -9999px !important;
+  opacity: 0 !important;
 }
 
 .goog-te-gadget-icon {
@@ -431,6 +435,7 @@ html {
   margin-top: 0 !important;
   position: static !important;
   height: 100% !important;
+  min-height: 100% !important;
 }
 
 #google_translate_element {
@@ -441,8 +446,10 @@ html {
 .goog-tooltip,
 .goog-te-hover-frame,
 .goog-te-balloon-frame,
-.goog-te-menu-frame {
+.goog-te-menu-frame,
+#goog-gt-tt {
   display: none !important;
+  visibility: hidden !important;
 }
 
 .goog-text-highlight {
