@@ -505,6 +505,7 @@ const Learn = () => {
     const articleId = searchParams.get('article');
     const initialArticle = articleId ? blogPosts.find(p => p.id === articleId) || null : null;
     const [selectedArticle, _setSelectedArticle] = useState<typeof blogPosts[0] | null>(initialArticle);
+    const [readingMode, setReadingMode] = useState(false);
 
     // Wrapper to update URL when article changes
     const setSelectedArticle = (article: typeof blogPosts[0] | null) => {
@@ -591,7 +592,7 @@ const Learn = () => {
                         <div className="flex items-center justify-between h-16">
                             <Link to="/" className="flex items-center gap-2 text-xl font-semibold tracking-tight text-foreground hover:text-foreground/90 transition-colors">
                                 <Flame className="w-5 h-5 text-primary" />
-                                <span className="hidden xs:inline">Sadhana</span>
+                                <span>Sadhana</span>
                             </Link>
 
                             <div className="flex items-center gap-2">
@@ -605,6 +606,18 @@ const Learn = () => {
                                     <span className="hidden sm:inline">Back</span>
                                 </Button>
                                 <div className="hidden sm:block h-4 w-px bg-border/50 mx-1" />
+
+                                {/* Reading Features */}
+                                <Button
+                                    variant="ghost"
+                                    size="icon"
+                                    className={`shrink-0 ${readingMode ? 'text-primary bg-primary/10' : 'text-muted-foreground hover:text-foreground'}`}
+                                    onClick={() => setReadingMode(!readingMode)}
+                                    title="Reading Mode"
+                                >
+                                    <BookOpen className="w-4 h-4" />
+                                </Button>
+                                <ThemeToggle variant="icon" className="shrink-0" />
                                 <LanguageSelector />
                             </div>
                         </div>
@@ -674,18 +687,19 @@ const Learn = () => {
                     </div>
 
                     <div className="container mx-auto px-4 lg:px-6 py-12">
-                        <article className="max-w-3xl mx-auto">
+                        <article className={`max-w-3xl mx-auto transition-all duration-500 ease-in-out ${readingMode ? 'max-w-2xl' : ''}`}>
                             {/* Pro-tip: Translate widget is now in header for cleaner reading */}
                             <div
-                                className="prose prose-invert prose-lg max-w-none
+                                className={`prose prose-invert prose-lg max-w-none transition-all duration-500
                 prose-headings:text-foreground prose-headings:font-semibold
                 prose-h3:text-xl prose-h3:mt-8 prose-h3:mb-4
-                prose-p:text-muted-foreground prose-p:leading-relaxed prose-p:mb-4
+                prose-p:text-muted-foreground prose-p:leading-relaxed ${readingMode ? 'prose-xl prose-p:text-lg sm:prose-p:text-xl' : ''}
+ prose-p:mb-4
                 prose-li:text-muted-foreground prose-li:my-1
                 prose-strong:text-foreground prose-strong:font-semibold
                 prose-blockquote:border-l-primary prose-blockquote:bg-card prose-blockquote:py-4 prose-blockquote:px-6 prose-blockquote:rounded-r-lg prose-blockquote:not-italic prose-blockquote:text-foreground
                 prose-ul:my-4 prose-ol:my-4
-              "
+              `}
                                 dangerouslySetInnerHTML={{ __html: selectedArticle.content }}
                             />
 
