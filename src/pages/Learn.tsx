@@ -720,10 +720,10 @@ const Learn = () => {
                     </div>
 
                     <div className="container mx-auto px-4 lg:px-6 py-12">
-                        <article className="max-w-3xl mx-auto">
+                        <article className={`max-w-3xl mx-auto transition-all duration-500 ease-in-out ${readingMode ? 'max-w-2xl' : ''}`}>
                             {/* Pro-tip: Translate widget is now in header for cleaner reading */}
                             <div
-                                className="prose prose-invert prose-lg max-w-none
+                                className={`prose prose-invert prose-lg max-w-none transition-all duration-500
                 prose-headings:text-foreground prose-headings:font-semibold
                 prose-h3:text-xl prose-h3:mt-8 prose-h3:mb-4
                 prose-p:text-muted-foreground prose-p:leading-relaxed prose-p:mb-4
@@ -731,7 +731,8 @@ const Learn = () => {
                 prose-strong:text-foreground prose-strong:font-semibold
                 prose-blockquote:border-l-primary prose-blockquote:bg-card prose-blockquote:py-4 prose-blockquote:px-6 prose-blockquote:rounded-r-lg prose-blockquote:not-italic prose-blockquote:text-foreground
                 prose-ul:my-4 prose-ol:my-4
-              "
+                ${readingMode ? 'prose-xl prose-p:text-lg sm:prose-p:text-xl text-justify' : ''}
+              `}
                                 dangerouslySetInnerHTML={{ __html: selectedArticle.content }}
                             />
 
