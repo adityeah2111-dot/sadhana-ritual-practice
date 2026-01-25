@@ -511,6 +511,7 @@ const Learn = () => {
     const [searchParams, setSearchParams] = useSearchParams();
     const [selectedCategory, setSelectedCategory] = useState('All');
     const [searchQuery, setSearchQuery] = useState('');
+    const [readingMode, setReadingMode] = useState(false);
 
     // Initialize article from URL param
     const articleId = searchParams.get('article');
@@ -596,6 +597,9 @@ const Learn = () => {
     if (selectedArticle) {
         return (
             <div className="min-h-screen bg-background">
+                {/* Permanent Google Translate Target (Hidden) */}
+                <div id="google_translate_element" className="hidden" />
+
                 {/* Enhanced Sticky Header */}
                 <header className="border-b border-border/40 bg-background/80 backdrop-blur-md sticky top-0 z-50 supports-[backdrop-filter]:bg-background/60">
                     <div className="container mx-auto px-4 lg:px-6">
@@ -641,9 +645,6 @@ const Learn = () => {
                                                 <ThemeToggle variant="dropdown" className="w-full justify-between" />
                                             </div>
                                         </div>
-
-                                        <DropdownMenuSeparator />
-                                        <LanguageSelector variant="submenu" />
                                     </DropdownMenuContent>
                                 </DropdownMenu>
                             </div>
@@ -657,6 +658,11 @@ const Learn = () => {
                         {/* Dynamic Background with Overlay */}
                         <div className={`absolute inset-0 bg-gradient-to-br ${selectedArticle.gradient || 'from-slate-800 to-slate-950'} opacity-30`} />
                         <div className="absolute inset-0 bg-background/60 backdrop-blur-[1px]" />
+
+                        {/* Language Selector (Top Right of Hero) */}
+                        <div className="absolute top-4 right-4 z-20">
+                            <LanguageSelector />
+                        </div>
 
                         {/* Background Pattern/Watermark */}
                         <div className="absolute right-0 bottom-0 opacity-5 translate-y-1/3 translate-x-1/4 pointer-events-none">

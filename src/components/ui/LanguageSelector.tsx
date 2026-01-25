@@ -128,7 +128,6 @@ const LanguageSelector = ({ variant = 'default' }: LanguageSelectorProps) => {
     if (variant === 'submenu') {
         return (
             <>
-                <div id="google_translate_element" className="hidden" />
                 <DropdownMenuSub>
                     <DropdownMenuSubTrigger className="gap-2">
                         <Languages className="w-4 h-4" />
@@ -136,7 +135,7 @@ const LanguageSelector = ({ variant = 'default' }: LanguageSelectorProps) => {
                     </DropdownMenuSubTrigger>
                     <DropdownMenuSubContent className="w-[200px] max-h-[300px] overflow-y-auto">
                         <div className="p-2 border-b border-border sticky top-0 bg-popover z-10">
-                            <input
+                            <Input
                                 placeholder="Search..."
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
@@ -163,8 +162,6 @@ const LanguageSelector = ({ variant = 'default' }: LanguageSelectorProps) => {
 
     return (
         <div className="relative">
-            <div id="google_translate_element" className="hidden" />
-
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                     <Button
