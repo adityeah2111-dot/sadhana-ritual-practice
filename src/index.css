@@ -424,10 +424,10 @@ body {
 .goog-te-gadget-simple {
   background-color: hsl(var(--card)) !important;
   border: 1px solid hsl(var(--border)) !important;
-  padding: 6px 12px !important;
+  padding: 4px 8px !important;
   border-radius: var(--radius) !important;
-  font-size: 0.875rem !important;
-  line-height: 1.25rem !important;
+  font-size: 0.75rem !important;
+  line-height: 1rem !important;
   display: inline-flex !important;
   align-items: center !important;
   transition: all 0.2s ease !important;
