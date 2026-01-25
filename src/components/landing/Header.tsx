@@ -389,13 +389,13 @@ const Header = () => {
                       </div>
                     </>
                   ) : (
-                    <div className="space-y-3">
-                      <Link to="/auth" onClick={() => setIsMenuOpen(false)}>
+                    <div className="space-y-5 pt-2">
+                      <Link to="/auth" onClick={() => setIsMenuOpen(false)} className="block">
                         <Button variant="crimson" className="w-full h-14 text-lg shadow-lg">
                           Start Your Practice
                         </Button>
                       </Link>
-                      <Link to="/auth" onClick={() => setIsMenuOpen(false)}>
+                      <Link to="/auth" onClick={() => setIsMenuOpen(false)} className="block">
                         <Button variant="outline" className="w-full h-12 text-base border-border hover:border-primary/50 transition-all font-medium group bg-background/50 backdrop-blur-sm">
                           Already a practitioner? <span className="text-primary font-bold ml-1.5 group-hover:underline underline-offset-4 decoration-2">Sign In</span>
                         </Button>
