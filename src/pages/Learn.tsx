@@ -14,21 +14,9 @@ import {
     Search,
     Languages,
     Calendar,
-    User,
-    Settings2,
-    Check,
-    BookOpen
+    User
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { ThemeToggle } from '@/components/ui/ThemeToggle';
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
 import { Input } from '@/components/ui/input';
 import { useEffect } from 'react';
 import LanguageSelector from '@/components/ui/LanguageSelector';
@@ -517,7 +505,6 @@ const Learn = () => {
     const articleId = searchParams.get('article');
     const initialArticle = articleId ? blogPosts.find(p => p.id === articleId) || null : null;
     const [selectedArticle, _setSelectedArticle] = useState<typeof blogPosts[0] | null>(initialArticle);
-    const [readingMode, setReadingMode] = useState(false);
 
     // Wrapper to update URL when article changes
     const setSelectedArticle = (article: typeof blogPosts[0] | null) => {
@@ -615,43 +602,10 @@ const Learn = () => {
                                     onClick={() => setSelectedArticle(null)}
                                 >
                                     <ArrowLeft className="w-4 h-4" />
-                                    <span className="inline">Back</span>
+                                    <span className="hidden sm:inline">Back</span>
                                 </Button>
                                 <div className="hidden sm:block h-4 w-px bg-border/50 mx-1" />
-
-                                {/* Consolidated Settings including Language */}
-                                <DropdownMenu>
-                                    <DropdownMenuTrigger asChild>
-                                        <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground">
-                                            <Settings2 className="w-5 h-5" />
-                                        </Button>
-                                    </DropdownMenuTrigger>
-                                    <DropdownMenuContent align="end" className="w-64">
-                                        <DropdownMenuLabel>View Options</DropdownMenuLabel>
-                                        <DropdownMenuSeparator />
-
-                                        <DropdownMenuItem onSelect={(e) => { e.preventDefault(); setReadingMode(!readingMode); }} className="flex items-center justify-between cursor-pointer">
-                                            <div className="flex items-center gap-2">
-                                                <BookOpen className="w-4 h-4" />
-                                                <span>Reading Mode</span>
-                                            </div>
-                                            {readingMode && <Check className="w-4 h-4 text-primary" />}
-                                        </DropdownMenuItem>
-
-                                        <div className="px-2 py-2">
-                                            <div className="flex items-center gap-2 mb-2 text-sm font-medium px-2">
-                                                <ThemeToggle variant="dropdown" className="w-full justify-between" />
-                                            </div>
-                                        </div>
-
-                                        <DropdownMenuSeparator />
-                                        <DropdownMenuLabel>Language</DropdownMenuLabel>
-                                        <div className="px-2 pb-2">
-                                            {/* Embed Language Selector logic here or keep it simple */}
-                                            <LanguageSelector />
-                                        </div>
-                                    </DropdownMenuContent>
-                                </DropdownMenu>
+                                <LanguageSelector />
                             </div>
                         </div>
                     </div>

@@ -7,7 +7,14 @@ import {
     DropdownMenuContent,
     DropdownMenuItem,
     DropdownMenuTrigger,
+    DropdownMenuSub,
+    DropdownMenuSubContent,
+    DropdownMenuSubTrigger,
 } from '@/components/ui/dropdown-menu';
+
+interface LanguageSelectorProps {
+    variant?: 'default' | 'submenu';
+}
 
 const LANGUAGES = [
     { code: 'en', label: 'English', native: 'English' },
@@ -31,7 +38,7 @@ declare global {
     }
 }
 
-const LanguageSelector = () => {
+const LanguageSelector = ({ variant = 'default' }: LanguageSelectorProps) => {
     const [currentLang, setCurrentLang] = useState('en');
     const [searchQuery, setSearchQuery] = useState('');
 
