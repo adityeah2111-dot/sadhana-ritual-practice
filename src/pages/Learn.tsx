@@ -401,6 +401,8 @@ const blogPosts = [
         <li>After 40 days, the new habit will feel natural</li>
       </ol>
       
+      <p>The journey is not linear, but the destination is freedom.</p>
+      
       <blockquote>"Watch your thoughts, they become your words; watch your words, they become your actions; watch your actions, they become your habits; watch your habits, they become your character." — Upanishadic Wisdom</blockquote>
     `,
         readTime: '10 min read',
@@ -408,6 +410,68 @@ const blogPosts = [
         gradient: 'from-pink-500 to-rose-500',
         author: 'Sadhana Team',
         date: 'November 28, 2025',
+    },
+    {
+        id: 'deep-work-ritual',
+        category: 'Discipline',
+        title: 'Deep Work: Rituals for Focus in a Distracted World',
+        excerpt: 'In an age of constant notification, the ability to focus is a superpower. Learn how to build rituals that protect your deep work.',
+        content: `
+      <p>We live in an attention economy. Apps, emails, and notifications compete for every second of your focus. "Deep Work," a term coined by Cal Newport, is the ability to focus without distraction on a cognitively demanding task.</p>
+      
+      <h3>The Cost of Distraction</h3>
+      <p>Every time you switch tasks—glancing at a notification while writing, for instance—you experience "attention residue." Your focus doesn't instantly snap back; it drags behind, reducing your cognitive capacity by up to 20%.</p>
+      
+      <h3>Rituals for Deep Work</h3>
+      <p>Willpower isn't enough to fight distraction. You need rituals:</p>
+      <ul>
+        <li><strong>Location:</strong> Designate a specific spot for deep work. When you sit there, you work. No phone, no browsing.</li>
+        <li><strong>Time-Blocking:</strong> Schedule your deep work blocks. Treat them as sacred appointments.</li>
+        <li><strong>Shutdown Ritual:</strong> End your work day with a clear signal. Close tabs, review tomorrow's plan, say "done." This allows your brain to disconnect and recharge.</li>
+      </ul>
+      
+      <h3>Embracing Boredom</h3>
+      <p>To deepen focus, you must retrain your brain to be comfortable with boredom. Don't reach for your phone the moment you're in line or waiting. Let your mind wander. This rest strengthens your attention muscle.</p>
+      
+      <blockquote>"The ability to perform deep work is becoming increasingly rare at exactly the same time it is becoming increasingly valuable in our economy." — Cal Newport</blockquote>
+    `,
+        readTime: '8 min read',
+        icon: Brain,
+        gradient: 'from-indigo-500 to-blue-600',
+        author: 'Sadhana Team',
+        date: 'November 20, 2025',
+    },
+    {
+        id: 'sleep-foundation',
+        category: 'Habit Formation',
+        title: 'Sleep: The Non-Negotiable Foundation of Discipline',
+        excerpt: 'You can\'t out-discipline a tired brain. Discover why sleep hygiene is the single most important factor for sustaining your practice.',
+        content: `
+      <p>We often treat sleep as a luxury—the first thing to sacrifice when life gets busy. But scientifically, sleep is the foundation of discipline. When you are sleep-deprived, your prefrontal cortex (the part of the brain responsible for willpower) is impaired.</p>
+      
+      <h3>Willpower and Rest</h3>
+      <p>Willpower is a finite resource. It relies on glucose and efficient brain function. Sleep deprivation acts like a "metabolic drunk," reducing your ability to resist impulses. Skipping sleep to "hustle" is biologically counterproductive.</p>
+      
+      <h3>Vedic Wisdom on Sleep</h3>
+      <p>Ayurveda emphasizes rising with the sun and sleeping shortly after sunset. It teaches that the hours before midnight provide the deepest, most restorative rest for the nervous system.</p>
+      
+      <h3>Optimizing Your Sleep Ritual</h3>
+      <ul>
+        <li><strong>Coolness:</strong> Keep your room cool (approx. 65°F/18°C).</li>
+        <li><strong>Darkness:</strong> Even small LEDs can disrupt melatonin. Use blackout curtains or a mask.</li>
+        <li><strong>Wind Down:</strong> No screens 1 hour before bed. Read fiction, stretch, or meditate.</li>
+        <li><strong>Consistency:</strong> Wake up at the same time every day, even weekends. This anchors your circadian rhythm.</li>
+      </ul>
+      
+      <p>Prioritizing sleep isn't laziness; it's the ultimate discipline. It's the respect you pay to the machine that allows you to do your work.</p>
+      
+      <blockquote>"Sleep is the best meditation." — Dalai Lama</blockquote>
+    `,
+        readTime: '7 min read',
+        icon: Clock,
+        gradient: 'from-slate-700 to-slate-900',
+        author: 'Sadhana Team',
+        date: 'November 15, 2025',
     },
 ];
 
