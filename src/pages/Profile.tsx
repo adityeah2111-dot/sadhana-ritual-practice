@@ -19,7 +19,8 @@ import {
     Check,
     X,
     Sparkles,
-    TrendingUp
+    TrendingUp,
+    Trash2
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -191,6 +192,18 @@ const Profile = () => {
         }
     };
 
+    const handleRemoveAvatar = () => {
+        setAvatarPreview(null);
+        setAvatarFile(null);
+        if (fileInputRef.current) {
+            fileInputRef.current.value = '';
+        }
+        toast({
+            title: 'Avatar removed',
+            description: 'Click save to permanently remove your profile picture.',
+        });
+    };
+
     const formatTime = (time: string | null) => {
         if (!time) return 'Not set';
         const hour = parseInt(time.split(':')[0]);
@@ -340,15 +353,27 @@ const Profile = () => {
                                         )}
                                     </div>
 
-                                    {/* Camera Button */}
+                                    {/* Action Buttons */}
                                     {isEditing && (
                                         <>
                                             <button
                                                 onClick={handleAvatarClick}
-                                                className="absolute -bottom-1 -right-1 w-10 h-10 bg-primary rounded-full flex items-center justify-center shadow-lg border-4 border-background hover:bg-primary/90 transition-colors"
+                                                className="absolute -bottom-1 -right-1 w-10 h-10 bg-primary rounded-full flex items-center justify-center shadow-lg border-4 border-background hover:bg-primary/90 transition-colors z-10"
+                                                title="Change photo"
                                             >
                                                 <Camera className="w-4 h-4 text-white" />
                                             </button>
+
+                                            {avatarPreview && (
+                                                <button
+                                                    onClick={handleRemoveAvatar}
+                                                    className="absolute -bottom-1 -left-1 w-10 h-10 bg-destructive rounded-full flex items-center justify-center shadow-lg border-4 border-background hover:bg-destructive/90 transition-colors z-10"
+                                                    title="Remove photo"
+                                                >
+                                                    <Trash2 className="w-4 h-4 text-white" />
+                                                </button>
+                                            )}
+
                                             <input
                                                 type="file"
                                                 ref={fileInputRef}
